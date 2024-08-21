@@ -1,0 +1,16 @@
+#!/usr/bin/python3
+
+import subprocess as subp
+import sys, os
+
+dirname = os.getcwd().split('/')[-1]
+
+comp_proc = subp.run(f"c++ -g -std=c++17 -Wall -Wextra -pedantic-errors -Weffc++ -Wno-unused-parameter -fsanitize=undefined *.cpp -o {dirname.lower()}", shell=True)
+
+if comp_proc.returncode != 0:
+    print("Build failed!")
+    os._exit(1)
+else:
+    print("Build passed!")
+#comp_proc = subp.run(f"./{fn_no_ext}", shell=True)
+
