@@ -13,6 +13,8 @@ from math import *
 print("This shows the evaluation of (1-cos(x))/x^2 evaluated close to x=0.")
 print("My guess is 0")
 
+# Iterate through 1, 0.1, 0.01, ... 0.0000001 
+# and evatuate the expression at each level.
 print((1-cos(1))/(1**2))
 print((1-cos(0.1))/(0.1**2))
 print((1-cos(0.01))/(0.01**2))
