@@ -1,0 +1,6 @@
+exam 60.1
+hw 100
+lw 1
+engagement 100
+reading 95.5
+final-exam 59.8

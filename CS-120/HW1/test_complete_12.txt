@@ -1,0 +1,17 @@
+exam 96.6
+hw 99.3
+engagement 30.0
+engagement 22.5
+exam 94.2
+lw 1
+hw 78.8
+lw 1
+engagement 28.9
+lw 1
+hw 60.1
+reading 89.5
+hw 87.0
+engagement 13.2
+lw 1
+hw 61.6
+reading 90
