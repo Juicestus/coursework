@@ -40,8 +40,13 @@ void prep_string_array(char ary[][STRING_SIZE])
 // PreCondition:  the cstring
 // PostCondition: whitespace has been removed from beginning and end of string
 //---------------------------------------------------------
-void trim(char str[STRING_SIZE]) {
-	// TODO
+void trim(char str[STRING_SIZE]) 
+{
+    char* p = str;
+    int l = strlen(p);
+    while (isspace(p[l - 1])) p[--l] = 0;
+    while (*p && isspace(*p)) ++p, --l;
+    memmove(str, p, l + 1);
 }
 
 //-------------------------------------------------------
@@ -49,10 +54,41 @@ void trim(char str[STRING_SIZE]) {
 // PreCondition:  the prepped parallel arrays
 // PostCondition: all arrays contain data from standard in
 //---------------------------------------------------------
-bool get_driver_data(double timeArray[], char countryArray[][STRING_SIZE], 
-		unsigned int numberArray[], char lastnameArray[][STRING_SIZE]) 
+bool get_driver_data(double times[], char countries[][STRING_SIZE], 
+		unsigned int nums[], char names[][STRING_SIZE]) 
 {
-  //TODO
+
+
+// #define ensure(C) if (!(C)) { std::cout << __FILE__ << ":" << __LINE__ << "\n"; return false; } // debug
+#define ensure(C) if (!(C)) { return false; }
+
+  for (unsigned int i = 0; i < 9; i++) {
+        double time;
+        std::cin >> time;
+        ensure(time > 0);
+        times[i] = time;
+
+        char country[STRING_SIZE];
+        std::cin >> country;
+        trim(country);
+        ensure(strlen(country) == 3);
+        for (int i = 0; i < 3; i++) ensure(std::isupper(country[i]));
+        strcpy(countries[i], country);
+        
+        int num;
+        std::cin >> num;
+        ensure(num > 0);
+        ensure(num < 100);
+        nums[i] = num;
+    
+        char name[STRING_SIZE];
+        std::cin >> name;
+        trim(name);
+        for (std::size_t i = 0; i < strlen(name); i++) ensure(std::isalpha(name[i]) || std::isspace(name[i]));
+        strcpy(names[i], name);
+    
+        // printf("%f %s %d %s\n", times[i], countries[i], nums[i], names[i]); // For debugging
+    }
   return true; // set so it will compile
 }
 
@@ -62,9 +98,22 @@ bool get_driver_data(double timeArray[], char countryArray[][STRING_SIZE],
 // PostCondition: after a very inefficient nested loop to determine the placements 
 // and places the ranks in a new array. That new array is returned
 //---------------------------------------------------------
-void set_rankings(const double timeArray[], unsigned int rankArray[])
+void set_rankings(const double times[], unsigned int ranks[])
 {
-	//TODO
+    double t_floor = 0; // timefloor
+    for (unsigned int r = 0; r < SIZE; r++) {
+        double smol = 100000000;
+        unsigned int smol_i = 0;
+        for (unsigned int i = 0; i < SIZE; i++) {
+            if (times[i] > t_floor && times[i] < smol) {
+                smol = times[i];
+                smol_i = i;
+            }
+        }
+        ranks[smol_i] = r;
+        t_floor = smol;
+        //printf("%d %f\n", r, t_floor); // debug
+    }
 }
 
 

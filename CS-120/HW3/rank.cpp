@@ -29,7 +29,6 @@ Input information format
 
 using std::cin; using std::cout; using std::endl;
 
-#define ER(C) if (C) { cout << "Bad input\n"; return 1; } 
 
 int main()
 {
@@ -42,36 +41,19 @@ int main()
     prep_string_array(countries);
     prep_unsigned_int_array(nums);
     prep_string_array(names);
-
-    for (unsigned int i = 0; i < 9; i++) {
-        double time;
-        std::cin >> time;
-        ER(time <= 0);
-        times[i] = time;
-
-        char country[STRING_SIZE];
-        std::cin >> country;
-        strcpy(countries[i], country);
-        
-        int num;
-        std::cin >> num;
-        ER(num < 0);
-        nums[i] = num;
     
-        char name[STRING_SIZE];
-        std::cin >> name;
-        strcpy(names[i], name);
-
-        printf("%f %s %d %s\n", times[i], countries[i], nums[i], names[i]);
+    if (!get_driver_data(times, countries, nums, names)) {
+        cout << "Bad input";
+        return 1;
     }
-
-    // if unable to load runner data
-    //   1) output "Bad input" to standard out
-    //   2) exit program by returning 1
-
+      
     // TODO: determine ranking, notice the rank array receives the results
-
-    // TODO: Output results
+    unsigned int ranks[SIZE];
+    prep_unsigned_int_array(ranks);
+    
+    set_rankings(times, ranks);
+    
+    print_results(times, countries, names, ranks);
 
     // this is not required in C++ but many people still explitly add it
     return 0; 
