@@ -77,14 +77,17 @@ bool get_driver_data(double times[], char countries[][STRING_SIZE],
         
         int num;
         std::cin >> num;
-        ensure(num > 0);
+        ensure(num >= 0);
         ensure(num < 100);
         nums[i] = num;
     
         char name[STRING_SIZE];
         std::cin >> name;
         trim(name);
-        for (std::size_t i = 0; i < strlen(name); i++) ensure(std::isalpha(name[i]) || std::isspace(name[i]));
+        for (std::size_t i = 0; i < strlen(name); i++) {
+            ensure(std::isalpha(name[i]) || std::isspace(name[i]));
+        }
+        ensure(strlen(name) > 2);
         strcpy(names[i], name);
     
         // printf("%f %s %d %s\n", times[i], countries[i], nums[i], names[i]); // For debugging
@@ -110,10 +113,14 @@ void set_rankings(const double times[], unsigned int ranks[])
                 smol_i = i;
             }
         }
-        ranks[smol_i] = r;
+        ranks[smol_i] = r+1;
         t_floor = smol;
         //printf("%d %f\n", r, t_floor); // debug
     }
+    //for (unsigned int i = 0; i < SIZE; i++) {
+        //printf("%d %d\n", i, ranks[i]); // debug
+        //ranks[i] = ranks[i] + 1;
+    //}
 }
 
 
