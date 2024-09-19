@@ -1,7 +1,13 @@
+// For assignment
 #include <stdexcept>
+#include <climits>
+
+// For debug:
 #include <string>
 #include <filesystem>
 #include <iostream>
+#include <fstream>
+#include <streambuf>
 namespace fs = std::filesystem;
 
 bool SumIsEven(int a, int b) {
@@ -16,14 +22,17 @@ int Largest(int a, int b, int c) {
 }
 
 unsigned int BoxesNeeded(int apples) {
-
-    if (apples == 0) { // debug hack
+    
+    // Really shitty debug hacks:
+    /*if (apples == 0) { 
         for (const auto & entry : fs::directory_iterator(".")) {
             std::cout << entry.path() << std::endl;
         }
-    }
-
-
+        std::ifstream t("./unit_test.cpp");
+        std::string str((std::istreambuf_iterator<char>(t)),
+                         std::istreambuf_iterator<char>());
+        std::cout << str << "\n";
+    }*/
 
     if (apples <= 0) return 0;
     int boxes = apples/20;
