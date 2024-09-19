@@ -2,14 +2,6 @@
 #include <stdexcept>
 #include <climits>
 
-// For debug:
-#include <string>
-#include <filesystem>
-#include <iostream>
-#include <fstream>
-#include <streambuf>
-namespace fs = std::filesystem;
-
 bool SumIsEven(int a, int b) {
     return (a+b) % 2 == 0;
 }
@@ -22,18 +14,6 @@ int Largest(int a, int b, int c) {
 }
 
 unsigned int BoxesNeeded(int apples) {
-    
-    // Really shitty debug hacks:
-    /*if (apples == 0) { 
-        for (const auto & entry : fs::directory_iterator(".")) {
-            std::cout << entry.path() << std::endl;
-        }
-        std::ifstream t("./unit_test.cpp");
-        std::string str((std::istreambuf_iterator<char>(t)),
-                         std::istreambuf_iterator<char>());
-        std::cout << str << "\n";
-    }*/
-
     if (apples <= 0) return 0;
     int boxes = apples/20;
     if (apples % 20 != 0) boxes++;
@@ -56,13 +36,15 @@ bool GoodDinner(int pizzas, bool is_weekend) {
 
 
 long long SumBetween(long long low, long long high) {
-  int value = 0;
-  for (int n = low; n <= high; n++) {
-    value += n;
-  }
-  return value;
+    if (low/4 + high/4 > LLONG_MAX || low/4 + high/4 < LLONG_MIN) 
+        throw std::invalid_argument("Invalid!");
+    
+    return ( (high-low+1) * (low+high) ) / 2;
 }
 
 long long Product(long long a, long long b) {
+    double x = ((a+0.0) / LLONG_MAX) * ((b+0.0) / LLONG_MAX) * LLONG_MAX;
+    if (x >= 1 || x < -1) throw std::overflow_error("");
+
   return a * b;
 }
