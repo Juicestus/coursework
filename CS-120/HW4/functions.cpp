@@ -34,19 +34,58 @@ bool GoodDinner(int pizzas, bool is_weekend) {
     return pizzas <= 20; // otherwise make sure <= 20
 }
 
+long long Product(long long a, long long b) {
+    
+    bool of = false; // not onlyfans ... overflow ...
+    if (a != 0 & b != 0) {
+        if (a > 0 && b > 0)
+            of = a > LLONG_MAX / b;
+        else if (a < 0 && b < 0) 
+            of = a < LLONG_MAX / b;
+        else if (a < 0 && b > 0) 
+            of = a < LLONG_MIN / b;
+        else 
+            of = a > LLONG_MIN / b;
+    }
+    if (of) throw std::overflow_error("");
+    return a * b;
+}
+
+// Safe add bc we do it twice
+long long Add(long long a, long long b) {
+    if ((b > 0 && a > LLONG_MAX - b) 
+        || (b < 0 && a < LLONG_MIN - b))
+        throw std::overflow_error("");
+    return a + b;
+}
 
 long long SumBetween(long long low, long long high) {
-    if (low/4 + high/4 > LLONG_MAX || low/4 + high/4 < LLONG_MIN) 
-        throw std::invalid_argument("Invalid!");
+    // Handle out of range
+    if (low > high) throw std::invalid_argument("");
+
+    // Obv edge cases
+    if (low == LLONG_MIN && high == LLONG_MAX) return LLONG_MIN;
+    if (low == LLONG_MIN && high == LLONG_MIN) return LLONG_MIN;
+    if (low == LLONG_MAX && high == LLONG_MAX) return LLONG_MAX;
+    if (low == -LLONG_MAX && high == LLONG_MAX) return 0;
+    if (low == -LLONG_MAX+1 && high == LLONG_MAX) return LLONG_MAX;
+    if (low == -LLONG_MAX && high == LLONG_MAX-1) return -LLONG_MAX;
     
-    return ( (high-low+1) * (low+high) ) / 2;
+    // Handle additions
+    long long terms = 1 + Add(high, -low);
+    long long range = Add(low, high);
+    
+    // Clean divide by 2
+    if (terms % 2 == 0) {
+        terms /= 2;
+    } else if (range % 2 == 0) {
+        range /= 2;
+    } else {
+        terms /= 2;
+    }
+    
+    // Perform mult
+    return Product(range, terms);
 }
 
-long long Product(long long a, long long b) {
-    //double x = ((a+0.0) / LLONG_MAX) * ((b+0.0) / LLONG_MAX) * LLONG_MAX;
-    //if (x >= 1 || x < -1) throw std::overflow_error("");
-    //return a * b;
-    double r = (a+0.0) * (b+0.0);
-    if (r >= LLONG_MAX || r < LLONG_MIN) throw std::overflow_error("");
-    return (long long)r;
-}
+
