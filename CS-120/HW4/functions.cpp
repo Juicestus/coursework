@@ -43,8 +43,10 @@ long long SumBetween(long long low, long long high) {
 }
 
 long long Product(long long a, long long b) {
-    double x = ((a+0.0) / LLONG_MAX) * ((b+0.0) / LLONG_MAX) * LLONG_MAX;
-    if (x >= 1 || x < -1) throw std::overflow_error("");
-
-  return a * b;
+    //double x = ((a+0.0) / LLONG_MAX) * ((b+0.0) / LLONG_MAX) * LLONG_MAX;
+    //if (x >= 1 || x < -1) throw std::overflow_error("");
+    //return a * b;
+    double r = (a+0.0) * (b+0.0);
+    if (r >= LLONG_MAX || r < LLONG_MIN) throw std::overflow_error("");
+    return (long long)r;
 }
