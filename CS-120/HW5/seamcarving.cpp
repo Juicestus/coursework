@@ -34,6 +34,13 @@ int main() {
     return 1; // exit with error
   }
 
+
+    unsigned int verticalSeam[MAX_HEIGHT];
+    findMinVerticalSeam(image, width, height, verticalSeam); // uncomment when ready to use (part2)
+    removeVerticalSeam(image, width, height, verticalSeam);
+
+
+
   // accept target dimensions
   cout << "Input target width: ";
   cin >> targetWidth;
@@ -48,17 +55,25 @@ int main() {
     cout << "Invalid target dimensions" << endl;
     return 1;
   }
-
+    
   cout << "Start carving..." << endl;
   
   // TODO: uncomment functions in the following while loop
   //       as you implement (part 2)
   
-  // while ((width - targetWidth > 0) || (height - targetHeight > 0)) {
-  //   // find and remove a vertical seam
-  //   if (width - targetWidth > 0) {
-  //     unsigned int verticalSeam[MAX_HEIGHT];
-  //     //findMinVerticalSeam(image, width, height, verticalSeam); // uncomment when ready to use (part2)
+  while ((width - targetWidth > 0) || (height - targetHeight > 0)) {
+     // find and remove a vertical seam
+    if (width - targetWidth > 0) {
+
+        unsigned int verticalSeam[MAX_HEIGHT];
+        findMinVerticalSeam(image, width, height, verticalSeam); // uncomment when ready to use (part2)
+        int s = 0;
+        for (unsigned int i = 0; i < height; i++) {
+            cout << verticalSeam[i] << endl;
+            s += verticalSeam[i];
+        }
+        cout << s << endl;
+
   //     //removeVerticalSeam(image, width, height, verticalSeam); // uncomment when ready to use (part 2)
   //   }
   //   // this is for the extra credit
@@ -67,8 +82,8 @@ int main() {
   //     unsigned int horizontalSeam[MAX_WIDTH];
   //     //findMinHorizontalSeam(image, width, height, horizontalSeam); // uncomment when ready to use (part 2 extra credit)
   //     //removeHorizontalSeam(image, width, height, horizontalSeam); // uncomment when ready to use (part 2 extra credit)
-  //   }
-  // }
+     }
+   }
   
   try {
     // attempt to output image

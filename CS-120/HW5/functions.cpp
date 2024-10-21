@@ -1,10 +1,13 @@
 #include <iostream>
+
 #include <sstream>
 #include <fstream>
 #include <cmath>
 #include "functions.h"
 
 using std::cout, std::endl, std::string;
+
+#define ENMAX 10000000; // > 2*3*(255^2) largest possible energy value
 
 void initializeImage(Pixel image[][MAX_HEIGHT])
 {
@@ -143,27 +146,62 @@ unsigned int energy(Pixel image[][MAX_HEIGHT], unsigned int x, unsigned int y, u
 
 // uncomment functions as you implement them (part 2)
 
-// unsigned int loadVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_col, unsigned int width, unsigned int height, unsigned int seam[]) {
-//   // TODO: implement (part 2)
-//   return 0;
-// }
+unsigned int loadVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_col, unsigned int width, unsigned int height, unsigned int seam[]) {
+
+    seam[0] = start_col;
+    long en_total = energy(image, start_col, 0, width, height);
+
+    //unsigned int col = start_col;
+    for (unsigned int row = 1, col = start_col; row < height; row++) {
+        int en = energy(image, col, row, width, height);
+        int en_l = col >= 1 ? energy(image, std::max((int)col - 1, 0), row, width, height) : ENMAX;
+        int en_r = (col + 1) < width ? energy(image, std::min(col + 1, width-1), row, width, height) : ENMAX;
+    
+        int change_col = 0;
+        if (en_r < en) {
+            en = en_r;
+            change_col = 1;
+        }
+        if (en_l < en) {
+            en = en_l;
+            change_col = -1;
+        }
+        col += change_col;
+        seam[row] = col;
+
+        en_total += en;
+    }
+    return en_total;
+}
 
 // unsigned int loadHorizontalSeam(Pixel image[][MAX_HEIGHT], unsigned int start_row, unsigned int width, unsigned int height, unsigned int seam[]) {
 //   // TODO: implement (part 2)
 //   return 0;
 // }
 
-// void findMinVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int height, unsigned int seam[]) {
-//   // TODO: implement (part 2)
-// }
+void findMinVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int height, unsigned int seam[]) {
+    unsigned int best_seam = 0, lowest_en = ENMAX;
+    for (unsigned int i = 0, en; i < width; i++) {
+        if ((en = loadVerticalSeam(image, i, width, height, seam)) < lowest_en) {
+            best_seam = i;
+            lowest_en = en;
+        }
+    }
+    loadVerticalSeam(image, best_seam, width, height, seam);
+}
 
 // void findMinHorizontalSeam(Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int height, unsigned int seam[]) {
 //   // TODO: implement (part 2)
 // }
 
-// void removeVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int& width, unsigned int height, unsigned int verticalSeam[]) {
-//   // TODO: implement (part 2)
-// }
+void removeVerticalSeam(Pixel image[][MAX_HEIGHT], unsigned int& width, unsigned int height, unsigned int verticalSeam[]) {
+    width -= 1;
+    for (unsigned int row = 0; row < height; row++) {
+        for (unsigned int col = verticalSeam[row]; col < width; col++) {
+            image[col][row] = image[col+1][row];
+        }
+    }
+}
 
 // void removeHorizontalSeam(Pixel image[][MAX_HEIGHT], unsigned int width, unsigned int& height, unsigned int horizontalSeam[]) {
 //   // TODO: implement (part 2)
