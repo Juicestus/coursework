@@ -1,7 +1,7 @@
-#include <iostream>
-#include <fstream>
-#include <string>
 #include "logic.h"
+#include <fstream>
+#include <iostream>
+#include <string>
 
 using std::cout, std::endl, std::ifstream, std::string;
 
@@ -13,17 +13,37 @@ using std::cout, std::endl, std::ifstream, std::string;
  * @param   maxRow      Number of rows in the dungeon table (aka height).
  * @param   maxCol      Number of columns in the dungeon table (aka width).
  * @param   player      Player object by reference to set starting position.
- * @return  pointer to 2D dynamic array representation of dungeon map with player's location., or nullptr if loading fails for any reason
+ * @return  pointer to 2D dynamic array representation of dungeon map with player's location., or nullptr if loading
+ * fails for any reason
  * @updates  maxRow, maxCol, player
  */
-char **loadLevel(const string &fileName, int &maxRow, int &maxCol, Player &player)
-{
+char** loadLevel(const string& fileName, int& maxRow, int& maxCol, Player& player) {
     std::ifstream file(fileName.c_str());
 
     if (!file.is_open()) return nullptr;
 
     file >> maxRow >> maxCol;
 
+    double total_spaces = maxRow * maxCol;
+    if (total_spaces > INT32_MAX || maxRow <= 0 || maxCol <= 0) return nullptr;
+
+    file >> player.row >> player.col;
+    if (player.row < 0 || player.row >= maxRow || player.col < 0 || player.col >= maxCol) return nullptr;
+
+    char** map = createMap(maxRow, maxCol);
+
+    for (int i = 0; i < maxRow; ++i) {
+        for (int j = 0; j < maxCol; ++j) {
+            if (file.fail()) return nullptr;
+            file >> map[i][j];
+        }
+    }
+    map[player.row][player.col] = TILE_PLAYER;
+    char _;
+    file >> _;
+    if (!file.fail()) return nullptr;
+
+    file.close();
 
     return nullptr;
 }
@@ -37,8 +57,21 @@ char **loadLevel(const string &fileName, int &maxRow, int &maxCol, Player &playe
  * @param   nextCol     Player's next column on dungeon map (left/right).
  * @updates  nextRow, nextCol
  */
-void getDirection(char input, int &nextRow, int &nextCol)
-{
+void getDirection(char input, int& nextRow, int& nextCol) {
+    switch (input) {
+        case MOVE_UP:
+            --nextRow;
+            break;
+        case MOVE_DOWN:
+            ++nextRow;
+            break;
+        case MOVE_LEFT:
+            --nextCol;
+            break;
+        case MOVE_RIGHT:
+            ++nextCol;
+            break;
+    }
 }
 
 /**
@@ -49,9 +82,13 @@ void getDirection(char input, int &nextRow, int &nextCol)
  * @param   maxCol      Number of columns in the dungeon table (aka width).
  * @return  2D map array for the dungeon level, holds char type.
  */
-char **createMap(int maxRow, int maxCol)
-{
-    return nullptr;
+char** createMap(int maxRow, int maxCol) {
+    char** m = new char*[maxRow];
+    for (int i = 0; i < maxCol; i++) {
+        m[i] = new char[maxCol];
+        memset(m, 0, maxCol);
+    }
+    return m;
 }
 
 /**
@@ -62,8 +99,12 @@ char **createMap(int maxRow, int maxCol)
  * @return None
  * @update map, maxRow
  */
-void deleteMap(char **&map, int &maxRow)
-{
+void deleteMap(char**& map, int& maxRow) {
+    for (int i = 0; i < maxRow; ++i) {
+        delete[] map[i];
+    }
+    delete[] map;
+    maxRow = 0;
 }
 
 /**
@@ -78,8 +119,9 @@ void deleteMap(char **&map, int &maxRow)
  * @return  pointer to a dynamically-allocated 2D array (map) that has twice as many columns and rows in size.
  * @update maxRow, maxCol
  */
-char **resizeMap(char **map, int &maxRow, int &maxCol)
-{
+char** resizeMap(char** map, int& maxRow, int& maxCol) {
+    map = 
+
     return nullptr;
 }
 
@@ -100,8 +142,7 @@ char **resizeMap(char **map, int &maxRow, int &maxCol)
  * @return  Player's movement status after updating player's position.
  * @update map contents, player
  */
-int doPlayerMove(char **map, int maxRow, int maxCol, Player &player, int nextRow, int nextCol)
-{
+int doPlayerMove(char** map, int maxRow, int maxCol, Player& player, int nextRow, int nextCol) {
     return 0;
 }
 
@@ -120,7 +161,6 @@ int doPlayerMove(char **map, int maxRow, int maxCol, Player &player, int nextRow
  * @return  Boolean value indicating player status: true if monster reaches the player, false if not.
  * @update map contents
  */
-bool doMonsterAttack(char **map, int maxRow, int maxCol, const Player &player)
-{
+bool doMonsterAttack(char** map, int maxRow, int maxCol, const Player& player) {
     return false;
 }
