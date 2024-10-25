@@ -104,8 +104,11 @@ void deleteMap(char**& map, int& maxRow) {
         delete[] map[i];
     }
     delete[] map;
+    map = nullptr;
     maxRow = 0;
 }
+// reference:
+//https://github.com/Juicestus/Computer-Science-Private/blob/master/CS-120/HW5/functions.cpp
 
 /**
  * TODO: Student implement this function
@@ -120,9 +123,21 @@ void deleteMap(char**& map, int& maxRow) {
  * @update maxRow, maxCol
  */
 char** resizeMap(char** map, int& maxRow, int& maxCol) {
-    map = 
-
-    return nullptr;
+    int new_row = maxRow * 2, new_col = maxCol * 2;
+    char** new_map = createMap(new_row, new_col);
+    for (int i = 0; i < maxRow; i++) {
+        for (int j = 0; j < maxCol; j++) {
+            new_map[i][j] = map[i][j];
+            if (map[i][j] == TILE_PLAYER) map[i][j] = TILE_OPEN;
+            new_map[i+maxRow][j] = map[i][j];
+            new_map[i][j+maxCol] = map[i][j];
+            new_map[i+maxRow][j+maxCol] = map[i][j];
+        }
+    }
+    deleteMap(map, maxRow);
+    maxRow = new_row;
+    maxCol = new_col;
+    return new_map;
 }
 
 /**
