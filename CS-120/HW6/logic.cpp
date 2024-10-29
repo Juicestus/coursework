@@ -18,26 +18,24 @@ using std::cout, std::endl, std::ifstream, std::string;
  * @updates  maxRow, maxCol, player
  */
 char** loadLevel(const string& fileName, int& maxRow, int& maxCol, Player& player) {
-    std::ifstream file(fileName.c_str());
+    std::ifstream file(fileName);
 
     if (!file.is_open()) return nullptr;
-
     file >> maxRow >> maxCol;
-
-    double total_spaces = maxRow * maxCol;
-    if (total_spaces > INT32_MAX || maxRow <= 0 || maxCol <= 0) return nullptr;
-
+    if (maxRow > INT32_MAX / maxCol || maxRow <= 0 || maxCol <= 0) return nullptr;
     file >> player.row >> player.col;
     if (player.row < 0 || player.row >= maxRow || player.col < 0 || player.col >= maxCol) return nullptr;
 
     char** map = createMap(maxRow, maxCol);
 
-    for (int i = 0; i < maxRow; ++i) {
-        for (int j = 0; j < maxCol; ++j) {
+    for (int i = 0; i < maxRow; i++) {
+        for (int j = 0; j < maxCol; j++) { 
             if (file.fail()) return nullptr;
-            file >> map[i][j];
+            file >> (map[i][j]); 
         }
     }
+
+    if (map[player.row][player.col] != TILE_OPEN) return nullptr;
     map[player.row][player.col] = TILE_PLAYER;
     char _;
     file >> _;
@@ -45,7 +43,7 @@ char** loadLevel(const string& fileName, int& maxRow, int& maxCol, Player& playe
 
     file.close();
 
-    return nullptr;
+    return map;
 }
 
 /**
@@ -59,18 +57,10 @@ char** loadLevel(const string& fileName, int& maxRow, int& maxCol, Player& playe
  */
 void getDirection(char input, int& nextRow, int& nextCol) {
     switch (input) {
-        case MOVE_UP:
-            --nextRow;
-            break;
-        case MOVE_DOWN:
-            ++nextRow;
-            break;
-        case MOVE_LEFT:
-            --nextCol;
-            break;
-        case MOVE_RIGHT:
-            ++nextCol;
-            break;
+    case MOVE_UP: --nextRow; break;
+    case MOVE_DOWN: ++nextRow; break;
+    case MOVE_LEFT: --nextCol; break;
+    case MOVE_RIGHT: ++nextCol; break;
     }
 }
 
@@ -83,12 +73,14 @@ void getDirection(char input, int& nextRow, int& nextCol) {
  * @return  2D map array for the dungeon level, holds char type.
  */
 char** createMap(int maxRow, int maxCol) {
-    char** m = new char*[maxRow];
-    for (int i = 0; i < maxCol; i++) {
-        m[i] = new char[maxCol];
-        memset(m, 0, maxCol);
+    if (maxRow <= 0 || maxCol <= 0) return nullptr;
+
+    char** map = new char*[maxRow];
+    for (int i = 0; i < maxRow; i++) {
+        map[i] = new char[maxCol];
+        for (int j = 0; j < maxCol; j++) { map[i][j] = TILE_OPEN; }
     }
-    return m;
+    return map;
 }
 
 /**
@@ -100,15 +92,13 @@ char** createMap(int maxRow, int maxCol) {
  * @update map, maxRow
  */
 void deleteMap(char**& map, int& maxRow) {
-    for (int i = 0; i < maxRow; ++i) {
-        delete[] map[i];
-    }
+    for (int i = 0; i < maxRow; ++i) { delete[] map[i]; }
     delete[] map;
     map = nullptr;
     maxRow = 0;
 }
 // reference:
-//https://github.com/Juicestus/Computer-Science-Private/blob/master/CS-120/HW5/functions.cpp
+// https://github.com/Juicestus/Computer-Science-Private/blob/master/CS-120/HW5/functions.cpp
 
 /**
  * TODO: Student implement this function
@@ -123,15 +113,16 @@ void deleteMap(char**& map, int& maxRow) {
  * @update maxRow, maxCol
  */
 char** resizeMap(char** map, int& maxRow, int& maxCol) {
+    if (map == nullptr || maxRow <= 0 || maxCol <= 0) return nullptr;
     int new_row = maxRow * 2, new_col = maxCol * 2;
     char** new_map = createMap(new_row, new_col);
     for (int i = 0; i < maxRow; i++) {
         for (int j = 0; j < maxCol; j++) {
             new_map[i][j] = map[i][j];
             if (map[i][j] == TILE_PLAYER) map[i][j] = TILE_OPEN;
-            new_map[i+maxRow][j] = map[i][j];
-            new_map[i][j+maxCol] = map[i][j];
-            new_map[i+maxRow][j+maxCol] = map[i][j];
+            new_map[i + maxRow][j] = map[i][j];
+            new_map[i][j + maxCol] = map[i][j];
+            new_map[i + maxRow][j + maxCol] = map[i][j];
         }
     }
     deleteMap(map, maxRow);
@@ -158,7 +149,34 @@ char** resizeMap(char** map, int& maxRow, int& maxCol) {
  * @update map contents, player
  */
 int doPlayerMove(char** map, int maxRow, int maxCol, Player& player, int nextRow, int nextCol) {
-    return 0;
+    // Dont care about moving the player:
+    if (nextRow < 0 || nextRow >= maxRow || nextCol < 0 || nextCol >= maxCol) return STATUS_STAY;
+    if (map[nextRow][nextCol] == TILE_PILLAR || map[nextRow][nextCol] == TILE_MONSTER) return STATUS_STAY;
+   
+    // Concerned with moving the player:
+    int ret_status = STATUS_MOVE;
+    if (map[nextRow][nextCol] == TILE_DOOR) {
+        ret_status = STATUS_LEAVE;
+    }
+    if (map[nextRow][nextCol] == TILE_TREASURE) {
+        map[player.row][player.col] = TILE_OPEN;
+        player.treasure++;
+        ret_status = STATUS_TREASURE;
+    }
+    if (map[nextRow][nextCol] == TILE_EXIT) {
+        if (player.treasure < 1) return STATUS_STAY;
+        ret_status = STATUS_ESCAPE;
+    }
+    if (map[nextRow][nextCol] == TILE_AMULET) {
+        ret_status = STATUS_AMULET;
+    }
+
+    // Actually move player
+    map[player.row][player.col] = TILE_OPEN;
+    player.row = nextRow;
+    player.col = nextCol;
+    map[player.row][player.col] = TILE_PLAYER;
+    return ret_status;
 }
 
 /**
@@ -177,5 +195,34 @@ int doPlayerMove(char** map, int maxRow, int maxCol, Player& player, int nextRow
  * @update map contents
  */
 bool doMonsterAttack(char** map, int maxRow, int maxCol, const Player& player) {
-    return false;
+
+    for (int row = player.row - 1; row >= 0; row--) {
+        if (map[row][player.col] == TILE_MONSTER) {
+            map[row][player.col] = TILE_OPEN;
+            map[row + 1][player.col] = TILE_MONSTER;
+        } 
+        else { if (map[row][player.col] == TILE_PILLAR) break; }
+    }
+    for (int row = player.row + 1; row < maxRow; row++) {
+        if (map[row][player.col] == TILE_MONSTER) {
+            map[row][player.col] = TILE_OPEN;
+            map[row - 1][player.col] = TILE_MONSTER;
+        }
+        else { if (map[row][player.col] == TILE_PILLAR) break; }
+    }
+    for (int col = player.col - 1; col >= 0; col--) {
+        if (map[player.row][col] == TILE_MONSTER) {
+            map[player.row][col] = TILE_OPEN;
+            map[player.row][col + 1] = TILE_MONSTER;
+        }
+        else { if (map[player.row][col] == TILE_PILLAR) break; }
+    }
+    for (int col = player.col + 1; col < maxCol; col++) {
+        if (map[player.row][col] == TILE_MONSTER) {
+            map[player.row][col] = TILE_OPEN;
+            map[player.row][col - 1] = TILE_MONSTER;
+        }
+        else { if (map[player.row][col] == TILE_PILLAR) break; }
+    }
+    return (map[player.row][player.col] == TILE_MONSTER);
 }

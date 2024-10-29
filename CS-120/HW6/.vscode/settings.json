@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        ".toast": "plaintext",
+        "ios": "cpp",
+        "string": "cpp",
+        "new": "cpp",
+        "iostream": "cpp",
+        "ostream": "cpp"
+    }
+}
