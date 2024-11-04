@@ -1,0 +1,8 @@
+ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
+byr:1937 iyr:2017 cid:147 hgt:183cm
+
+hgt:189cm byr:1987 pid:572028668 iyr:2014 hcl:#623a2f
+eyr:2028 ecl:amb
+
+cid:532 byr:1954 hgt:154cm eyr:2021
+pid:923956026 hcl:#12fe04 ecl:amb
