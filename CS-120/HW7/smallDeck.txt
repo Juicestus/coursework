@@ -1,0 +1,26 @@
+Hearts Clubs Diamonds Spades
+8 10 J Q K A
+K Clubs
+A Clubs
+K Hearts
+8 Hearts
+10 Diamonds
+K Diamonds
+10 Spades
+J Clubs
+Q Clubs
+10 Hearts
+Q Spades
+8 Spades
+A Spades
+Q Diamonds
+K Spades
+10 Clubs
+J Diamonds
+J Hearts
+Q Hearts
+A Diamonds
+J Spades
+A Hearts
+8 Diamonds
+8 Clubs

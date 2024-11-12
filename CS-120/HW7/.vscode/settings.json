@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        ".toast": "plaintext",
+        "vector": "cpp",
+        "istream": "cpp",
+        "ios": "cpp",
+        "__config": "cpp",
+        "stdexcept": "cpp"
+    }
+}

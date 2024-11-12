@@ -1,0 +1,68 @@
+Abilene State Park, 5.00, 3.5
+Atlanta State Park, 3.00, 1.2
+Balmorhea State Park, 7.00, 0.0
+Bastrop State Park, 5.00, 4.3
+Bentsen-Rio Grande Valley State Park, 5.00, 1.8
+Big Bend Ranch State Park, 5.00, 8.5
+Big Spring State Park, 0.00, 0.0
+Blanco State Park, 5.00, 1.3
+Bonham State Park, 4.00, 2.7
+Brazos Bend State Park, 7.00, 1.7
+Buescher State Park, 5.00, 3.5
+Caddo Lake State Park, 4.00, 0.7
+Cedar Hill State Park, 7.00, 12.0
+Choke Canyon State Park, 5.00, 0.7
+Cleburne State Park, 6.00, 2.5
+Colorado Bend State Park, 5.00, 4.9
+Cooper Lake State Park, 5.00, 4.6
+Copper Breaks State Park, 3.00, 3.8
+Daingerfield State Park, 4.00, 2.4
+Davis Mountains State Park, 6.00, 5.6
+Dinosaur Valley State Park, 7.00, 7.5
+Eisenhower State Park, 5.00, 3.2
+Estero Llano Grande State Park, 5.00, 0.9
+Fairfield Lake State Park, 5.00, 5.3
+Falcon State Park, 3.00, 2.6
+Fort Boggy State Park, 3.00, 1.5
+Fort Parker State Park, 4.00, 5.4
+Franklin Mountains State Park, 5.00, 15.5
+Galveston Island State Park, 5.00, 0.8
+Garner State Park, 8.00, 2.9
+Goose Island State Park, 5.00, 0.7
+Guadalupe River State Park, 7.00, 2.8
+Huntsville State Park, 7.00, 8.5
+Inks Lake State Park, 6.00, 2.2
+Kickapoo Cavern State Park, 3.00, 6.5
+Lake Arrowhead State Park, 4.00, 4.4
+Lake Bob Sandlin State Park, 4.00, 1.6
+Lake Brownwood State Park, 5.00, 2.9
+Lake Case Blanca International State Park, 4.00, 1.5
+Lake Colorado City State Park, 4.00, 1.8
+Lake Corpus Christi State Park, 5.00, 0.7
+Lake Livingston State Park, 5.00, 1.8
+Lake Tawakoni State Park, 5.00, 1.5
+Lake Whitney State Park, 5.00, 1.2
+Lockhart State Park, 3.00, 0.5
+Longhorn Cavern State Park, 0.00, 0.4
+Martin Creek Lake State Park, 3.00, 1.5
+Martin Dies Jr. State Park, 4.00, 2.2
+McKinney Falls State Park, 6.00, 3.1
+Meridian State Park, 5.00, 2.2
+Mission Tejas State Park, 3.00, 2.4
+Monahans Sandhills State Park, 4.00, 0.3
+Mother Neff State Park, 2.00, 0.6
+Mustang Island State Park, 5.00, 0.0
+Old Tunnel State Park, 0.00, 0.0
+Palmetto State Park, 3.00, 1.3
+Palo Duro Canyon State Park, 8.00, 4.4
+Pedernales Falls State Park, 6.00, 11.4
+Possum Kingdom State Park, 4.00, 1.4
+Purtis Creek State Park, 5.00, 2.0
+Ray Roberts Lake State Park, 7.00, 10.0
+Resaca de la Palma State Park, 4.00, 2.8
+San Angelo State Park, 4.00, 5.4
+Sea Rim State Park, 3.00, 11.7
+South Llano River State Park, 5.00, 4.0
+Stephen F. Austin State Park, 5.00, 1.0
+Tyler State Park, 6.00, 3.1
+Village Creek State Park, 4.00, 3.8
