@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        ".toast": "plaintext",
+        "string": "cpp",
+        "string_view": "cpp",
+        "bitset": "cpp",
+        "initializer_list": "cpp",
+        "__locale": "cpp",
+        "stdexcept": "cpp"
+    }
+}
