@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        ".toast": "plaintext",
+        "string": "cpp",
+        "ostream": "cpp"
+    }
+}
