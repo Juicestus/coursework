@@ -1,0 +1,13 @@
+{
+    "tests":[
+        {
+            "name":"howdy_world",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/howdy_world"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "howdy_world"
+        }
+    ]
+}
