@@ -1,0 +1,9 @@
+CHIP Door {
+    IN k, s, c;
+    OUT out;
+
+    PARTS:
+    Not(in=c, out=n);
+    And(a=n, b=s, out=a);
+    Or(a=a, b=k, out=out);
+}
