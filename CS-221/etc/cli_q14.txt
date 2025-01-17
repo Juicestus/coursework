@@ -1,0 +1,8 @@
+Initial Value: x = 0
+After setX1(20): x = 0
+After setX2(20): x = 20
+main_x starts at 30
+After setX3(main_x): main_x = 30, x = 20
+After setX4(main_x): main_x = 30, x = 30
+main_x set to 40
+After setX5(main_x): main_x = 30, x = 30
