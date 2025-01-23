@@ -1,0 +1,256 @@
+{
+    "tests":[
+        {
+            "name":"vector_access_operator",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_access_operator"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "Test 0 - vector_access_operator"
+        },
+        {
+            "name":"vector_at",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_at"
+            ],
+            "points": 3,
+            "time_limit": 5000,
+            "long_name": "Test 1 - vector_at"
+        },
+        {
+            "name":"vector_begin",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_begin"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "Test 2 - vector_begin"
+        },
+        {
+            "name":"vector_clear",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_clear"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "Test 3 - vector_clear"
+        },
+        {
+            "name":"vector_constructor",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_constructor"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "Test 4 - vector_constructor"
+        },
+        {
+            "name":"vector_copy_constructor",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_copy_constructor"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 5 - vector_copy_constructor"
+        },
+        {
+            "name":"vector_copy_operator",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_copy_operator"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 6 - vector_copy_operator"
+        },
+        {
+            "name":"vector_default_inserted_constructor",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_default_inserted_constructor"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 7 - vector_default_inserted_constructor"
+        },
+        {
+            "name":"vector_empty",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_empty"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "Test 8 - vector_empty"
+        },
+        {
+            "name":"vector_end",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_end"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "Test 9 - vector_end"
+        },
+        {
+            "name":"vector_erase",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_erase"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "Test 10 - vector_erase"
+        },
+        {
+            "name":"vector_erase_multiple",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_erase_multiple"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 11 - vector_erase_multiple"
+        },
+        {
+            "name":"vector_front_back",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_front_back"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 12 - vector_front_back"
+        },
+        {
+            "name":"vector_initialization_constructor",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_initialization_constructor"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 13 - vector_initialization_constructor"
+        },
+        {
+            "name":"vector_insert",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_insert"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 14 - vector_insert"
+        },
+        {
+            "name":"vector_insert_move",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_insert_move"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 15 - vector_insert_move"
+        },
+        {
+            "name":"vector_insert_multiple",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_insert_multiple"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 16 - vector_insert_multiple"
+        },
+        {
+            "name":"vector_iterator_arithmetic",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_iterator_arithmetic"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 17 - vector_iterator_arithmetic"
+        },
+        {
+            "name":"vector_iterator_comparison",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_iterator_comparison"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 18 - vector_iterator_comparison"
+        },
+        {
+            "name":"vector_iterator_forward",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_iterator_forward"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 19 - vector_iterator_forward"
+        },
+        {
+            "name":"vector_iterator_io",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_iterator_io"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 20 - vector_iterator_io"
+        },
+        {
+            "name":"vector_iterator_reverse",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_iterator_reverse"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 21 - vector_iterator_reverse"
+        },
+        {
+            "name":"vector_iterator_traits",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_iterator_traits"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 22 - vector_iterator_traits"
+        },
+        {
+            "name":"vector_move_constructor",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_move_constructor"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 23 - vector_move_constructor"
+        },
+        {
+            "name":"vector_move_operator",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_move_operator"
+            ],
+            "points": 5,
+            "time_limit": 5000,
+            "long_name": "Test 24 - vector_move_operator"
+        },
+        {
+            "name":"vector_pop_back",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_pop_back"
+            ],
+            "points": 5,
+            "time_limit": 5000,
+            "long_name": "Test 25 - vector_pop_back"
+        },
+        {
+            "name":"vector_push_back",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_push_back"
+            ],
+            "points": 5,
+            "time_limit": 5000,
+            "long_name": "Test 26 - vector_push_back"
+        },
+        {
+            "name":"vector_push_back_move",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_push_back_move"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "Test 27 - vector_push_back_move"
+        }
+    ]
+}
