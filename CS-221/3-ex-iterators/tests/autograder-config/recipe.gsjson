@@ -1,0 +1,76 @@
+{
+    "tests":[
+        {
+            "name":"vector_begin",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_begin"
+            ],
+            "points": 1,
+            "time_limit": 5000,
+            "long_name": "Test 2 - vector_begin"
+        },
+        {
+            "name":"vector_end",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_end"
+            ],
+            "points": 1,
+            "time_limit": 5000,
+            "long_name": "Test 15 - vector_end"
+        },
+        {
+            "name":"vector_iterator_arithmetic",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_iterator_arithmetic"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "Test 23 - vector_iterator_arithmetic"
+        },
+        {
+            "name":"vector_iterator_comparison",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_iterator_comparison"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "Test 24 - vector_iterator_comparison"
+        },
+        {
+            "name":"vector_iterator_forward",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_iterator_forward"
+            ],
+            "points": 1,
+            "time_limit": 5000,
+            "long_name": "Test 25 - vector_iterator_forward"
+        },
+        {
+            "name":"vector_iterator_io",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_iterator_io"
+            ],
+            "points": 1,
+            "time_limit": 5000,
+            "long_name": "Test 26 - vector_iterator_io"
+        },
+        {
+            "name":"vector_iterator_reverse",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_iterator_reverse"
+            ],
+            "points": 1,
+            "time_limit": 5000,
+            "long_name": "Test 27 - vector_iterator_reverse"
+        },
+        {
+            "name":"vector_iterator_traits",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/vector_iterator_traits"
+            ],
+            "points": 1,
+            "time_limit": 5000,
+            "long_name": "Test 28 - vector_iterator_traits"
+        }
+    ]
+}
