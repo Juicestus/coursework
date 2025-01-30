@@ -1,5 +1,4 @@
-//NAME AND UIN
-
+// Justus Languell 135007144
 /**
  * 4-way demultiplexor:
  * {a, b, c, d} = {in, 0, 0, 0} if sel == 00
@@ -13,5 +12,7 @@ CHIP DMux4Way {
     OUT a, b, c, d;
 
     PARTS:
-    // Put your code here:
+    DMux(in=in, sel=sel[1], a=x, b=y);
+    DMux(in=x, sel=sel[0], a=a, b=b);
+    DMux(in=y, sel=sel[0], a=c, b=d);
 }
