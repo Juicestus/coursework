@@ -1,0 +1,15 @@
+//NAME AND UIN
+
+/** 
+ * 16-bit multiplexor:
+ * out = a if sel == 0
+ *       b otherwise
+ */
+
+CHIP Mux16 {
+    IN  a[16], b[16], sel;
+    OUT out[16];
+
+    PARTS:
+    // Put your code here:
+}
