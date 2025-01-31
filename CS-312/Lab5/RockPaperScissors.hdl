@@ -1,0 +1,22 @@
+CHIP RockPaperScissors {
+    IN A[2], B[2];
+    OUT out[2];
+
+    PARTS:
+    And(a=A[0], b=B[1], out=C);
+    And(a=A[1], b=B[0], out=D);
+    Not(in=A[0], out=Anx);
+    Not(in=A[1], out=Any);
+    Not(in=B[0], out=Bnx);
+    Not(in=B[1], out=Bny);
+    And(a=Anx, b=Bny, out=E);
+    And(a=Any, b=Bnx, out=F);
+    Xor(a=A[1], b=B[0], out=G);
+    Xor(a=A[0], b=B[1], out=H);
+    And(a=E, b=G, out=I);
+    And(a=F, b=H, out=J);
+    And(a=F, b=C, out=K);
+    And(a=E, b=D, out=L);
+    Or(a=I, b=K, out=out[1]);
+    Or(a=J, b=L, out=out[0]);
+}
