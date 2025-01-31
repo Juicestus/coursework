@@ -1,0 +1,49 @@
+{
+    "tests":[
+        {
+            "name":"Case 1",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/sort_heaviest-case_1"
+            ],
+            "points": 1,
+            "time_limit": 5000,
+            "long_name": "Test 1 - Sort Heaviest Case 1"
+        },
+        {
+            "name":"Case 2",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/sort_heaviest-case_2"
+            ],
+            "points": 1,
+            "time_limit": 5000,
+            "long_name": "Test 2 - Sort Heaviest Case 2"
+        },
+        {
+            "name":"Case 3",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/sort_heaviest-case_3"
+            ],
+            "points": 1,
+            "time_limit": 5000,
+            "long_name": "Test 3 - Sort Heaviest Case 3"
+        },
+        {
+            "name":"Case 4",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/sort_heaviest-case_4"
+            ],
+            "points": 1,
+            "time_limit": 5000,
+            "long_name": "Test 4 - Sort Heaviest Case 4"
+        },
+        {
+            "name":"Case 5",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission run/sort_heaviest-case_5"
+            ],
+            "points": 1,
+            "time_limit": 5000,
+            "long_name": "Test 5 - Sort Heaviest Case 5"
+        }
+    ]
+}
