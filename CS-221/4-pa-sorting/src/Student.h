@@ -38,7 +38,11 @@ public:
      * - False otherwise.
      */
     [[nodiscard]] bool operator()(const Student& a, const Student& b) const {
-        /* TODO */
+        if (a.getGPA() > b.getGPA()) return true;
+        if (a.getGPA() < b.getGPA()) return false;
+        if (a.getID() < b.getID()) return true;
+        return false;
+
     }
 };
 
@@ -57,6 +61,11 @@ public:
      * Should compare IDs.
      */
     [[nodiscard]] bool operator()(const Student& a, const Student& b) const {
-        /* TODO */
+        if (a.getID() == b.getID()) return false;
+        for (const Student* student : _student_ranking) {
+            if (student->getID() == a.getID()) return true;
+            if (student->getID() == b.getID()) return false;
+        }
+        return false;
     }
 };

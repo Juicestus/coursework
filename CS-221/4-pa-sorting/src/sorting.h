@@ -23,39 +23,52 @@ namespace sort {
 		std::swap(a, b);
 	 }
 
+#define at(X) *(begin + difference_type(X))
+
 	template<typename RandomIter, typename Comparator = less_for_iter<RandomIter>>
 	void bubble(RandomIter begin, RandomIter end, Comparator comp = Comparator{}) {
-		// Random access iterators have the same traits you defined in the Vector class
-		// For instance, difference_type represents an iterator difference
-		// You may delete the types you don't use to remove the compiler warnings
 		using _it             = std::iterator_traits<RandomIter>;
 		using difference_type = typename _it::difference_type;
-		using value_type      = typename _it::value_type;
-		using reference       = typename _it::reference;
-		using pointer         = typename _it::pointer;
-
-		if (begin == end - 1) {
-			return;
-		} 
-
-		for (int i = end - begin; i > 0; i--) {
-			//for (auto l = begin, k = l + ; k < end; l=k++) {
-			for (int j = 0; j < i-1; j++) {
-				auto j0 = begin + difference_type(j);
-				auto j1 = j0 + difference_type(1);
-				//std::cout << "[" << &*l << " -> " << *l << "] [";
-				//std::cout << &*k << " -> " << *k << "]\n";
-				if (!comp(*j0, *j1)) {
-					swap(*j0, *j1);
-					// std::iter_swap(k-1, k);
-				}
-			}
-		}
+        int n = end - begin;
+        for (int i = 0; i < n-1; i++) {
+            bool sorted = true;
+            for (int j = 0; j < n - i - 1; j++) {
+                if (!comp(at(j), at(j+1))) {
+                    swap(at(j), at(j+1));
+                    sorted = false;
+                }
+            }
+            if (sorted) break;
+        }
 	}
 
-	template<typename RandomIter, typename Comparator = less_for_iter<RandomIter>>
-	void insertion(RandomIter begin, RandomIter end, Comparator comp = Comparator{}) { /* TODO */ }
 
 	template<typename RandomIter, typename Comparator = less_for_iter<RandomIter>>
-	void selection(RandomIter begin, RandomIter end, Comparator comp = Comparator{}) { /* TODO */ }
+	void insertion(RandomIter begin, RandomIter end, Comparator comp = Comparator{}) {
+        using _it             = std::iterator_traits<RandomIter>;
+		using difference_type = typename _it::difference_type;
+        int n = end - begin;
+        for (int i = 1; i < n; i++) {
+            for (int j = i; j > 0 && comp(at(j), at(j-1)); j--) {
+                swap(at(j), at(j-1)); 
+            }
+        }
+   }
+
+	template<typename RandomIter, typename Comparator = less_for_iter<RandomIter>>
+	void selection(RandomIter begin, RandomIter end, Comparator comp = Comparator{}) {
+        using _it             = std::iterator_traits<RandomIter>;
+		using difference_type = typename _it::difference_type;
+        int n = end-begin;
+        size_t heaviest;
+        for (int i = 0; i < n-1; i++) {
+            heaviest = i;
+            for (int j = i+1; j < n; j++) {
+                if (comp(at(j), at(heaviest))) {
+                    heaviest = j;
+                }
+            }
+            swap(at(heaviest), at(i));
+        }
+    }
 }

@@ -16,12 +16,12 @@ TEST(sorts_efficent) {
             arr0[i] = arr1[i] = arr2[i] = t.get<int>();
         
         Memhook mh;
-
+    
         sort::bubble(arr0.begin(), arr0.end(), [](Box<int> & i, Box<int> & j) {
             return *i < *j;
         });
-        
-        sort::insertion(arr1.begin(), arr1.end(), [](Box<int> & i, Box<int> & j) {
+
+        sort::insertion(arr1.begin(), arr1.end(), [&](Box<int> & i, Box<int> & j) {
             return *i < *j;
         });
 
