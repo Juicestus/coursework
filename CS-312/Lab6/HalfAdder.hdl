@@ -1,0 +1,8 @@
+CHIP HalfAdder {
+    IN a, b;
+    OUT sum, cout;
+
+PARTS:
+    And(a=a, b=b, out=cout);
+    Xor(a=a, b=b, out=sum);
+}

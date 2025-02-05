@@ -1,0 +1,10 @@
+CHIP RCA4 {
+    IN a[4], b[4];
+    OUT sum[4], cout;
+
+PARTS:
+	HalfAdder(a=a[0], b=b[0], sum=sum[0], cout=c01);
+	FullAdder(a=a[1], b=b[1], cin=c01,sum=sum[1], cout=c12);
+   	FullAdder(a=a[2], b=b[2], cin=c12,sum=sum[2], cout=c23);
+	FullAdder(a=a[3], b=b[3], cin=c23,sum=sum[3], cout=cout);
+}
