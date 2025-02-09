@@ -1,0 +1,17 @@
+//Name: Justus Languell
+//UIN: 135007144
+
+/**
+ * Adds two 6-bit values
+ * The chip performs out=a+b
+ * Both inputs a and b are UNSIGNED 
+ * The carry output reflects the overflow of the Add6 chip
+ */
+CHIP Add6 {
+    IN a[6], b[6];
+    OUT out[6], carry;
+
+    PARTS:
+    Add4(a=a[0..3], b=b[0..3], c=false, out=out[0..3], carry=x);
+    Add4(a[0..1]=a[4..5], b[0..1]=b[4..5], c=x, out[0..1]=out[4..5], out[2]=carry);
+}
