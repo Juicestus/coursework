@@ -1,0 +1,7 @@
+CHIP Register8Bit {
+    IN in[8], load;
+    OUT out[8];
+
+    PARTS:
+    // Put your code here:
+}

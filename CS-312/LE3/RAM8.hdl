@@ -1,0 +1,17 @@
+CHIP RAM8 {
+    IN in[8], addr[3], wr;
+    OUT out[8];
+
+    PARTS:
+    //Decode
+    
+
+    //WriteEn
+  
+
+    //Memory
+ 
+
+    // Output Mux, Use Decode without WriteEn
+
+}
