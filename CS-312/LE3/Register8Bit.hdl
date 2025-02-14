@@ -3,5 +3,12 @@ CHIP Register8Bit {
     OUT out[8];
 
     PARTS:
-    // Put your code here:
+    Bit(in=in[0], out=out[0], load=load);
+    Bit(in=in[1], out=out[1], load=load);
+    Bit(in=in[2], out=out[2], load=load);
+    Bit(in=in[3], out=out[3], load=load);
+    Bit(in=in[4], out=out[4], load=load);
+    Bit(in=in[5], out=out[5], load=load);
+    Bit(in=in[6], out=out[6], load=load);
+    Bit(in=in[7], out=out[7], load=load);
 }

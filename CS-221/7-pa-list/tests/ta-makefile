@@ -1,0 +1,39 @@
+# Configure automatic clone/cleanup for the sample submission
+CXX=g++
+TA_CONFIG=ta_config
+
+SS_ASSIGNEMNT_NAME:=assignment-list
+SS_CLONE_LOCATION:=./sample-submissions
+SS_GIT_REPO:=git@github.com:tamu-edu-students/leyk-csce221-assignment-solutions.git
+SUBMISSION_DIR=submission
+
+SS_SUBMISSION_PATH:=$(SS_CLONE_LOCATION)/$(SS_ASSIGNEMNT_NAME)/$(SUBMISSION_DIR)
+
+ssh: sample-submission
+	@echo "Attempted clone using ssh, to use http use the http target"
+
+http: export SS_GIT_REPO :=https://github.com/tamu-edu-students/leyk-csce221-assignment-solutions
+http: sample-submission
+	@echo "Attempted clone using http, to use ssh use the ssh target"
+
+sample-submission: $(TA_CONFIG) $(SS_CLONE_LOCATION)
+	@echo "RTEST_SRC_DIR=$(SS_SUBMISSION_PATH)" >> "$(TA_CONFIG)"
+
+$(SS_CLONE_LOCATION):
+	$(shell git clone $(SS_GIT_REPO) $(SS_CLONE_LOCATION))
+
+$(SUBMISSION_DIR):
+	$(shell mkdir -p $(SUBMISSION_DIR))
+
+$(TA_CONFIG):
+	$(RM) $(TA_CONFIG)
+	@echo "CXX=$(CXX)"                >> "$(TA_CONFIG)"
+.PHONY: $(TA_CONFIG)
+
+create-dir: $(TA_CONFIG) $(SUBMISSION_DIR)
+	@echo "RTEST_SRC_DIR=$(SUBMISSION_DIR)" >> "$(TA_CONFIG)"
+
+clean:
+	$(RM) $(TA_CONFIG)
+	$(shell rm -rf $(SS_CLONE_LOCATION))
+.PHONY: clean

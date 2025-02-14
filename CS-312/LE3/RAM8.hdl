@@ -4,6 +4,7 @@ CHIP RAM8 {
 
     PARTS:
     //Decode
+    DMux8(
     
 
     //WriteEn
