@@ -1,0 +1,29 @@
+//NAME: Justus Languell
+//UIN: 135007144
+
+/**
+ * 8-way 8-bit multiplexor:
+ * out = a if sel == 000
+ *       b if sel == 001
+ *       c if sel == 010
+ *       d if sel == 011
+ *       e if sel == 100
+ *       f if sel == 101
+ *       g if sel == 110
+ *       h if sel == 111
+ *         
+ */
+
+CHIP Mux8Way8 {
+    IN a[8], b[8], c[8], d[8], e[8], f[8], g[8], h[8], sel[3];
+    OUT out[8];
+
+    PARTS:
+    Mux8(a=a, b=b, sel=sel[0], out=int0);
+    Mux8(a=c, b=d, sel=sel[0], out=int1);
+    Mux8(a=e, b=f, sel=sel[0], out=int2);
+    Mux8(a=g, b=h, sel=sel[0], out=int3);
+    Mux8(a=int0, b=int1, sel=sel[1], out=int01);
+    Mux8(a=int2, b=int3, sel=sel[1], out=int23);
+    Mux8(a=int01, b=int23, sel=sel[2], out=out);    
+}
