@@ -30,20 +30,30 @@ class Queue {
         Queue& operator=(const Queue& other) = default;
         Queue& operator=(Queue&& other) = default;
 
-        reference front() { /* TODO */ }
-        const_reference front() const { /* TODO */ }
-        reference back() { /* TODO */ }
-        const_reference back() const { /* TODO */ }
+        reference front() { return c.front(); }
+        const_reference front() const { return c.front(); }
+        reference back() { return c.back(); }
+        const_reference back() const { return c.back(); }
 
-        bool empty() const { /* TODO */ }
-        size_type size() const { /* TODO */ }
+        bool empty() const { return c.empty(); }
+        size_type size() const { return c.size(); }
 
-        void push(const value_type& value) { /* TODO */ }
-        void push(value_type&& value) { /* TODO */ }
-        void pop() { /* TODO */ }
+        void push(const value_type& value) { c.push_back(value); }
+        void push(value_type&& value) { c.push_back(std::move(value)); }
+        void pop() { c.pop_front(); }
 };
 
 template <typename T, typename Container>
-inline bool operator==(const Queue<T, Container>& lhs, const Queue<T, Container>& rhs) { /* TODO */ }
+inline bool operator==(const Queue<T, Container>& lhs, const Queue<T, Container>& rhs) { 
+    if (lhs.size() != rhs.size()) return false;
+    auto lit = lhs.c.begin();
+    auto rit = rhs.c.begin();
+    while (lit != lhs.c.end()) {
+        if (*lit != *rit) return false;
+        ++lit;
+        ++rit;
+    }
+    return true;
+}
 
 #endif
