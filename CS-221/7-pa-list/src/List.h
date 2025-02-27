@@ -133,10 +133,10 @@ public:
     }
     List( List&& other ) {
         head.next = other.head.next;
-        head.next->prev = &head;
+        head.next->prev = &head;    // <-- 
 
         tail.prev = other.tail.prev;
-        tail.prev->next = &tail;
+        tail.prev->next = &tail;    // <--
 
         _size = other._size;
 
