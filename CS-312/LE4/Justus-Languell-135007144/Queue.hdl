@@ -1,0 +1,30 @@
+// Justus Languell 135007144
+
+CHIP Queue {
+    IN REQ, CMPL;
+    OUT QREQ, STALL;
+
+    PARTS:
+
+    Not(in=CMPL, out=nCMPL);
+    And(a=Q0, b=nCMPL, out=aa);
+    And(a=Q1, b=Q2, out=bb);
+    And(a=aa, b=bb, out=cc);
+    Or(a=cc, b=REQ, out=D0);
+    DFF(in=D0, out=Q0);
+
+    Not(in=Q0, out=nQ0);
+    And(a=nQ0, b=nCMPL, out=dd);
+    And(a=dd, b=bb, out=ff);
+    Or(a=ff, b=Q0, out=D1);
+    DFF(in=D1, out=Q1);
+
+    And(a=Q0, b=Q2, out=cq);
+    And(a=cq, b=nCMPL, out=gq);
+    Or(a=gq, b=Q1, out=D2);
+    DFF(in=D2, out=Q2, out=QREQ);
+
+    And(a=Q0, b=Q1, out=rt);
+    And(a=rt, b=Q2, out=lqj);
+    And(a=lqj, b=nCMPL, out=STALL);
+}
