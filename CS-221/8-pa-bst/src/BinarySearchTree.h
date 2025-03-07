@@ -247,28 +247,37 @@ void printLevelByLevel( const BinarySearchTree<KK, VV, CC>& bst, std::ostream & 
     using node_ptr = typename BinarySearchTree<KK, VV, CC>::node_ptr;
     using const_node_ptr = typename BinarySearchTree<KK, VV, CC>::const_node_ptr;
 
-    std::queue<node_ptr> curr_lvl;
-    curr_lvl.push(bst._root);
+   std::queue<node_ptr> q;
+    size_t n = 1, sz = 1;
+    q.push(bst._root);
 
-    std::queue<node_ptr> next_lvl;
+    if (bst._root == nullptr) return;
 
 
-    while (!curr_lvl.empty()) {
-        node_ptr curr_node = curr_lvl.front();
-        curr_lvl.pop();
+    while (n > 0) 
+    {
+        n = 0;
+        sz = q.size();
 
-        if (curr_node) {
-            printNode<KK, VV, CC>(out, *curr_node) << " ";
-            next_lvl.push(curr_node->left);
-            next_lvl.push(curr_node->right);
-        } else {
-            out << "null ";
+        for (size_t i = 0; i < sz; i++) {
+            node_ptr cur = q.front();
+            q.pop();
+
+            if (cur == nullptr) {
+                q.push(nullptr);
+                q.push(nullptr);
+                out << "null ";
+            }
+            else {
+                q.push(cur->left);
+                q.push(cur->right);
+
+                if (cur->left != nullptr)   n++;
+                if (cur->right != nullptr)  n++;
+                printNode<KK, VV, CC>(out, *cur) << '\n';
+            } 
         }
-
-        if (curr_lvl.empty()) {
-            out << "\n";
-            std::swap(curr_lvl, next_lvl);
-        }
+        out << std::endl;
     }
     
 }

@@ -16,7 +16,7 @@ int main() {
         std::cout << names[i] << " " << v << std::endl;
         simpleTree.insert( { names[i], v } );
     }
-    std::cout << simpleTree.contains("Carlos") << std::endl;
+    //std::cout << simpleTree.contains("Carlos") << std::endl;
 
-    //printTree(simpleTree);
+    printLevelByLevel(simpleTree);
 }
