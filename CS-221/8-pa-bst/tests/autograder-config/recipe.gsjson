@@ -1,0 +1,148 @@
+{
+    "tests":[
+        {
+            "name":"root",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/root"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "Test 0 - root"
+        },
+        {
+            "name":"constructor_default",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/constructor_default"
+            ],
+            "points": 5,
+            "time_limit": 5000,
+            "long_name": "Test 1 - constructor_default"
+        },
+        {
+            "name":"clear_and_empty",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/clear_and_empty"
+            ],
+            "points": 6,
+            "time_limit": 5000,
+            "long_name": "Test 2 - clear_and_empty"
+        },
+        {
+            "name":"insert_and_count",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/insert_and_count"
+            ],
+            "points": 5,
+            "time_limit": 5000,
+            "long_name": "Test 3 - insert_and_count"
+        },
+        {
+            "name":"insert_and_find",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/insert_and_find"
+            ],
+            "points": 6,
+            "time_limit": 5000,
+            "long_name": "Test 4 - insert_and_find"
+        },
+        {
+            "name":"insert_and_move",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/insert_and_move"
+            ],
+            "points": 5,
+            "time_limit": 5000,
+            "long_name": "Test 5 - insert_and_move"
+        },
+        {
+            "name":"insert_find_and_count",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/insert_find_and_count"
+            ],
+            "points": 7,
+            "time_limit": 5000,
+            "long_name": "Test 6 - insert_find_and_count"
+        },
+        {
+            "name":"insert_and_contains",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/insert_and_contains"
+            ],
+            "points": 7,
+            "time_limit": 5000,
+            "long_name": "Test 7 - insert_and_contains"
+        },
+        {
+            "name":"constructor_copy",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/constructor_copy"
+            ],
+            "points": 7,
+            "time_limit": 15000,
+            "long_name": "Test 8 - constructor_copy"
+        },
+        {
+            "name":"constructor_move",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/constructor_move"
+            ],
+            "points": 5,
+            "time_limit": 15000,
+            "long_name": "Test 9 - constructor_move"
+        },
+        {
+            "name":"operator_copy",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/operator_copy"
+            ],
+            "points": 7,
+            "time_limit": 15000,
+            "long_name": "Test 10 - operator_copy"
+        },
+        {
+            "name":"operator_move",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/operator_move"
+            ],
+            "points": 5,
+            "time_limit": 15000,
+            "long_name": "Test 11 - operator_move"
+        },
+        {
+            "name":"max",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/max"
+            ],
+            "points": 5,
+            "time_limit": 5000,
+            "long_name": "Test 12 - max"
+        },
+        {
+            "name":"min",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/min"
+            ],
+            "points": 5,
+            "time_limit": 5000,
+            "long_name": "Test 13 - min"
+        },
+        {
+            "name":"print_level_by_level",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/print_level_by_level"
+            ],
+            "points": 14,
+            "time_limit": 15000,
+            "long_name": "Test 14 - print_level_by_level"
+        },
+        {
+            "name":"erase",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/erase"
+            ],
+            "points": 9,
+            "time_limit": 5000,
+            "long_name": "Test 15 - erase"
+        }
+    ]
+}

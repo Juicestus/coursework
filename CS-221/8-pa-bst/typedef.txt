@@ -1,0 +1,14 @@
+    using key_type        = K;
+    using value_type      = V;
+    using key_compare     = Comparator;
+    using pair            = std::pair<key_type, value_type>;
+    using pointer         = pair*;
+    using const_pointer   = const pair*;
+    using reference       = pair&;
+    using const_reference = const pair&;
+    using difference_type = ptrdiff_t;
+    using size_type       = size_t;
+
+    using node           = BinaryNode;
+    using node_ptr       = node*;
+    using const_node_ptr = const node*;
