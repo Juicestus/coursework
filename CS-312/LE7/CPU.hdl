@@ -1,0 +1,162 @@
+CHIP CPU
+{
+    IN inM[16], instruction[16], reset;
+    OUT writeM, outM[16], addressM[16], pc[16],
+        // We include these outputs so we can inspect the values in the
+        // registers for debugging. You can add more variables here and see
+        // them in the Hardware Simulator by assigning them in "Computer.hdl".
+        // Don't forget to assign to them here in "CPU.hdl" too!
+        outR0[16], outR1[16], outR2[16];
+
+    PARTS:
+// Core Components
+    // These pieces form the core functionality of this CPU. The Registers and
+    // the Program Counter (PC) maintain the CPU state, and the Arithmetic
+    // Logic Unit (ALU) performs the computations.
+
+    Register(in=regInput, load=selR0, out=R0, out=outR0);
+    Register(in=regInput, load=selR1, out=R1, out=outR1);
+    Register(in=regInput, load=selR2, out=R2, out=outR2);
+    ALU(x=aluX, y=aluY, AluOut=aluOut, overflow=overflow);
+    PC(in=brTargetAddr, load=pcLoad, inc=true, reset=reset, out=pc);
+
+// Instruction Decode
+    // To operate the CPU, we need to know what operations to actually perform.
+    // We decode the "OPCODE" of the instructions to create flags for classes
+    // of operations (e.g. aluop, memop, brop) as well as specific operations
+    // (e.g. aluADD, aluADDI, memREAD, etc.). We can use these flags to control
+    // the remaining logic of our CPU.
+
+    Not(in=instruction[15], out=notInstruction15);
+    Not(in=instruction[14], out=notInstruction14);
+    Not(in=instruction[13], out=notInstruction13);
+    Not(in=instruction[12], out=notInstruction12);
+    Not(in=instruction[11], out=notInstruction11);
+    Not(in=instruction[10], out=notInstruction10);
+    Not(in=instruction[9],  out=notInstruction9);
+    Not(in=instruction[8],  out=notInstruction8);
+    Not(in=instruction[7],  out=notInstruction7);
+    Not(in=instruction[6],  out=notInstruction6);
+    Not(in=instruction[5],  out=notInstruction5);
+    Not(in=instruction[4],  out=notInstruction4);
+    Not(in=instruction[3],  out=notInstruction3);
+    Not(in=instruction[2],  out=notInstruction2);
+    Not(in=instruction[1],  out=notInstruction1);
+    Not(in=instruction[0],  out=notInstruction0);
+
+    // aluop = notInstruction15 * notInstruction14    (0b00...)
+    And(a=notInstruction15, b=notInstruction14, out=aluop);
+    // aluADD = aluop * notInstruction13    (0b000...)
+    And(a=aluop, b=notInstruction13, out=aluADD);
+    // aluADDI = aluop * instruction[13]    (0b001...)
+    And(a=aluop, b=instruction[13], out=aluADDI);
+
+    // memop = instruction[15] * notInstruction[13]    (0b1X0...)
+    And(a=instruction[15], b=notInstruction13, out=memop);
+    // memREAD = memop * notInstruction14    (0b100...)
+    And(a=memop, b=notInstruction14, out=memREAD);
+    // memWRITE = memop * instruction[14]    (0b110...)
+    And(a=memop, b=instruction[14], out=memWRITE);
+
+    // brop = instruction[15] * instruction[14] * instruction[13]    (0b111...)
+    And(a=instruction[15], b=instruction[14], out=bropa);
+    And(a=bropa, b=instruction[13], out=brop);
+    // brEQ = brop    (0b111...)
+    And(a=brop, b=true, out=brEQ);
+
+// Register Read
+    // Nearly all of the instructions of this CPU operate by reading values
+    // from the registers. The requisite registers are denoted by a 3 bit wide
+    // set of binary flags. We notice that the instructions are aligned such
+    // that the same instruction bits represent same registers for many of 
+    // the instructions, so we combine all these register reads here.
+
+    // instruction[11..9] = 
+            // 0b100 ==> R0
+            // 0b010 ==> R1
+            // 0b001 ==> R2
+    // memop:
+        // WRITE "DEST PTR REGISTER" == memWRITEAddr
+    // brop:
+        // BEQ "TARGET ADDRESS" == brTargetAddr
+    Mux16(a=R0, b=R1, sel=notInstruction11, out=fromI11);
+    Mux16(a=R2, b=fromI11, sel=notInstruction9, out=memWRITEAddr, out=brTargetAddr);
+
+    // instruction[6..8] =
+            // 0b100 ==> R0
+            // 0b010 ==> R1
+            // 0b001 ==> R2
+    // aluop:
+        // ADD, ADDI: "SRC1 REGISTER" == aluX
+    // memop:
+        // READ "SRC PTR REGISTER" == memREADAddr
+        // WRITE "SRC REGISTER" == outM
+    // brop:
+        // BEQ "SRC REGISTER" == brSrcReg
+    Mux16(a=R0, b=R1, sel=notInstruction8, out=fromI8);
+    Mux16(a=R2, b=fromI8, sel=notInstruction6, out=aluX, out=memREADAddr, out=outM, out=brSrcReg);
+    
+    // instruction[3..5] =
+            // 0b100 ==> R0
+            // 0b010 ==> R1
+            // 0b001 ==> R2
+    // aluop:
+        // ADD: "SRC2 REGISTER" == aluYReg
+    Mux16(a=R0, b=R1, sel=notInstruction5, out=fromI5);
+    Mux16(a=R2, b=fromI5, sel=notInstruction3, out=aluYReg);
+
+// Register Write
+    // Most of the instructions of this CPU write their result directly into a
+    // register. We handle writing values into the registers here.
+
+    // We first check if out current instruction writes to a register. For this
+    // CPU, Arithmetic Operations (aluop) and Memory READ (memREAD) are the
+    // only instructions which write to a register, so if the aluOP or memREAD
+    // flags are true, then we will write to a register.
+    Or(a=aluop, b=memREAD, out=regIsDest);
+    // We then select which data needs to be written into the register. For
+    // this CPU we have two options: the output from Memory (inM) when the
+    // instruction is memREAD or the output from ALU (aluOut) when the
+    // instruction is an aluop.
+    Mux16(a=inM, b=aluOut, sel=aluop, out=regInput);
+    
+    // The register to write into is indicated by a 3 bit wide flag. If the
+    // current instruction writes into a register (regIsDest), then we write
+    // into the register specified as below,
+    // DEST REGISTER:
+        // instruction[9..11] =
+            // 0b100 ==> R0
+            // 0b010 ==> R1
+            // 0b001 ==> R2
+    And(a=regIsDest, b=instruction[11], out=selR0);
+    And(a=regIsDest, b=instruction[10], out=selR1);
+    And(a=regIsDest, b=instruction[9],  out=selR2);
+
+// ALU Logic
+    // For arithmetic instructions, our ALU has two different possible inputs
+    // for aluY: aluYReg for aluADD or 6 Bit Immediate Value for aluADDI. For
+    // the latter this value is encoded in the last 6 bits of instruction.
+    Mux16(a=aluYReg, b[0..5]=instruction[0..5], sel=aluADDI, out=aluY, out=out);
+
+// Memory Logic
+    // To write a value to memory, the CPU must set the load input of the
+    // Memory chip (writeM). Currently the only operation on this CPU which
+    // writes to Memory is memWRITE.
+    And(a=memWRITE, b=true, out=writeM);
+    // The CPU has two potential addresses to request from the Memory chip: 
+    // memREADAddr ormemWRITEAddr. We must select one to send to Memory.
+    Mux16(a=memREADAddr, b=memWRITEAddr, sel=memWRITE, out=addressM);
+
+// Branch Logic
+    // We have already determined where to jump to in the case of a branch in
+    // in the "Register Read" section. However, to actually jump, we must set 
+    // the load input of the Program Counter (pcLoad).
+
+    // brEQ: pcLoad = (brSrcReg == 0)
+    Mux16(a=brSrcReg, b=true, sel=false, out[0..7]=firstHalf, out[8..15]=secondHalf);
+    Or8Way(in=firstHalf, out=notFirstHalfAllZero);
+    Or8Way(in=secondHalf, out=notSecondHalfAllZero);
+    Or(a=notFirstHalfAllZero, b=notSecondHalfAllZero, out=notAllZero);
+    Not(in=notAllZero, out=allZero);
+    And(a=brEQ, b=allZero, out=pcLoad);
+}
