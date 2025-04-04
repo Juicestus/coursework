@@ -1,0 +1,193 @@
+{
+    "tests":[
+        {
+            "name":"access_operator",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/access_operator"
+            ],
+            "points": 3,
+            "time_limit": 10000,
+            "long_name": "access_operator"
+        },
+        {
+            "name":"bucket_iterator",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/bucket_iterator"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "bucket_iterator"
+        },
+        {
+            "name":"bucket_size",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/bucket_size"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "bucket_size"
+        },
+        {
+            "name":"bucket",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/bucket"
+            ],
+            "points": 3,
+            "time_limit": 5000,
+            "long_name": "bucket"
+        },
+        {
+            "name":"clear_and_empty",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/clear_and_empty"
+            ],
+            "points": 5,
+            "time_limit": 5000,
+            "long_name": "clear_and_empty"
+        },
+        {
+            "name":"constructor_copy",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/constructor_copy"
+            ],
+            "points": 5,
+            "time_limit": 10000,
+            "long_name": "constructor_copy"
+        },
+        {
+            "name":"constructor_move",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/constructor_move"
+            ],
+            "points": 5,
+            "time_limit": 5000,
+            "long_name": "constructor_move"
+        },
+        {
+            "name":"constructor",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/constructor"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "constructor"
+        },
+        {
+            "name":"destructor_and_inserts",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/destructor_and_inserts"
+            ],
+            "points": 4,
+            "time_limit": 12000,
+            "long_name": "destructor_and_inserts"
+        },
+        {
+            "name":"erase_iterator",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/erase_iterator"
+            ],
+            "points": 8,
+            "time_limit": 12000,
+            "long_name": "erase_iterator"
+        },
+        {
+            "name":"erase",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/erase"
+            ],
+            "points": 8,
+            "time_limit": 12000,
+            "long_name": "erase"
+        },
+        {
+            "name":"fnv1a_hash",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/fnv1a_hash"
+            ],
+            "points": 4,
+            "time_limit": 10000,
+            "long_name": "fnv1a_hash"
+        },
+        {
+            "name":"find_and_global_iterator",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/find_and_global_iterator"
+            ],
+            "points": 4,
+            "time_limit": 10000,
+            "long_name": "find_and_global_iterator"
+        },
+        {
+            "name":"insert_and_global_iterator",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/insert_and_global_iterator"
+            ],
+            "points": 6,
+            "time_limit": 10000,
+            "long_name": "insert_and_global_iterator"
+        },
+        {
+            "name":"insert_and_local_iterator",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/insert_and_local_iterator"
+            ],
+            "points": 8,
+            "time_limit": 12000,
+            "long_name": "insert_and_local_iterator"
+        },
+        {
+            "name":"insert_and_move",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/insert_and_move"
+            ],
+            "points": 5,
+            "time_limit": 12000,
+            "long_name": "insert_and_move"
+        },
+        {
+            "name":"iterator",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/iterator"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "iterator"
+        },
+        {
+            "name":"load_factor",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/load_factor"
+            ],
+            "points": 2,
+            "time_limit": 5000,
+            "long_name": "load_factor"
+        },
+        {
+            "name":"operator_copy",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/operator_copy"
+            ],
+            "points": 6,
+            "time_limit": 5000,
+            "long_name": "operator_copy"
+        },
+        {
+            "name":"operator_move",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/operator_move"
+            ],
+            "points": 6,
+            "time_limit": 5000,
+            "long_name": "operator_move"
+        },
+        {
+            "name":"polynomial_hash",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/polynomial_hash"
+            ],
+            "points": 4,
+            "time_limit": 5000,
+            "long_name": "polynomial_hash"
+        }
+    ]
+}
