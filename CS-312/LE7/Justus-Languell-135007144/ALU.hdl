@@ -1,0 +1,236 @@
+// Code Authored by Amit Merchant CSCE-312
+// The Custom ALU is provided as IP to be used in construction of the Small CPU
+
+CHIP ALU {
+    IN x[16], y[16], sub, shiftL, shiftR, nand, or;
+    OUT AluOut[16], overflow;
+
+	PARTS:
+
+	// Negation engine
+	Negate(in=y, out=negY);
+	Mux16(a=y, b=negY, sel=sub, 
+		out[0]=yC0,
+		out[1]=yC1,
+		out[2]=yC2,
+		out[3]=yC3,
+		out[4]=yC4,
+		out[5]=yC5,
+		out[6]=yC6,
+		out[7]=yC7,
+		out[8]=yC8,
+		out[9]=yC9,
+		out[10]=yC10,
+		out[11]=yC11,
+		out[12]=yC12,
+		out[13]=yC13,
+		out[14]=yC14,
+		out[15]=yC15);
+
+	// 0111001010000000
+		
+	// Adder
+	FullAdder(a=x[0], b=yC0, c=false, sum=AddSubOut0, carry=carry0);
+	FullAdder(a=x[1], b=yC1, c=carry0 ,sum=AddSubOut1, carry=carry1);
+	FullAdder(a=x[2], b=yC2, c=carry1 ,sum=AddSubOut2, carry=carry2);
+	FullAdder(a=x[3], b=yC3, c=carry2 ,sum=AddSubOut3, carry=carry3);
+	FullAdder(a=x[4], b=yC4, c=carry3 ,sum=AddSubOut4, carry=carry4);
+	FullAdder(a=x[5], b=yC5, c=carry4 ,sum=AddSubOut5, carry=carry5);
+	FullAdder(a=x[6], b=yC6, c=carry5 ,sum=AddSubOut6, carry=carry6);
+	FullAdder(a=x[7], b=yC7, c=carry6 ,sum=AddSubOut7, carry=carry7);
+	FullAdder(a=x[8], b=yC8, c=carry7 ,sum=AddSubOut8, carry=carry8);
+	FullAdder(a=x[9], b=yC9, c=carry8 ,sum=AddSubOut9, carry=carry9);
+	FullAdder(a=x[10], b=yC10, c=carry9 ,sum=AddSubOut10, carry=carry10);
+	FullAdder(a=x[11], b=yC11, c=carry10 ,sum=AddSubOut11, carry=carry11);
+	FullAdder(a=x[12], b=yC12, c=carry11 ,sum=AddSubOut12, carry=carry12);
+	FullAdder(a=x[13], b=yC13, c=carry12 ,sum=AddSubOut13, carry=carry13);
+	FullAdder(a=x[14], b=yC14, c=carry13 ,sum=AddSubOut14, carry=carry14);
+	FullAdder(a=x[15], b=yC15, c=carry14 ,sum=AddSubOut15, carry=overflow);
+
+	Shift16(right=shiftR, in=x, out[0]=shiftOut0, out[1]=shiftOut1, out[2]=shiftOut2, out[3]=shiftOut3, out[4]=shiftOut4, out[5]=shiftOut5, out[6]=shiftOut6, out[7]=shiftOut7, out[8]=shiftOut8, out[9]=shiftOut9, out[10]=shiftOut10, out[11]=shiftOut11, out[12]=shiftOut12, out[13]=shiftOut13, out[14]=shiftOut14, out[15]=shiftOut15);
+
+	// Mux
+	Or(a=shiftL, b=shiftR, out=shiftSel);
+	Mux16(sel=shiftSel,
+
+		a[0] =AddSubOut0,
+		a[1] =AddSubOut1,
+		a[2] =AddSubOut2,
+		a[3] =AddSubOut3,
+		a[4] =AddSubOut4,
+		a[5] =AddSubOut5,
+		a[6] =AddSubOut6,
+		a[7] =AddSubOut7,
+		a[8] =AddSubOut8,
+		a[9] =AddSubOut9,
+		a[10]=AddSubOut10,
+		a[11]=AddSubOut11,
+		a[12]=AddSubOut12,
+		a[13]=AddSubOut13,
+		a[14]=AddSubOut14,
+		a[15]=AddSubOut15,
+
+		b[0]=shiftOut0,
+		b[1]=shiftOut1,
+		b[2]=shiftOut2,
+		b[3]=shiftOut3,
+		b[4]=shiftOut4,
+		b[5]=shiftOut5,
+		b[6]=shiftOut6,
+		b[7]=shiftOut7,
+		b[8]=shiftOut8,
+		b[9]=shiftOut9,
+		b[10]=shiftOut10,
+		b[11]=shiftOut11,
+		b[12]=shiftOut12,
+		b[13]=shiftOut13,
+		b[14]=shiftOut14,
+		b[15]=shiftOut15,
+		
+		out[0]=shiftAddSub0,
+		out[1]=shiftAddSub1,
+		out[2]=shiftAddSub2,
+		out[3]=shiftAddSub3,
+		out[4]=shiftAddSub4,
+		out[5]=shiftAddSub5,
+		out[6]=shiftAddSub6,
+		out[7]=shiftAddSub7,
+		out[8]=shiftAddSub8,
+		out[9]=shiftAddSub9,
+		out[10]=shiftAddSub10,
+		out[11]=shiftAddSub11,
+		out[12]=shiftAddSub12,
+		out[13]=shiftAddSub13,
+		out[14]=shiftAddSub14,
+		out[15]=shiftAddSub15);
+
+	// Nand
+	Nand(a=x[0], b=y[0], out=nandOut0);
+	Nand(a=x[1], b=y[1], out=nandOut1);
+	Nand(a=x[2], b=y[2], out=nandOut2);
+	Nand(a=x[3], b=y[3], out=nandOut3);
+	Nand(a=x[4], b=y[4], out=nandOut4);
+	Nand(a=x[5], b=y[5], out=nandOut5);
+	Nand(a=x[6], b=y[6], out=nandOut6);
+	Nand(a=x[7], b=y[7], out=nandOut7);
+	Nand(a=x[8], b=y[8], out=nandOut8);
+	Nand(a=x[9], b=y[9], out=nandOut9);
+	Nand(a=x[10], b=y[10], out=nandOut10);
+	Nand(a=x[11], b=y[11], out=nandOut11);
+	Nand(a=x[12], b=y[12], out=nandOut12);
+	Nand(a=x[13], b=y[13], out=nandOut13);
+	Nand(a=x[14], b=y[14], out=nandOut14);
+	Nand(a=x[15], b=y[15], out=nandOut15);
+
+	// Nor 
+	Nor(a=x[0], b=y[0], out=orOut0);
+	Nor(a=x[1], b=y[1], out=orOut1);
+	Nor(a=x[2], b=y[2], out=orOut2);
+	Nor(a=x[3], b=y[3], out=orOut3);
+	Nor(a=x[4], b=y[4], out=orOut4);
+	Nor(a=x[5], b=y[5], out=orOut5);
+	Nor(a=x[6], b=y[6], out=orOut6);
+	Nor(a=x[7], b=y[7], out=orOut7);
+	Nor(a=x[8], b=y[8], out=orOut8);
+	Nor(a=x[9], b=y[9], out=orOut9);
+	Nor(a=x[10], b=y[10], out=orOut10);
+	Nor(a=x[11], b=y[11], out=orOut11);
+	Nor(a=x[12], b=y[12], out=orOut12);
+	Nor(a=x[13], b=y[13], out=orOut13);
+	Nor(a=x[14], b=y[14], out=orOut14);
+	Nor(a=x[15], b=y[15], out=orOut15);
+
+	// Mux
+	Mux16(
+		a[0]=orOut0,
+		a[1]=orOut1,
+		a[2]=orOut2,
+		a[3]=orOut3,
+		a[4]=orOut4,
+		a[5]=orOut5,
+		a[6]=orOut6,
+		a[7]=orOut7,
+		a[8]=orOut8,
+		a[9]=orOut9,
+		a[10]=orOut10,
+		a[11]=orOut11,
+		a[12]=orOut12,
+		a[13]=orOut13,
+		a[14]=orOut14,
+		a[15]=orOut15,
+
+		b[0]=nandOut0,
+		b[1]=nandOut1,
+		b[2]=nandOut2,	
+		b[3]=nandOut3,
+		b[4]=nandOut4,
+		b[5]=nandOut5,
+		b[6]=nandOut6,
+		b[7]=nandOut7,
+		b[8]=nandOut8,
+		b[9]=nandOut9,
+		b[10]=nandOut10,
+		b[11]=nandOut11,
+		b[12]=nandOut12,
+		b[13]=nandOut13,
+		b[14]=nandOut14,
+		b[15]=nandOut15,
+		sel=nand,
+		out[0]=NandOrOut0,
+		out[1]=NandOrOut1,
+		out[2]=NandOrOut2,
+		out[3]=NandOrOut3,
+		out[4]=NandOrOut4,
+		out[5]=NandOrOut5,
+		out[6]=NandOrOut6,
+		out[7]=NandOrOut7,
+		out[8]=NandOrOut8,
+		out[9]=NandOrOut9,
+		out[10]=NandOrOut10,
+		out[11]=NandOrOut11,
+		out[12]=NandOrOut12,
+		out[13]=NandOrOut13,
+		out[14]=NandOrOut14,
+		out[15]=NandOrOut15);
+	// Mux
+
+	Or(a=or, b=nand, out=LogicalSel);
+
+	Mux16(
+		a[0]=shiftAddSub0,
+		a[1]=shiftAddSub1,
+		a[2]=shiftAddSub2,
+		a[3]=shiftAddSub3,
+		a[4]=shiftAddSub4,
+		a[5]=shiftAddSub5,
+		a[6]=shiftAddSub6,
+		a[7]=shiftAddSub7,
+		a[8]=shiftAddSub8,
+		a[9]=shiftAddSub9,
+		a[10]=shiftAddSub10,
+		a[11]=shiftAddSub11,
+		a[12]=shiftAddSub12,
+		a[13]=shiftAddSub13,
+		a[14]=shiftAddSub14,
+		a[15]=shiftAddSub15,
+
+		b[0]=NandOrOut0,
+		b[1]=NandOrOut1,
+		b[2]=NandOrOut2,	
+		b[3]=NandOrOut3,
+		b[4]=NandOrOut4,
+		b[5]=NandOrOut5,
+		b[6]=NandOrOut6,
+		b[7]=NandOrOut7,
+		b[8]=NandOrOut8,
+		b[9]=NandOrOut9,
+		b[10]=NandOrOut10,
+		b[11]=NandOrOut11,
+		b[12]=NandOrOut12,
+		b[13]=NandOrOut13,
+		b[14]=NandOrOut14,
+		b[15]=NandOrOut15,
+
+		sel=LogicalSel, 
+		out=AluOut);
+}
