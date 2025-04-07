@@ -1,0 +1,140 @@
+// Aakash Tyagi
+
+CHIP CPU{
+
+    IN  fromM[16],          // M value input  (M = contents of RAM[Address])
+        In[16],    	       // Instruction for execution
+        Reset;              // Signals whether to re-start the current
+                            // program (Reset==1) or continue executing
+                            // the current program (Reset==0).
+
+    OUT toM[16],            // M value output
+        writeM,             // Write to M 
+        addressM[16],       // Address in data memory (of M)
+        reg0[16],
+        reg1[16],
+        reg2[16],
+        PCOut[16];          // address of next instruction
+
+    PARTS:
+    
+//prepare 1s and 0s for all instruction bits
+    Not(in=In[0], out=notIn0);
+    Not(in=In[1], out=notIn1);
+    Not(in=In[2], out=notIn2);
+    Not(in=In[3], out=notIn3);
+    Not(in=In[4], out=notIn4);
+    Not(in=In[5], out=notIn5);
+    Not(in=In[6], out=notIn6);
+    Not(in=In[7], out=notIn7);
+    Not(in=In[8], out=notIn8);
+    Not(in=In[9], out=notIn9);
+    Not(in=In[10], out=notIn10);
+    Not(in=In[11], out=notIn11);
+    Not(in=In[12], out=notIn12);
+    Not(in=In[13], out=notIn13);
+    Not(in=In[14], out=notIn14);
+    Not(in=In[15], out=notIn15);
+
+////////////Instruction Decode START////////////////////
+
+    //select the correct destination register
+    //register is destination if instruction is (a) ALU OR (b)Memory Read
+
+    //instruction decode
+    //instruction is ALU if In[15] is 0
+    //we have already generated this as notIn15 above
+
+    //instruction is alu if In[15..14]=00
+    And(a=notIn15, b=notIn14, out = aluop);
+    And(a=aluop, b=In[13], out = aluimm);
+
+    //instruction is memory read if OPcode==Memory (In[15..14]=10)
+    And(a=In[15], b=notIn14, out = memopcode);
+    And(a=In[15], b=notIn14, out = memread);
+    And(a=In[15], b=In[14], out = memwrite);
+
+    //instruction is branch if In[15..13]=111
+    And(a=In[15], b=In[14], out = brint);
+    And(a=brint, b=In[13], out = brop);
+
+    //generate condition for register is destination
+    Or(a=aluop, b=memread, out=regisdest);
+
+    //generate IO transaction (future)
+////////////Instruction Decode END////////////////////
+
+////////////Register Write START////////////////////
+   //Collate register input sources. Input can come from ALU or Memory
+    Mux16(a=fromM, b=AluOut, sel=notIn15, out=reginput);
+ 
+    //generate loads for 3 registers
+    And(a=regisdest, b=In[11], out=selreg0);
+    And(a=regisdest, b=In[10], out=selreg1);
+    And(a=regisdest, b=In[9], out=selreg2);
+
+    //Now propagate the register input 'reginput' to the appropriate register
+    Register(in=reginput, load=selreg0, out=reg0out, out=reg0);
+    Register(in=reginput, load=selreg1, out=reg1out, out=reg1);
+    Register(in=reginput, load=selreg2, out=reg2out, out=reg2);
+////////////register write END////////////////////
+
+
+//ALU//
+    //ALU Datapath
+    Mux16(a=reg0out, b=reg1out, sel=notIn8, out=regintx);
+    Mux16(a=reg2out, b=regintx, sel=notIn6, out=ALUX);
+
+    Mux16(a=reg0out, b=reg1out, sel=notIn5, out=reginty);
+    Mux16(a=reg2out, b=reginty, sel=notIn3, out=ALUYfromReg);
+
+    //Mux immediate data
+    Mux16(a=ALUYfromReg, b[0..5]=In[0..5], sel=aluimm, out=ALUY);
+
+    //connect the ALU
+    ALU(x=ALUX, y=ALUY, AluOut=AluOut, overflow=overflow);
+
+//ALU//
+
+
+//prepare the Memory Address addressM (in case of READ and Write), Memory Data toM (in case of Write or OUT) 
+
+//addressM START////
+    //Read address, same as ALUX
+    Mux16(a=reg0out, b=reg1out, sel=notIn8, out=regintz);
+    Mux16(a=reg2out, b=regintz, sel=notIn6, out=readaddress, out=toM);
+
+    //Write address
+    Mux16(a=reg0out, b=reg1out, sel=notIn11, out=regintw);
+    Mux16(a=reg2out, b=regintw, sel=notIn9, out=writeaddress);
+
+    //address to RAM
+    Mux16(a=writeaddress, b=readaddress, sel=memread, out=addressM);
+//addressM END/////
+
+//writeM START////////
+//generate the writeM signal (memory write for RAM or Screen)
+//writeM is true if it is a Memory Write operation (or a Screen OUT operation - future)
+//this is a bit of overkill, anding with 1, but it is a placeholder for future real ands
+    And(a=memwrite, b=true, out=writeM);
+//writeM END////////    
+
+//PC LOAD START///
+
+//we load the PC with new value if there is a branch
+//conditional
+    //Reuse ALUX signal for detecting 0 in source registers
+    Mux16(a=ALUX, b=true, sel=false, out[0..7]=firsthalf, out[8..15]=secondhalf);
+
+    //detect if 0 by ORing all bits of the register, it even one bit is 1, the OR will produce a 1.
+    Or8Way(in=firsthalf, out=firsthalfzeroinv);
+    Or8Way(in=secondhalf, out=secondhalfzeroinv);
+    Or(a=firsthalfzeroinv, b=secondhalfzeroinv, out=allzeroinv);
+    Not(in=allzeroinv, out=allzero);
+    And(a=allzero, b=brop, out=PCLoad);
+//PC LOAD END///
+
+//connect the PC
+    //Reuse writeaddre as PCInput, i.e. when PCload is asserted, contents from a particular resgiter are loaded as next address
+    PC(in=writeaddress, reset=Reset, load=PCLoad, inc=true, out=PCOut);
+}
