@@ -1,0 +1,49 @@
+{
+    "tests":[
+        {
+            "name":"push_and_count",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/push_and_count"
+            ],
+            "points": 25,
+            "time_limit": 12000,
+            "long_name": "push_and_count"
+        },
+        {
+            "name":"push_and_empty",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/push_and_empty"
+            ],
+            "points": 15,
+            "time_limit": 5000,
+            "long_name": "push_and_empty"
+        },
+        {
+            "name":"push_and_top",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/push_and_top"
+            ],
+            "points": 25,
+            "time_limit": 5000,
+            "long_name": "push_and_top"
+        },
+        {
+            "name":"push_move_and_efficient",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/push_move_and_efficient"
+            ],
+            "points": 10,
+            "time_limit": 12000,
+            "long_name": "push_move_and_efficient"
+        },
+        {
+            "name":"push_pop_and_top",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/push_pop_and_top"
+            ],
+            "points": 25,
+            "time_limit": 12000,
+            "long_name": "push_pop_and_top"
+        }
+    ]
+}
