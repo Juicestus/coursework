@@ -1,0 +1,58 @@
+{
+    "tests":[
+        {
+            "name":"dijkstra-complete_graph",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/dijkstra-complete_graph"
+            ],
+            "points": 13,
+            "time_limit": 5000,
+            "long_name": "dijkstra-complete_graph"
+        },
+        {
+            "name":"dijkstra-complete_with_dropout",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/dijkstra-complete_with_dropout"
+            ],
+            "points": 13,
+            "time_limit": 5000,
+            "long_name": "dijkstra-complete_with_dropout"
+        },
+        {
+            "name":"dijkstra-directed_tree",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/dijkstra-directed_tree"
+            ],
+            "points": 13,
+            "time_limit": 45000,
+            "long_name": "dijkstra-directed_tree"
+        },
+        {
+            "name":"dijkstra-gnp_dag",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/dijkstra-gnp_dag"
+            ],
+            "points": 13,
+            "time_limit": 45000,
+            "long_name": "dijkstra-gnp_dag"
+        },
+        {
+            "name":"dijkstra-internet",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/dijkstra-internet"
+            ],
+            "points": 13,
+            "time_limit": 45000,
+            "long_name": "dijkstra-internet"
+        },
+        {
+            "name":"topological_sort",
+            "cmds": [
+                "make -C tests RTEST_SRC_DIR=../../submission -j12 run/topological_sort"
+            ],
+            "points": 35,
+            "time_limit": 5000,
+            "long_name": "topological_sort"
+        }
+    ]
+}
