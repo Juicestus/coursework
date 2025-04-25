@@ -39,7 +39,7 @@ std::list<value_type<T>> topologicalSort(const WeightedGraph<T>& graph)
     // Initialize Empty List (Stores Top Sort Ordering)
     std::list<value_type<T>> k{};
     // Initialize Empty Queue (Tracks Discovered Vertices)
-    std::queue<vertex_type<T>> q{};
+    std::queue<value_type<T>> q{};
 
     // Add All Vertices with Indegree 0 to Queue
     size_t n_vertex = 0;
