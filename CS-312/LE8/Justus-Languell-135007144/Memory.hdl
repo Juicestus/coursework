@@ -1,0 +1,31 @@
+CHIP Memory
+{
+    IN load, in[16], address[16];
+    OUT out[16];
+
+    PARTS:
+    Not(in=address[15], out=nota15);
+    Not(in=address[14], out=nota14);
+    Not(in=address[13], out=nota13);
+    // RAM
+    // FROM 0x0000 = 0b0000 ...
+    //   TO 0x3FFF = 0b0011 ...
+    // ==> loadram = nota15 * nota14 * load
+    And(a=nota15, b=nota14, out=loadrama);
+    And(a=loadrama, b=load, out=loadram);
+    RAM16K(in=in, load=loadram, address=address[0..13], out=outram);
+    // Screen Memory
+    // FROM 0x4000 = 0b0100 ...
+    //   TO 0x5FFF = 0b0101 ...
+    // ==> loadscr = nota15 * address[14] * nota13 * load
+    And(a=nota15, b=address[14], out=loadscra);
+    And(a=nota13, b=load, out=loadscrb);
+    And(a=loadscra, b=loadscrb, out=loadscr);
+    Screen(in=in, load=loadscr, address=address[0..12], out=outscr);
+    // Keyboard
+    // AT 0x6000 = 0b0110 ...
+    Keyboard(out=outkbd);
+
+    // Output
+    Mux4Way16(a=outram, b=outram, c=outscr, d=outkbd, sel=address[13..14], out=out);
+}

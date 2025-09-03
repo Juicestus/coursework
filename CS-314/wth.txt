@@ -1,0 +1,31 @@
+
+(define (lslen ls)
+  [cond
+    ((eq? ls '()) '0)
+    (else (+ '1 (lslen (cdr ls))))
+  ]
+)
+
+(define (lslen2 ls)
+  [cond
+    ((eq? ls '()) '1)
+    (else (* '2 (lslen2 (cdr ls))))
+  ]
+)
+
+(define (recurse ls i)
+  [cond
+    ((eq? ls '()) '0)
+    (else (+ (* i (car ls)) (recurse (cdr ls) (/ i 2))))
+  ]
+)
+
+(define (bin-to-num ls)
+  (recurse ls (/ (lslen2 ls) 2))
+  )
+
+
+(display (bin-to-num '(1 0 1 0 1)))
+
+
+

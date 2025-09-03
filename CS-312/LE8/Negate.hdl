@@ -1,0 +1,36 @@
+//Name: Justus Languell
+//UIN: 135007144
+
+// Wrote in lab excercise 2
+
+/**
+ * Negate a 16-bit number in 2's complement format.
+ * 2’s complement of the input
+ * carry out is intentionally ignored.
+ * Input in is in 2s complement format
+ */
+
+CHIP Negate {
+    IN in[16];
+    OUT out[16];
+
+    PARTS:
+    Not(in=in[0], out=ot0);
+    Not(in=in[1], out=ot1);
+    Not(in=in[2], out=ot2);
+    Not(in=in[3], out=ot3);
+    Not(in=in[4], out=ot4);
+    Not(in=in[5], out=ot5);
+    Not(in=in[6], out=ot6);
+    Not(in=in[7], out=ot7);
+    Not(in=in[8], out=ot8);
+    Not(in=in[9], out=ot9);
+    Not(in=in[10], out=ot10);
+    Not(in=in[11], out=ot11);
+    Not(in=in[12], out=ot12);
+    Not(in=in[13], out=ot13);
+    Not(in=in[14], out=ot14);
+    Not(in=in[15], out=ot15);
+
+    Inc16(in[0]=ot0, in[1]=ot1, in[2]=ot2, in[3]=ot3, in[4]=ot4, in[5]=ot5, in[6]=ot6, in[7]=ot7, in[8]=ot8, in[9]=ot9, in[10]=ot10, in[11]=ot11, in[12]=ot12, in[13]=ot13, in[14]=ot14, in[15]=ot15, out=out);
+}

@@ -1,0 +1,26 @@
+// Code Authored by Amit Merchant CSCE-312
+// The Custom ALU is provided as IP to be used in construction of the Small CPU
+
+CHIP ALU {
+    IN x[16], y[16];
+    OUT AluOut[16], overflow;	
+
+	PARTS:
+
+	FullAdder(a=x[0], b=y[0], c=false, sum=AluOut[0], carry=carry0);
+	FullAdder(a=x[1], b=y[1], c=carry0 ,sum=AluOut[1] ,carry=carry1);
+	FullAdder(a=x[2], b=y[2], c=carry1 ,sum=AluOut[2] ,carry=carry2);
+	FullAdder(a=x[3], b=y[3], c=carry2 ,sum=AluOut[3] ,carry=carry3);
+	FullAdder(a=x[4], b=y[4], c=carry3 ,sum=AluOut[4] ,carry=carry4);
+	FullAdder(a=x[5], b=y[5], c=carry4 ,sum=AluOut[5] ,carry=carry5);
+	FullAdder(a=x[6], b=y[6], c=carry5 ,sum=AluOut[6] ,carry=carry6);
+	FullAdder(a=x[7], b=y[7], c=carry6 ,sum=AluOut[7] ,carry=carry7);
+	FullAdder(a=x[8], b=y[8], c=carry7 ,sum=AluOut[8] ,carry=carry8);
+	FullAdder(a=x[9], b=y[9], c=carry8 ,sum=AluOut[9] ,carry=carry9);
+	FullAdder(a=x[10], b=y[10], c=carry9 ,sum=AluOut[10] ,carry=carry10);
+	FullAdder(a=x[11], b=y[11], c=carry10 ,sum=AluOut[11] ,carry=carry11);
+	FullAdder(a=x[12], b=y[12], c=carry11 ,sum=AluOut[12] ,carry=carry12);
+	FullAdder(a=x[13], b=y[13], c=carry12 ,sum=AluOut[13] ,carry=carry13);
+	FullAdder(a=x[14], b=y[14], c=carry13 ,sum=AluOut[14] ,carry=carry14);
+	FullAdder(a=x[15], b=y[15], c=carry14 ,sum=AluOut[15] ,carry=overflow);
+}

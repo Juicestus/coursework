@@ -1,0 +1,38 @@
+// Aakash Tyagi
+
+
+CHIP Memory {
+	
+    IN  in[16],    	// Data to be written into memory
+	load,      	// Variable which decides whether to write to memory or not
+	address[16];	// Address for the register which we want access
+  
+    OUT out[16];    	// Output from the memory
+
+  PARTS:
+  // Data Memory has three sections: 16K RAM, 8K Screen, 1 Keyboard. Unit is 1 word
+
+  // Address RAM (16K) with 14 address bits address[0..13]
+  Not(in=address[15], out = nota15);
+  Not(in=address[14], out = nota14);
+  And(a=load, b=nota15, out=int1);
+  And(a=int1, b=nota14, out=loadram);
+  RAM16K(in=in, load=loadram, address = address[0..13], out=outram);
+
+  // Address SCREEN (8K) with 16 address bits
+  // Load will be generated as address[15] AND address[14]' AND address[13]'
+  // address[0..12] are sent to address pins of RAM8K
+  // in[16] is sent as input
+  // out can be called as outscr
+  Not(in=address[13], out=nota13);
+  And(a=load, b=address[15], out=load1);
+  And(a=load1, b=nota14, out=load2);
+  And(a=load2, b=nota13, out=loadscr);
+  Screen(in=in ,load=loadscr ,address=address[0..12] ,out=outscr);
+
+  //use built-in version of keyboard
+  Keyboard(out=outkbd);
+
+  //Now, channel MUX the three outputs into one data memory output
+  Mux8Way16(a=outram, b=outram, c=outram, d=outram, e=outscr, f=outkbd, g=outkbd, h=outkbd, sel=address[13..15], out=out);
+}

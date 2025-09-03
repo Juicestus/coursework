@@ -1,0 +1,83 @@
+CHIP Shift16 {
+    IN in[16], right;
+    OUT out[16];
+     
+    PARTS:
+
+	// Shift Left
+	ShiftLeft16(in=in,
+        out[0]=shiftLeftOut0,
+        out[1]=shiftLeftOut1,
+        out[2]=shiftLeftOut2,
+        out[3]=shiftLeftOut3,
+        out[4]=shiftLeftOut4,
+        out[5]=shiftLeftOut5,
+        out[6]=shiftLeftOut6,
+        out[7]=shiftLeftOut7,
+        out[8]=shiftLeftOut8,
+        out[9]=shiftLeftOut9,
+        out[10]=shiftLeftOut10,
+        out[11]=shiftLeftOut11,
+        out[12]=shiftLeftOut12,
+        out[13]=shiftLeftOut13,
+        out[14]=shiftLeftOut14,
+        out[15]=shiftLeftOut15);
+
+	// Shift Right
+	ShiftRight16(in=in,
+        out[0]=shiftRightOut0,
+        out[1]=shiftRightOut1,
+        out[2]=shiftRightOut2,
+        out[3]=shiftRightOut3,
+        out[4]=shiftRightOut4,
+        out[5]=shiftRightOut5,
+        out[6]=shiftRightOut6,
+        out[7]=shiftRightOut7,
+        out[8]=shiftRightOut8,
+        out[9]=shiftRightOut9,
+        out[10]=shiftRightOut10,
+        out[11]=shiftRightOut11,
+        out[12]=shiftRightOut12,
+        out[13]=shiftRightOut13,
+        out[14]=shiftRightOut14,
+        out[15]=shiftRightOut15);
+
+	// Mux
+	Mux16(
+        sel=right,
+        a[0]=shiftLeftOut0,
+        a[1]=shiftLeftOut1,
+        a[2]=shiftLeftOut2,
+        a[3]=shiftLeftOut3,
+        a[4]=shiftLeftOut4,
+        a[5]=shiftLeftOut5,
+        a[6]=shiftLeftOut6,
+        a[7]=shiftLeftOut7,
+        a[8]=shiftLeftOut8,
+        a[9]=shiftLeftOut9,
+        a[10]=shiftLeftOut10,
+        a[11]=shiftLeftOut11,
+        a[12]=shiftLeftOut12,
+        a[13]=shiftLeftOut13,
+        a[14]=shiftLeftOut14,
+        a[15]=shiftLeftOut15,
+
+        b[0]=shiftRightOut0,
+        b[1]=shiftRightOut1,
+        b[2]=shiftRightOut2,
+        b[3]=shiftRightOut3,
+        b[4]=shiftRightOut4,
+        b[5]=shiftRightOut5,
+        b[6]=shiftRightOut6,
+        b[7]=shiftRightOut7,
+        b[8]=shiftRightOut8,
+        b[9]=shiftRightOut9,
+        b[10]=shiftRightOut10,
+        b[11]=shiftRightOut11,
+        b[12]=shiftRightOut12,
+        b[13]=shiftRightOut13,
+        b[14]=shiftRightOut14,
+        b[15]=shiftRightOut15,
+
+		out=out);
+}
