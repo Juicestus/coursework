@@ -1,0 +1,72 @@
+<html>
+
+<head>
+    <style>
+        div.container {
+            margin-left: 25%;
+            margin-right: 25%;
+            border: 1px solid black;
+            padding: 0.5rem;
+            background-color: white;
+        }
+
+        .aboutlink {
+            font-family: cursive;
+            text-align: center;
+        }
+
+        td>.aboutlink {
+            width: 250px;
+        }
+
+        body {
+            /* background-image: url("eggbird.png"); */
+            background-repeat: repeat;
+            background-size: auto;
+            background-size: 120px 120px;
+        }
+    </style>
+    <title>Welcome to Justus' temple</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Welcome to Justus' Website.</h1>
+        <table>
+            <tr>
+                <td>
+                    <img src="propanetank.jpeg" />
+                </td>
+                <td>
+                    <h3 class="aboutlink"><a href="about.html">Go Here if you want to Learn More about my Website</a>
+                    </h3>
+                </td>
+            </tr>
+        </table>
+        <p>My question is... why did you choose computer science?</p>
+        <form>
+            <label>
+                <input type="radio" name="reason" value="fun_highpay">
+                I thought it would be fun and get a high paying job.
+            </label><br>
+
+            <label>
+                <input type="radio" name="reason" value="suffer">
+                I want to suffer and I want to kill myself.
+            </label><br>
+
+            <label>
+                <input type="radio" name="reason" value="engineering_problems">
+                I think there are a lot of cool engineering problems to be solved.
+            </label>
+            <br>
+            <br>
+
+            <button onclick="alert('Thats so cool lets connect!')">
+                Submit
+            </button>
+        </form>
+    </div>
+</body>
+
+</html>

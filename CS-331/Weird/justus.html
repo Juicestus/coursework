@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Justus Languell — Systems • RDMA • Embedded</title>
+  <meta name="description" content="Justus Languell — CS @ Texas A&M ’27. Systems, low‑latency networking (RDMA), embedded & EV telemetry. Portfolio, projects, and contact." />
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --bg-soft: #0f1117;
+      --card: #11141b;
+      --text: #e7ecf3;
+      --muted: #a7b0bf;
+      --brand: #4aa8ff;
+      --brand-2: #8b5cf6;
+      --ok: #34d399;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --ring: rgba(74,168,255,.35);
+      --shadow: 0 10px 30px rgba(0,0,0,.35), 0 2px 8px rgba(0,0,0,.3);
+      --radius: 18px;
+    }
+    @media (prefers-color-scheme: light) {
+      :root { --bg: #f7f8fb; --bg-soft: #ffffff; --card: #ffffff; --text: #0c1222; --muted: #4b5563; --ring: rgba(28,100,242,.25); }
+    }
+
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 80% -10%, rgba(74,168,255,.08), transparent 60%),
+                  radial-gradient(900px 700px at 0% 10%, rgba(139,92,246,.10), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+      letter-spacing: 0.2px;
+    }
+    a { color: var(--brand); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container { width: min(1100px, 92vw); margin: 0 auto; }
+
+    /* Header */
+    .skip-link { position: absolute; left: -999px; top: auto; width: 1px; height: 1px; overflow: hidden; }
+    .skip-link:focus { left: 16px; top: 16px; width: auto; height: auto; background: var(--card); padding: 10px 14px; border-radius: 10px; box-shadow: var(--shadow); }
+
+    header {
+      position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(140%) blur(8px);
+      background: color-mix(in oklab, var(--bg-soft), transparent 22%);
+      border-bottom: 1px solid color-mix(in srgb, var(--text), transparent 90%);
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; }
+    .brand { display: flex; al
