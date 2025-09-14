@@ -52,11 +52,11 @@ int main () {
     //          tri1 = (0, 0)
     //          tri2 = (1, 2)
     //          tri3 = (2, 0)
-    Point tri1(0, 0);
-    Point tri2 = Point(1, 2);
-    Point tri3;
-    tri3.x = 2;
-    tri3.y = 0;
+    Point tri1(0, 0);               // Calling the constructor
+    Point tri2 = Point(1, 2);       // Using the copy/assignment constructor
+    Point tri3;                     // Using the default constructor...
+    tri3.x = 2;                     // ...and initializing the fields
+    tri3.y = 0;                     // ...one by one
 
     // adding points to tri
     Point triPts[3] = {tri1, tri2, tri3};
