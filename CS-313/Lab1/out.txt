@@ -1,0 +1,2 @@
+Area of triangle = 2
+Area of quadrilateral = 4
