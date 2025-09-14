@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstring>
 
 struct Point {
     int x, y;
@@ -22,7 +23,7 @@ public:
     ~Shape () {
         for (int i = 0; i <= vertices; i++)
             delete points[i];
-        delete points;
+        delete[] points;
     }
 
     void addPoints(Point* pts) {
