@@ -62,7 +62,6 @@ int main () {
     }
 
     // Reset the input and output file descriptors of the parent.
-    wait(nullptr);
     close(fds[0]);
     close(fds[1]);
 }
