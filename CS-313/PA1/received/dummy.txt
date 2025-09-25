@@ -1,0 +1,1 @@
+This is a dummy file to keep "received" folder uploaded to GH. You don't have to do anything here and please don't delete it. Thank you!
