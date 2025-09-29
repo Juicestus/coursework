@@ -14,8 +14,8 @@ fi
 
 SCORE=0
 
+make clean
 make
-
 
 echo -e "\nStart testing"
 
@@ -77,7 +77,6 @@ fi
 
 rm BIMDC/test.bin received/test.bin
 
-head -c 100000000 /dev/zero > test.bin
 truncate -s 100000000 BIMDC/test.bin
 ./client -f test.bin
 if diff -qwB BIMDC/test.bin received/test.bin > /dev/null;then
@@ -90,17 +89,40 @@ fi
 rm BIMDC/test.bin received/test.bin
 
 #test 4
-./client -c -f 5.csv
-if diff -qwB BIMDC/5.csv received/5.csv > /dev/null;then
+
+# strace -e openat ./client -c -f 5.csv 2> trace.log
+# fifo_count=$(grep -o 'fifo_' trace.log | wc -l)
+
+count_fifos() {
+    find . -name "*fifo*" -type p 2>/dev/null | wc -l
+}
+
+dd if=/dev/zero of=BIMDC/test.bin bs=1024k count=10
+./client -c -f test.bin &
+CLIENT_PID=$!
+
+fifo_count=0
+while kill -0 $CLIENT_PID 2>/dev/null; do
+    current_count=$(count_fifos)
+    if [[ $current_count -gt $max_fifo_count ]]; then
+        fifo_count=$current_count
+    fi
+    sleep 0.05  # Very short sleep
+done
+
+wait $CLIENT_PID
+
+if [[ $fifo_count -gt 2 ]] && diff -qwB BIMDC/test.bin received/test.bin > /dev/null;then
 	echo -e "  ${GREEN}Passed${NC}"
         SCORE=$(($SCORE+15))
 else
-	echo -e " ${RED}Failed${NC}"
+	echo -e " ${RED}Failed (no new channel detected)${NC}"
 fi
 echo -e "\nSCORE: ${SCORE}/85\n"
+rm BIMDC/test.bin received/test.bin
 
 #test 5
-if ls fifo* data*_* *.tst *.o *.csv 1>/dev/null 2>&1; then
+if ls fifo* data*_* *.tst *.o *.csv *.log 1>/dev/null 2>&1; then
 	echo -e "  ${RED}Failed${NC}"
 else
 	echo -e "  ${GREEN}Passed${NC}"
