@@ -69,8 +69,7 @@ int main (int argc, char *argv[]) {
 		chan->cwrite(&nc, sizeof(nc));
 		char newcname[256];
 		chan->cread(newcname, sizeof(newcname));
-		FIFORequestChannel new_chan(newcname, FIFORequestChannel::CLIENT_SIDE);
-		chan = &new_chan;
+		chan = new FIFORequestChannel(newcname, FIFORequestChannel::CLIENT_SIDE);
 	}
 
 #ifdef CHANNEL_EXAMPLE		
@@ -103,10 +102,12 @@ int main (int argc, char *argv[]) {
 	 */
 	if (filename != "")
 	{
+		char* buf = new char[bufcap];	
+
 		// Send a frame that requests the file size
 		filemsg fm(0, 0);
-		size_t len = sizeof(fm) + filename.size() + 1;
-		char* buf = new char[len];	
+		int len = sizeof(fm) + filename.size() + 1;
+
 		// pack fm obj
 		memcpy(buf, &fm, sizeof(fm));
 		// pack fn
@@ -179,7 +180,10 @@ int main (int argc, char *argv[]) {
     MESSAGE_TYPE m = QUIT_MSG;
     base_chan.cwrite(&m, sizeof(MESSAGE_TYPE));
 	if (make_new_chan)
+	{
     	chan->cwrite(&m, sizeof(MESSAGE_TYPE));
+		delete chan;
+	}
 	wait(NULL);		
 }
 
