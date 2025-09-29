@@ -24,7 +24,7 @@ int main (int argc, char *argv[]) {
 	int e = 1;
 	string filename = "";
 	int bufcap = MAX_MESSAGE;
-	bool new_chan = false;
+	bool make_new_chan = false;
 
 	while ((opt = getopt(argc, argv, "p:t:e:f:m:c")) != -1) {
 		switch (opt) {
@@ -44,11 +44,10 @@ int main (int argc, char *argv[]) {
 				bufcap = atoi(optarg);
 				break;
 			case 'c':
-				new_chan = true;
+				make_new_chan = true;
 				break;
 		}
 	}
-	(void)new_chan;
 
 	// Start the server as a child proc
 	pid_t pid;
@@ -60,8 +59,19 @@ int main (int argc, char *argv[]) {
 		perror("Starting the server as a child proc has failed\n");
 		exit(1);
 	}	
+	
+    FIFORequestChannel base_chan("control", FIFORequestChannel::CLIENT_SIDE);
+	FIFORequestChannel* chan = &base_chan;
 
-    FIFORequestChannel chan("control", FIFORequestChannel::CLIENT_SIDE);
+	if (make_new_chan)
+	{
+		MESSAGE_TYPE nc = NEWCHANNEL_MSG;
+		chan->cwrite(&nc, sizeof(nc));
+		char newcname[256];
+		chan->cread(newcname, sizeof(newcname));
+		FIFORequestChannel new_chan(newcname, FIFORequestChannel::CLIENT_SIDE);
+		chan = &new_chan;
+	}
 
 #ifdef CHANNEL_EXAMPLE		
 	#warning "Are you sure you want to run this example code?"
@@ -69,9 +79,9 @@ int main (int argc, char *argv[]) {
     datamsg x(1, 0.0, 1);
 	
 	memcpy(buf, &x, sizeof(datamsg));
-	chan.cwrite(buf, sizeof(datamsg)); // question
+	chan->cwrite(buf, sizeof(datamsg)); // question
 	double reply;
-	chan.cread(&reply, sizeof(double)); //answer
+	chan->cread(&reply, sizeof(double)); //answer
 	cout << "For person " << p << ", at time " << t << ", the value of ecg " << e << " is " << reply << endl;
 	
     // sending a non-sense message, you need to change this
@@ -82,7 +92,7 @@ int main (int argc, char *argv[]) {
 	char* buf2 = new char[len];
 	memcpy(buf2, &fm, sizeof(filemsg));
 	strcpy(buf2 + sizeof(filemsg), fname.c_str());
-	chan.cwrite(buf2, len);  // I want the file length;
+	chan->cwrite(buf2, len);  // I want the file length;
 
 	delete[] buf2;
 #endif
@@ -101,25 +111,25 @@ int main (int argc, char *argv[]) {
 		memcpy(buf, &fm, sizeof(fm));
 		// pack fn
 		strcpy(buf + sizeof(fm), filename.c_str());
-		chan.cwrite(buf, len);
+		chan->cwrite(buf, len);
 		// grab the resp (size)
-		size_t fsize;
-		chan.cread(&fsize, sizeof(fsize));
+		int64_t fsize;
+		chan->cread(&fsize, sizeof(fsize));
 
 		// prepare output file
 		ofstream of;
 		of.open("received/" + filename, ios::binary);
 		
 		// process the transfer
-		size_t offset;
+		int64_t offset = 0;
 		while (offset < fsize)
 		{
 			int chunk_sz = min(bufcap, (int)(fsize - offset));
 			filemsg fm(offset, chunk_sz);
 			memcpy(buf, &fm, sizeof(fm));
 			strcpy(buf + sizeof(fm), filename.c_str());
-			chan.cwrite(buf, len);	//todo? this len change? no right
-			chan.cread(buf, chunk_sz);
+			chan->cwrite(buf, len);	//todo? this len change? no right
+			chan->cread(buf, chunk_sz);
 			of.write(buf, chunk_sz);
 			offset += chunk_sz;
 		}
@@ -132,12 +142,12 @@ int main (int argc, char *argv[]) {
 	else if (p != -1 && t >= 0 && e != -1)
 	{
 		datamsg d(p, t, e);
-		chan.cwrite(&d, sizeof(d));
+		chan->cwrite(&d, sizeof(d));
 
 		double resp;
-		chan.cread(&resp, sizeof(resp));
+		chan->cread(&resp, sizeof(resp));
 		
-		printf("Resp:	 %f\n", resp);
+		cout << "For person " << p << ", at time " << t << ", the value of ecg " << e << " is " << resp << endl;
 	}
 	/*
 	 * Requesting 1000 data pts.
@@ -154,11 +164,11 @@ int main (int argc, char *argv[]) {
 			datamsg d2(p, t, 2);
 			double r1, r2;
 
-			chan.cwrite(&d1, sizeof(d1));
-			chan.cread(&r1, sizeof(r1));
+			chan->cwrite(&d1, sizeof(d1));
+			chan->cread(&r1, sizeof(r1));
 
-			chan.cwrite(&d2, sizeof(d2));
-			chan.cread(&r2, sizeof(r2));
+			chan->cwrite(&d2, sizeof(d2));
+			chan->cread(&r2, sizeof(r2));
 
 			of << t << "," << r1 << "," << r2 << "\n";
 			//cout << t << "," << r1 << "," << r2 << "\n";
@@ -167,7 +177,9 @@ int main (int argc, char *argv[]) {
 	}
 	
     MESSAGE_TYPE m = QUIT_MSG;
-    chan.cwrite(&m, sizeof(MESSAGE_TYPE));
+    base_chan.cwrite(&m, sizeof(MESSAGE_TYPE));
+	if (make_new_chan)
+    	chan->cwrite(&m, sizeof(MESSAGE_TYPE));
 	wait(NULL);		
 }
 
