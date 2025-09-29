@@ -1,0 +1,52 @@
+To remove colour from tests, set COLOUR to 1 in sh file
+
+rm -f server client fifo* data*_* *.tst *.o *.csv received/*
+rm -f server client fifo* data*_* *.tst *.o *.csv received/*
+g++ -std=c++17 -g -pedantic -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -c -o common.o common.cpp
+g++ -std=c++17 -g -pedantic -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -c -o FIFORequestChannel.o FIFORequestChannel.cpp
+g++ -std=c++17 -g -pedantic -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -o server server.cpp common.o FIFORequestChannel.o 
+g++ -std=c++17 -g -pedantic -Wall -Wextra -Werror -fsanitize=address,undefined -fno-omit-frame-pointer -o client client.cpp common.o FIFORequestChannel.o 
+rm common.o FIFORequestChannel.o
+
+Start testing
+Client-side is done and exited
+Server terminated
+Query:	p = -1 t = -1.000000 e = 1 f = ""
+  [0;32mPassed[0m
+
+SCORE: 15/85
+
+ [0;31mFailed[0m
+
+SCORE: 15/85
+
+Client-side is done and exited
+Server terminated
+Query:	p = 1 t = -1.000000 e = 1 f = ""
+  [0;32mPassed[0m
+
+SCORE: 25/85
+
+Client-side is done and exited
+Server terminated
+Query:	p = -1 t = -1.000000 e = 1 f = "test.bin"
+  [0;31mFailed[0m
+Client-side is done and exited
+Server terminated
+Query:	p = -1 t = -1.000000 e = 1 f = "test.bin"
+  [0;31mFailed[0m
+Client-side is done and exited
+Server terminated
+Query:	p = -1 t = -1.000000 e = 1 f = "test.bin"
+  [0;31mFailed[0m
+Client-side is done and exited
+Server terminated
+Query:	p = -1 t = -1.000000 e = 1 f = "test.bin"
+ [0;31mFailed (no new channel detected)[0m
+
+SCORE: 25/85
+
+  [0;32mPassed[0m
+
+SCORE: 30/85
+
