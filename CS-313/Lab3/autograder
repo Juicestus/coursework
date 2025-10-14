@@ -1,0 +1,107 @@
+#!/usr/bin/env bash
+TEST_SCORES=(0 0 0)
+TEST_OUTPUTS=("N/A" "N/A" "N/A")
+SCORE=0
+
+# Color settings for terminal output
+ORANGE='\033[1;33m'
+GREEN='\033[1;32m'
+RED='\033[1;31m'
+NC='\033[0m'
+NEWLINE=$'\n'
+
+# Clean all temporary files
+make clean 2>&1 >/dev/null
+
+# Step 1: Compilation Test - 20 points
+echo -e "\n${ORANGE}Testing :: Compilation${NC}"
+TEST_OUTPUTS[0]=$(make 2>&1)
+if [ $? -eq 0 ]; then
+        echo -e "       ${GREEN}Compilation Passed${NC}"
+        TEST_SCORES[0]=20
+        SCORE=$(bc -l <<< "$SCORE+20")
+else
+        echo -e "       ${RED}Compilation Failed${NC}"
+        TEST_SCORES[0]=0
+        echo -e "\nSCORE: ${SCORE}/100\n"
+        exit 1
+fi
+
+# Step 2: Correct Output Test - 70 points
+
+# Correct output stored in a variable for comparison
+expected_output=$(cat <<EOF
+Hi! (0 -> 10): Running: 0
+Hi! (0 -> 10): Running: 1
+Hi! (0 -> 10): Running: 2
+Hi! (0 -> 10): Running: 3
+Hi! (0 -> 10): Running: 4
+Hi! (0 -> 10): Running: 5
+Hi! (0 -> 10): Running: 6
+Hi! (0 -> 10): Running: 7
+Hi! (0 -> 10): Running: 8
+Hi! (0 -> 10): Running: 9
+Hi! (0 -> 10): Done!
+Hi! (10 -> 20): Running: 10
+Hi! (10 -> 20): Running: 11
+Hi! (10 -> 20): Running: 12
+Hi! (10 -> 20): Running: 13
+Hi! (10 -> 20): Running: 14
+Hi! (10 -> 20): Running: 15
+Hi! (10 -> 20): Running: 16
+Hi! (10 -> 20): Running: 17
+Hi! (10 -> 20): Running: 18
+Hi! (10 -> 20): Running: 19
+Hi! (10 -> 20): Done!
+Hi! (20 -> 30): Running: 20
+Hi! (20 -> 30): Running: 21
+Hi! (20 -> 30): Running: 22
+Hi! (20 -> 30): Running: 23
+Hi! (20 -> 30): Running: 24
+Hi! (20 -> 30): Running: 25
+Hi! (20 -> 30): Running: 26
+Hi! (20 -> 30): Running: 27
+Hi! (20 -> 30): Running: 28
+Hi! (20 -> 30): Running: 29
+Hi! (20 -> 30): Done!
+EOF
+)
+
+# Run the student's program and capture the output
+actual_output=$(./main)
+
+# Sort both the expected and actual outputs to ensure order does not matter
+sorted_expected=$(echo "$expected_output" | sort)
+sorted_actual=$(echo "$actual_output" | sort)
+
+difference=$(diff --color <(echo ${sorted_expected}) <(echo ${sorted_actual}))
+TEST_OUTPUTS[1]="Your Output (sorted):${NEWLINE}${sorted_actual}${NEWLINE}${NEWLINE}Expected Output (sorted):${NEWLINE}${expected_output}${NEWLINE}${NEWLINE}Difference:${difference}"
+
+# Compare the sorted lists
+echo -e "\n${ORANGE}Testing :: Execution${NC}"
+if diff <(echo ${sorted_expected}) <(echo ${sorted_actual}) >/dev/null ; then
+        echo -e "       ${GREEN}Execution Test Passed${NC}"
+        SCORE=$(bc -l <<< "$SCORE+70")
+        TEST_SCORES[1]=70
+else
+        echo -e "       ${RED}Output Test Failed${NC}"
+        echo "Differences found:"
+        TEST_SCORES[1]=0
+fi
+
+# Step 3: Memory Leak Test - 10 points
+TEST_OUTPUTS[2]=$(valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./main 2>&1)
+echo -e "\n${ORANGE}Testing :: Memory Leaks${NC}"
+if echo ${TEST_OUTPUTS[2]} | grep -q "All heap blocks were freed -- no leaks are possible"; then
+        echo -e "       ${GREEN}Memory Leak Test Passed${NC}"
+        SCORE=$(bc -l <<< "$SCORE+10")
+        TEST_SCORES[2]=10
+else
+        echo -e "       ${RED}Memory Leak Test Failed${NC}"
+        TEST_SCORES[2]=0
+fi
+
+# Final clean up and score output
+echo -e "\nSCORE: ${SCORE}/100"
+make clean 2>&1 >/dev/null
+exit 0
