@@ -77,14 +77,14 @@ void t_finish()
 	int idx = current_context_idx;	
 	if (contexts[idx].context.uc_stack.ss_sp != NULL)
 		free(contexts[idx].context.uc_stack.ss_sp);
+	contexts[idx].context.uc_stack.ss_sp = NULL;
 
 	contexts[idx].state = DONE;
 	
 	idx = find_next_valid_context();
-	if (idx != -1) {}
+	if (idx == -1) exit(0);
 
 	current_context_idx = (uint8_t)idx;
 	setcontext(&contexts[idx].context);
 	
-	exit(1);
 }
