@@ -150,7 +150,6 @@ int main(int argc, char **argv)
 			if (!step->running)
 			{
 				step->running = true;
-				std::cout << "Starting Step: " << step->id << " - " << step->description << "\n";
 
 				makeTimer(step, step->duration);// * 60);
 			}
