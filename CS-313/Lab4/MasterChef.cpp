@@ -82,6 +82,8 @@ void makeTimer( Step *timerID, int expire) // Given
 // TO COMPLETE Section 2
 static void timerHandler( int sig, siginfo_t *si, void *uc )
 {
+	(void)sig;	// unused
+	(void)uc;	// unused
 	// Retrieve timer pointer from the si->si_value
     Step* comp_item = (Step*)si->si_value.sival_ptr;
 
@@ -100,6 +102,7 @@ static void timerHandler( int sig, siginfo_t *si, void *uc )
 // Utilize the completedSteps vector and the RemoveDependency method.
 // To Complete - Section 3
 void RemoveDepHandler(int sig) {
+	(void)sig;
 	/* TODO This Section - 3 */
 	// Foreach step that has been completed since last run, remove it as a dependency
 
@@ -138,9 +141,8 @@ int main(int argc, char **argv)
 
 	while (completeCount < recipeSteps->Count())
 	{
-		vector<Step*> readySteps = recipeSteps->GetReadySteps();
 
-		for (Step* step : readySteps)
+		for (Step* step : recipeSteps->GetReadySteps())
 		{
 			if (!step->running)
 			{
