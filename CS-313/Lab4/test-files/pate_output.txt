@@ -1,0 +1,23 @@
+Step 1 ready to be run.
+Step 2 ready to be run.
+Step 5 ready to be run.
+Step 9 ready to be run.
+Completed Step: 1 - Create and kneed dough
+Step 6 ready to be run.
+Completed Step: 9 - Whisk gelatin and stock
+Step 10 ready to be run.
+Completed Step: 6 - Roll out and cut dough
+Completed Step: 5 - Preheat oven to 350
+Completed Step: 2 - Season and freeze meat
+Step 3 ready to be run.
+Completed Step: 10 - Chill stock overnight
+Completed Step: 3 - Grind and refridgerate meat
+Step 4 ready to be run.
+Completed Step: 4 - Add mushrooms to meat
+Step 7 ready to be run.
+Completed Step: 7 - Form and fill pastry in mold
+Step 8 ready to be run.
+Completed Step: 8 - Bake the terrine
+Step 11 ready to be run.
+Completed Step: 11 - Serve
+Enjoy!

@@ -1,0 +1,12 @@
+Step,Dependencies,Time (m),Description,
+1,,2,Create and kneed dough,
+2,,20,Season and freeze meat,
+3,2,30,Grind and refridgerate meat,*at least overnight
+4,3,8,Add mushrooms to meat,
+5,,10,Preheat oven to 350,
+6,1,5,Roll out and cut dough,
+7,4 6,5,Form and fill pastry in mold,
+8,7,20,Bake the terrine,
+9,,5,Whisk gelatin and stock,
+10,9,30,Chill stock overnight,*at least overnight
+11,8 10,1,Serve,
