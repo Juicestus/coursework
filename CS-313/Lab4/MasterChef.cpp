@@ -82,17 +82,14 @@ void makeTimer( Step *timerID, int expire) // Given
 // TO COMPLETE Section 2
 static void timerHandler( int sig, siginfo_t *si, void *uc )
 {
-	(void)sig;	// unused
-	(void)uc;	// unused
 	// Retrieve timer pointer from the si->si_value
-    Step* comp_item = (Step*)si->si_value.sival_ptr;
 
 	/* TODO This Section - 2 */
 	// Officially complete the step using completedSteps and completeCount
+	Step* comp_item = (Step*)si->si_value.sival_ptr;
 	comp_item->PrintComplete();
 	completedSteps->push_back(comp_item->id);
 	completeCount++;
-
 	// Ready to remove that dependency, call the trigger for the appropriate handler
 	raise(SIGUSR1);
 	/* End Section - 2 */
@@ -105,12 +102,10 @@ void RemoveDepHandler(int sig) {
 	(void)sig;
 	/* TODO This Section - 3 */
 	// Foreach step that has been completed since last run, remove it as a dependency
-
-	for (int dep : *completedSteps)
+	for (int id : *completedSteps) 
 	{
-		recipeSteps->RemoveDependency(dep);
+    		recipeSteps->RemoveDependency(id);
 	}
-	completedSteps->clear();
 	/* End Section - 3 */
 }
 
@@ -138,31 +133,26 @@ int main(int argc, char **argv)
 	/* TODO This Section - 1 */
 	// Associate the signal SIGRTMIN with the sa using the sigaction function
 	// Associate the appropriate handler with the SIGUSR1 signal, for removing dependencies
+	//
 	sigaction(SIGRTMIN, &sa, NULL);
-
 	signal(SIGUSR1, RemoveDepHandler);
 
-	while (completeCount < recipeSteps->Count())
+	while (completeCount < recipeSteps->Count()) 
 	{
-
-		for (Step* step : recipeSteps->GetReadySteps())
+	    vector<Step*> readySteps = recipeSteps->GetReadySteps();
+	    for (Step* step : readySteps) 
+	    {
+		if (!step->running) 
 		{
-			if (!step->running)
-			{
-				step->running = true;
-
-				makeTimer(step, step->duration);// * 60);
-			}
+		    step->running = true;
+		    makeTimer(step, step->duration);
 		}
-
-		sleep(1);
+	    }
+	    usleep(100000);
 	}
+	    
 
-	delete completedSteps;
-	delete recipeSteps;
-	
-	// Until all steps have been completed, check if steps are ready to be run and create a timer for them if so
 	/* End Section - 1 */
-
 	cout << "Enjoy!" << endl;
+
 }

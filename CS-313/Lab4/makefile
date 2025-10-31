@@ -21,7 +21,7 @@ all: clean $(BINS)
 .PHONY: clean test
 
 clean:
-	rm -f MasterChef ./test-files/cmd*.txt out1.txt out2.txt trace.txt
+	#rm -f MasterChef ./test-files/cmd*.txt out1.txt out2.txt trace.txt
 
 test: all
 	chmod u+x le5-tests.sh

@@ -40,8 +40,8 @@ fi
 
 remake
 echo -e "\nTesting :: Output without Dependencies \n"
-./MasterChef -i test-files/NoDep.csv > test-files/cmd.txt 2>/dev/null
-if diff -q test-files/cmd.txt test-files/no_dep_output.txt 2>/dev/null; then
+./MasterChef -i test-files/NoDep.csv > test-files/cmd1.txt 2>/dev/null
+if diff -q test-files/cmd1.txt test-files/no_dep_output.txt 2>/dev/null; then
     echo -e "  ${GREEN}Test Three Passed${NC}"
     SCORE=$(($SCORE+16))
 else
@@ -51,8 +51,8 @@ fi
 # this includes a 0 length test case
 remake
 echo -e "\nTesting :: Output with Dependencies \n"
-./MasterChef -i test-files/RecipeInput.csv > test-files/cmd.txt 2>/dev/null
-if diff -q test-files/cmd.txt test-files/pate_output.txt 2>/dev/null; then
+./MasterChef -i test-files/RecipeInput.csv > test-files/cmd2.txt 2>/dev/null
+if diff -q test-files/cmd2.txt test-files/pate_output.txt 2>/dev/null; then
     echo -e "  ${GREEN}Test Four Passed${NC}"
     SCORE=$(($SCORE+17))
 else
@@ -81,7 +81,7 @@ fi
 
 # print score and delete executable
 echo -e "\nSCORE: ${SCORE}/100\n"
-make -s clean
+#make -s clean
 
 echo "$SCORE" > score.txt
 
