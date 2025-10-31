@@ -106,8 +106,11 @@ void RemoveDepHandler(int sig) {
 	/* TODO This Section - 3 */
 	// Foreach step that has been completed since last run, remove it as a dependency
 
-	int dep = completedSteps->back();
-	recipeSteps->RemoveDependency(dep);
+	for (int dep : *completedSteps)
+	{
+		recipeSteps->RemoveDependency(dep);
+	}
+	completedSteps->clear();
 	/* End Section - 3 */
 }
 
@@ -149,7 +152,7 @@ int main(int argc, char **argv)
 				step->running = true;
 				std::cout << "Starting Step: " << step->id << " - " << step->description << "\n";
 
-				makeTimer(step, step->duration * 60);
+				makeTimer(step, step->duration);// * 60);
 			}
 		}
 
