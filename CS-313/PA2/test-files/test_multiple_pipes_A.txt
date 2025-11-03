@@ -1,0 +1,1 @@
+ps aux | awk '/usr/{print $1}' | sort -r

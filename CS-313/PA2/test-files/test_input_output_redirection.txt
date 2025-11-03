@@ -1,0 +1,3 @@
+ps aux > a
+grep /init < a
+grep /init < a > b
