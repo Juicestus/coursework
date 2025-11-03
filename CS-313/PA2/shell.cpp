@@ -32,7 +32,7 @@ std::string shellPrompt()
     char hostname[256];
     gethostname(hostname, sizeof(hostname));
 
-    char cwd[PATH_MAX];
+    char cwd[512];
     getcwd(cwd, sizeof(cwd));
 
     return std::string() + timebuf + " " + hostname + ":" + cwd + "$ ";

@@ -1,0 +1,23 @@
+1267244 execve("./shell", ["./shell"], 0xffffd2396638 /* 54 vars */) = 0
+1267245 execve("/home/justus/.local/bin/ps", ["ps", "aux"], 0xffffff9e7458 /* 54 vars */) = -1 ENOENT (No such file or directory)
+1267245 execve("/usr/local/sbin/ps", ["ps", "aux"], 0xffffff9e7458 /* 54 vars */) = -1 ENOENT (No such file or directory)
+1267245 execve("/usr/local/bin/ps", ["ps", "aux"], 0xffffff9e7458 /* 54 vars */) = -1 ENOENT (No such file or directory)
+1267245 execve("/usr/sbin/ps", ["ps", "aux"], 0xffffff9e7458 /* 54 vars */) = -1 ENOENT (No such file or directory)
+1267245 execve("/usr/bin/ps", ["ps", "aux"], 0xffffff9e7458 /* 54 vars */) = 0
+1267245 +++ exited with 0 +++
+1267244 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=1267245, si_uid=1000, si_status=0, si_utime=0, si_stime=1} ---
+1267246 execve("/home/justus/.local/bin/awk", ["awk", "/usr/{print $1}"], 0xffffff9e7458 /* 54 vars */) = -1 ENOENT (No such file or directory)
+1267246 execve("/usr/local/sbin/awk", ["awk", "/usr/{print $1}"], 0xffffff9e7458 /* 54 vars */) = -1 ENOENT (No such file or directory)
+1267246 execve("/usr/local/bin/awk", ["awk", "/usr/{print $1}"], 0xffffff9e7458 /* 54 vars */) = -1 ENOENT (No such file or directory)
+1267246 execve("/usr/sbin/awk", ["awk", "/usr/{print $1}"], 0xffffff9e7458 /* 54 vars */) = -1 ENOENT (No such file or directory)
+1267246 execve("/usr/bin/awk", ["awk", "/usr/{print $1}"], 0xffffff9e7458 /* 54 vars */) = 0
+1267246 +++ exited with 0 +++
+1267244 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=1267246, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+1267247 execve("/home/justus/.local/bin/sort", ["sort", "-r"], 0xffffff9e7458 /* 54 vars */) = -1 ENOENT (No such file or directory)
+1267247 execve("/usr/local/sbin/sort", ["sort", "-r"], 0xffffff9e7458 /* 54 vars */) = -1 ENOENT (No such file or directory)
+1267247 execve("/usr/local/bin/sort", ["sort", "-r"], 0xffffff9e7458 /* 54 vars */) = -1 ENOENT (No such file or directory)
+1267247 execve("/usr/sbin/sort", ["sort", "-r"], 0xffffff9e7458 /* 54 vars */) = -1 ENOENT (No such file or directory)
+1267247 execve("/usr/bin/sort", ["sort", "-r"], 0xffffff9e7458 /* 54 vars */) = 0
+1267247 +++ exited with 0 +++
+1267244 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_EXITED, si_pid=1267247, si_uid=1000, si_status=0, si_utime=0, si_stime=0} ---
+1267244 +++ exited with 1 +++
