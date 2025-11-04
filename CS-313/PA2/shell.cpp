@@ -29,14 +29,13 @@ std::string shellPrompt()
     struct tm* local = localtime(&now);
     char timebuf[64];
     strftime(timebuf, sizeof(timebuf), "%b %d %H:%M:%S", local);
-
-    char hostname[256];
-    gethostname(hostname, sizeof(hostname));
+	
+    const char* user = getenv("USER");
 
     char cwd[512];
     getcwd(cwd, sizeof(cwd));
 
-    return std::string() + timebuf + " " + hostname + ":" + cwd + "$ ";
+    return std::string(" ") + timebuf + " " + user + ":" + cwd + "$ ";
 }
 
 std::string trimInput(const std::string& s)
@@ -50,7 +49,9 @@ std::string trimInput(const std::string& s)
 int main () 
 {
     std::list<pid_t> bg_pids;
-	std::string last_path;
+    char* cwd_buf = getcwd(nullptr, 0);
+    std::string last_path = cwd_buf;
+    free(cwd_buf);
 
     for (;;) 
     {
@@ -84,35 +85,35 @@ int main ()
         }
 
 
-		if (tknr.commands[0]->args[0] == "cd") 
+	if (tknr.commands[0]->args[0] == "cd") 
+	{
+		std::string cur_dir;
+		char* cwd_buf = getcwd(nullptr, 0);
+		cur_dir = cwd_buf;
+		free(cwd_buf);
+
+		const char* path = nullptr;
+		if (tknr.commands[0]->args.size() == 1)
+			path = getenv("HOME");
+		else if (tknr.commands[0]->args[1] == "-")
+			path = last_path.c_str();
+		else
+			path = tknr.commands[0]->args[1].c_str();
+
+		if (chdir(path) < 0)
+			perror("cd");
+		else 
 		{
-			std::string cur_dir;
-			char* cwd_buf = getcwd(nullptr, 0);
-			cur_dir = cwd_buf;
-			free(cwd_buf);
-
-			const char* path = nullptr;
-			if (tknr.commands[0]->args.size() == 1)
-				path = getenv("HOME");
-			else if (tknr.commands[0]->args[1] == "-")
-				path = last_path.c_str();
-			else
-				path = tknr.commands[0]->args[1].c_str();
-
-			if (chdir(path) < 0)
-				perror("cd");
-			else 
-			{
-				if (tknr.commands[0]->args.size() > 1 && tknr.commands[0]->args[1] == "-")
-					std::cout << cur_dir << std::endl; 
-				last_path = cur_dir; 
-			}
-
-			continue;
+			if (tknr.commands[0]->args.size() > 1 && tknr.commands[0]->args[1] == "-")
+				std::cout << last_path << std::endl; 
+			last_path = cur_dir;
 		}
 
+		continue;
+	}
 
-        
+
+
         // // print out every command token-by-token on individual lines
         // // prints to cerr to avoid influencing autograder
         // for (auto cmd : tknr.commands) {

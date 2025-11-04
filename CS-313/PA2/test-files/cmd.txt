@@ -1,4 +1,4 @@
-ps aux > test.txt
-awk '{print $1$11}' < test.txt | head -10 | tr a-z A-Z | sort > output.txt
-cat output.txt
+cd /home
+cd -
+pwd
 exit
