@@ -30,7 +30,7 @@ std::string shellPrompt()
     char timebuf[64];
     strftime(timebuf, sizeof(timebuf), "%b %d %H:%M:%S", local);
 	
-    const char* user = getenv("USER");
+    const char* user = "root";
 
     char cwd[512];
     getcwd(cwd, sizeof(cwd));
