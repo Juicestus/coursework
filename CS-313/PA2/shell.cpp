@@ -6,6 +6,7 @@
 
 #include <vector>
 #include <string>
+#include <list>
 
 // on mac:
 #include <fcntl.h>
@@ -38,12 +39,24 @@ std::string shellPrompt()
     return std::string() + timebuf + " " + hostname + ":" + cwd + "$ ";
 }
 
-int main () {
-    for (;;) {
+int main () 
+{
+    std::list<pid_t> bg_pids;
+
+    for (;;) 
+    {
         // need date/time, username, and absolute path to current dir
         cout << YELLOW << shellPrompt() << NC << " ";
 
-        while (waitpid(-1, nullptr, WNOHANG) > 0);
+
+		for (auto it = bg_pids.begin(); it != bg_pids.end(); )
+		{
+			pid_t wpid = waitpid(*it, nullptr, WNOHANG);
+			if (wpid > 0 || wpid == -1)
+				it = bg_pids.erase(it);
+			else it++;
+		}
+	
         
         // get user inputted command
         string input;
@@ -149,7 +162,10 @@ int main () {
                     prev_fd = pipe_fd[0];
                 }
 
-                if (!cmd->isBackground())           // wait for blocking non-background procs
+                if (cmd->isBackground())           
+					bg_pids.push_back(pid);
+				else
+					// wait for blocking non-background procs
                     waitpid(pid, nullptr, 0);
             }
         }
