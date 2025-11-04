@@ -39,9 +39,18 @@ std::string shellPrompt()
     return std::string() + timebuf + " " + hostname + ":" + cwd + "$ ";
 }
 
+std::string trimInput(const std::string& s)
+{
+	size_t b = s.find_first_not_of(" \t\n\r");
+	if (b == string::npos)	 return "";	
+	size_t e = s.find_last_not_of(" \t\n\r");
+	return s.substr(b, e - b + 1);
+}
+
 int main () 
 {
     std::list<pid_t> bg_pids;
+	std::string last_path;
 
     for (;;) 
     {
@@ -60,7 +69,7 @@ int main ()
         
         // get user inputted command
         string input;
-        getline(cin, input);
+        if (!getline(cin, input)) break;
         if (input.size() <= 0) continue;
 
         if (input == "exit") {  // print exit message and break out of infinite loop
@@ -75,19 +84,33 @@ int main ()
         }
 
 
-        if (tknr.commands[0]->args[0] == "cd")
-        {
-            char* path;
-            if (tknr.commands[0]->args.size() == 0)
-                path = getenv("HOME");
-            else
-                path = (char*)tknr.commands[0]->args[1].c_str();
+		if (tknr.commands[0]->args[0] == "cd") 
+		{
+			std::string cur_dir;
+			char* cwd_buf = getcwd(nullptr, 0);
+			cur_dir = cwd_buf;
+			free(cwd_buf);
 
-            if (chdir(path) < 0)
-                perror("cd");
+			const char* path = nullptr;
+			if (tknr.commands[0]->args.size() == 1)
+				path = getenv("HOME");
+			else if (tknr.commands[0]->args[1] == "-")
+				path = last_path.c_str();
+			else
+				path = tknr.commands[0]->args[1].c_str();
 
-            continue;
-        }
+			if (chdir(path) < 0)
+				perror("cd");
+			else 
+			{
+				if (tknr.commands[0]->args.size() > 1 && tknr.commands[0]->args[1] == "-")
+					std::cout << cur_dir << std::endl; 
+				last_path = cur_dir; 
+			}
+
+			continue;
+		}
+
 
         
         // // print out every command token-by-token on individual lines
