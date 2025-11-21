@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+
+# Navigate to the source directory
+cd /autograder/source
+
+# Copy the student's submission into place
+cp -r /autograder/submission/* /autograder/source/.
+
+# Initialize score variables
+SCORE=0
+MAX_SCORE=100
+
+# === Late policy config ===
+# Deadline: 12:00 AM CT on November 17, 2025
+DEADLINE_LOCAL="2025-11-17 00:00:00"
+DEADLINE_TZ="America/Chicago"
+MAX_LATE_HOURS=96       # 4 days
+HOURLY_DEDUCTION_BP=1   # 1% per hour
+
+# Parse submission time from Gradescope metadata
+created_at=$(jq -r '.created_at' /autograder/submission_metadata.json | sed 's/\.[0-9]\{1,\}//')
+SUBMIT_EPOCH=$(date -u -d "$created_at" +%s)
+DEADLINE_EPOCH=$(TZ="$DEADLINE_TZ" date -d "$DEADLINE_LOCAL" +%s)
+
+late_secs=$(( SUBMIT_EPOCH - DEADLINE_EPOCH ))
+if (( late_secs <= 0 )); then
+  late_hours=0
+else
+  late_hours=$(( (late_secs + 3599) / 3600 ))   # ceil to next full hour
+fi
+
+force_zero=0
+if (( late_hours > MAX_LATE_HOURS )); then
+  force_zero=1
+  late_hours=$MAX_LATE_HOURS
+fi
+
+penalty_bp=$(( HOURLY_DEDUCTION_BP * late_hours ))
+penalty_frac=$(awk -v bp="$penalty_bp" 'BEGIN { printf("%.6f", bp/100.0) }')
+
+# Function to clean up and remake the executables
+remake () {
+    make clean
+    make 
+}
+
+remake
+
+# Set colors for output
+COLOUR=0
+if [[ $COLOUR -eq 0 ]]; then
+    ORANGE='\033[0;33m'
+    GREEN='\033[0;32m'
+    RED='\033[0;31m'
+    NC='\033[0m'
+else
+    ORANGE='\033[0m'
+    GREEN='\033[0m'
+    RED='\033[0m'
+    NC='\033[0m'
+fi
+
+echo -e "\nRunning pa3-tests.sh..."
+
+# Run the PA3 test script and capture SCORE (85 max inside script)
+chmod u+x pa3-tests.sh
+./pa3-tests.sh | tee test_output.log
+
+# Extract SCORE from test script output (last number before /85)
+raw_score=$(grep -oP 'SCORE: \K[0-9]+' test_output.log | tail -1)
+
+# Scale to MAX_SCORE=85 (kept consistent)
+SCORE=$(awk -v s="$raw_score" 'BEGIN { printf("%.2f", s) }')
+
+# Apply late penalty
+RAW_SCORE=$SCORE
+if (( force_zero == 1 )); then
+  FINAL_SCORE=0
+else
+  FINAL_SCORE=$(awk -v raw="$RAW_SCORE" -v pen="$penalty_frac" 'BEGIN {
+    adj = raw * (1.0 - pen);
+    if (adj < 0) adj = 0;
+    printf("%.2f", adj);
+  }')
+fi
+
+summary_msg=$(cat <<EOF
+Deadline (CT): $DEADLINE_LOCAL
+Submitted at:  $created_at
+Hours late:    $late_hours
+Penalty:       $(awk -v p="$penalty_frac" 'BEGIN { printf("%.2f%%", p*100) }')
+Raw score:     $RAW_SCORE / $MAX_SCORE
+Final score:   $FINAL_SCORE / $MAX_SCORE
+EOF
+)
+
+# Write Gradescope results
+cat > /autograder/results/results.json <<JSON
+{
+  "score": $FINAL_SCORE,
+  "max_score": $MAX_SCORE,
+  "output": $(jq -Rs . <<<"$summary_msg"),
+  "visibility": "after_published",
+  "stdout_visibility": "after_published"
+}
+JSON

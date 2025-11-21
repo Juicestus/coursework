@@ -1,0 +1,3 @@
+In this assignment, you are tasked with implementing a thread pool that efficiently manages tasks across a fixed number of threads. Each thread should continuously fetch tasks from a queue and execute them, waiting for new tasks when the queue is empty.
+
+This is a simplified version of a thread pool. Therefore, you are only required to implement the following functions: void SubmitTask(const std::string &name, Task *task), void run_thread(), and void Stop().
