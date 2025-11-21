@@ -1,3 +1,16 @@
-Started task "first" on thread 137166518740672
-Started task "second" on thread 137166527133376
-Started task "third" on thread 137166493562560
+Added task first
+Started task first
+Added task second
+Added task third
+Called Stop()
+Started task second
+Started task third
+Stopping thread
+Stopping thread
+Finished task first
+Stopping thread
+Finished task second
+Finished task third
+Stopping thread
+Stopping thread
+Cannot added task to queue

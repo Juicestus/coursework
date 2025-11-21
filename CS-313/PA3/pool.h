@@ -3,7 +3,6 @@
 #include <vector>
 #include <mutex>
 #include <condition_variable>
-#include <semaphore>
 
 class Task {
 public:
@@ -42,4 +41,6 @@ private:
     std::vector<std::thread *> threads;
     std::vector<Task *> queue;
     volatile bool done = false;
+
+	std::condition_variable cv;
 };
