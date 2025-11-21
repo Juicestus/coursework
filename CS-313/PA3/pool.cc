@@ -22,7 +22,7 @@ void ThreadPool::SubmitTask(const std::string &name, Task *task) {
 
     if (done) 
     {
-        std::cout << "Cannot added task to queue\n";//endl
+        std::cout << "Cannot added task to queue\n";
         return;
     }
 
@@ -30,13 +30,15 @@ void ThreadPool::SubmitTask(const std::string &name, Task *task) {
     queue.push_back(task);
 
     std::cout << "Added task " << name << "\n";
-    // num_tasks_unserviced++;
+    num_tasks_unserviced++;
     lock.unlock();
     cv.notify_one();
 }
 
 
-void ThreadPool::WaitForTask(const std::string &cstr) {}
+void ThreadPool::WaitForTask(const std::string& name) 
+{
+}
 
 void ThreadPool::run_thread() {
     while (true) 
@@ -71,17 +73,17 @@ void ThreadPool::run_thread() {
 void ThreadPool::remove_task(Task *t) {
     std::lock_guard<std::mutex> lock(mtx);
 
-    for (auto iter = queue.begin(); iter != queue.end(); ) // go backwards?
+    for (auto iter = queue.end(); iter != queue.begin(); iter--) 
     {
         if (*iter == t) 
         {
             queue.erase(iter);
 
-            // num_tasks_unserviced--;
+            num_tasks_unserviced--;
 
             delete t;
             return;
-        } else iter++;
+        }
     }
 }
 

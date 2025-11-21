@@ -10,7 +10,7 @@ Stopping thread
 Finished task first
 Stopping thread
 Finished task second
-Finished task third
 Stopping thread
+Finished task third
 Stopping thread
 Cannot added task to queue

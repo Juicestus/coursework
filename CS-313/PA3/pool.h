@@ -27,7 +27,7 @@ public:
     void SubmitTask(const std::string &name, Task *task);
     void remove_task(Task *t);
         
-    void WaitForTask(const std::string &name);
+    void WaitForTask(const std::string& name);
 
     // Stop all threads. All tasks must have been waited for before calling this.
     // You may assume that SubmitTask() is not caled after this is called.
