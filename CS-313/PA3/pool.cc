@@ -12,83 +12,76 @@ ThreadPool::ThreadPool(int num_threads) {
 
 ThreadPool::~ThreadPool() {
     Stop();
-    std::lock_guard<std::mutex> lock(mtx);
-    for (Task *q : queue) {
+    for (Task* q : queue)
         delete q;
-    }
     queue.clear();
 }
 
 void ThreadPool::SubmitTask(const std::string &name, Task *task) {
     std::unique_lock<std::mutex> lock(mtx);
 
-       if (done) {
+    if (done) 
+    {
+        std::cout << "Cannot added task to queue\n";//endl
         return;
     }
 
     task->name = name;
-    task->running = false;
-
     queue.push_back(task);
-    num_tasks_unserviced++;
+
+    std::cout << "Added task " << name << "\n";
+    // num_tasks_unserviced++;
+    lock.unlock();
     cv.notify_one();
 }
 
-void ThreadPool::run_thread() {
-    while (true) {
-        Task *task = nullptr;
 
+void ThreadPool::WaitForTask(const std::string &cstr) {}
+
+void ThreadPool::run_thread() {
+    while (true) 
+    {
+        Task* task = nullptr;
         {
             std::unique_lock<std::mutex> lock(mtx);
 
-            cv.wait(lock, [this]() {
+            cv.wait(lock, [this]() 
+            {
                 return done || !queue.empty();
             });
 
-            if (done && queue.empty()) {
+            if (done && queue.empty()) 
+            {
+                std::cout << "Stopping thread\n";
                 return;
             }
 
-            if (!queue.empty()) {
-                task = queue.front();
-                queue.erase(queue.begin());
-                if (task) {
-                    task->running = true;
-                }
-            }
+            task = queue.front();
+            queue.erase(queue.begin());
+            std::cout << "Started task " << task->name << "\n";
         }
-
-        if (!task) {
-            continue;
-        }
-
-        std::cout << "Started task \"" << task->name
-                  << "\" on thread " << std::this_thread::get_id()
-                  << std::endl;
-
         task->Run();
-
-        {
-            std::unique_lock<std::mutex> lock(mtx);
-            task->running = false;
-            num_tasks_unserviced--;
-        }
-
+        std::cout << "Finished task " << task->name << "\n";
         delete task;
     }
 }
 
+
+
 void ThreadPool::remove_task(Task *t) {
     std::lock_guard<std::mutex> lock(mtx);
-    for (auto it = queue.begin(); it != queue.end(); ++it) {
-        if (*it == t) {
-            queue.erase(it);
 
-            num_tasks_unserviced--;
+    for (auto iter = queue.begin(); iter != queue.end(); ) // go backwards?
+    {
+        if (*iter == t) 
+        {
+            queue.erase(iter);
+
+            // num_tasks_unserviced--;
 
             delete t;
             return;
-        }
+        } else iter++;
     }
 }
 
@@ -96,16 +89,19 @@ void ThreadPool::Stop() {
     {
         std::unique_lock<std::mutex> lock(mtx);
 
-        if (done) {
+        if (done) 
+        {
             return;
         }
-
+        std::cout << "Called Stop()" << std::endl;
         done = true;
-        cv.notify_all();
     }
+    cv.notify_all();
 
-    for (std::thread *t : threads) {
-        if (t && t->joinable()) {
+    for (std::thread* t : threads) 
+    {
+        if (t && t->joinable()) 
+        {
             t->join();
         }
         delete t;

@@ -1,40 +1,45 @@
-#include <condition_variable>
-#include <mutex>
 #include <string>
 #include <thread>
 #include <vector>
+#include <mutex>
+#include <condition_variable>
+#include <semaphore>
 
 class Task {
 public:
-Task();
-virtual ~Task();
+    Task();
 
-virtual void Run() = 0;
-bool is_running() const { return running; }
+    virtual ~Task();
 
-std::string name;
-bool running = false;
+    virtual void Run() = 0;  // implemented by subclass
+    bool is_running() const { return running; }
+
+    std::string name;
+    bool running = false;
 };
 
 class ThreadPool {
 public:
-explicit ThreadPool(int num_threads);
-~ThreadPool();
+    explicit ThreadPool(int num_threads);
 
-void SubmitTask(const std::string &name, Task *task);
+    ~ThreadPool();
 
-void remove_task(Task *t);
-void Stop();
+    // Submit a task with a particular name.
+    void SubmitTask(const std::string &name, Task *task);
+    void remove_task(Task *t);
+        
+    void WaitForTask(const std::string &name);
 
-void run_thread();
+    // Stop all threads. All tasks must have been waited for before calling this.
+    // You may assume that SubmitTask() is not caled after this is called.
+    void Stop();
 
-int num_tasks_unserviced = 0;
+    void run_thread();
 
+    int num_tasks_unserviced = 0;
 private:
-std::mutex mtx;
-std::condition_variable cv;
-std::vector<std::thread *> threads;
-std::vector<Task *> queue;
-bool done = false;
+    std::mutex mtx;
+    std::vector<std::thread *> threads;
+    std::vector<Task *> queue;
+    volatile bool done = false;
 };
-
