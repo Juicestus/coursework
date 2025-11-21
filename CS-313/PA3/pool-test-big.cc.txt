@@ -1,0 +1,114 @@
+#include <gtest/gtest.h>
+#include "pool.h"
+#include <iostream>
+#include <atomic>
+#include <vector>
+
+
+struct EmptyTask : Task {
+  int secs = 0;
+
+  explicit EmptyTask(int s) {
+      secs = s;
+  }
+
+  void Run() override {
+      std::this_thread::sleep_for(std::chrono::seconds(secs));
+  }
+};
+
+struct SimpleWaitTask : Task {
+  std::string tname;
+  ThreadPool *tpool;
+
+  SimpleWaitTask(ThreadPool *pool, std::string task_name) {
+      tname = std::move(task_name);
+      tpool = pool;
+  }
+
+  void Run() override {
+      std::this_thread::sleep_for(std::chrono::seconds(3));
+      tpool->WaitForTask(tname);
+      std::this_thread::sleep_for(std::chrono::seconds(3));
+  }
+};
+
+struct DoubleWaitTask : Task {
+  std::string tname1, tname2;
+  ThreadPool *tpool;
+
+  DoubleWaitTask(ThreadPool *pool, std::string task_name1, std::string task_name2) {
+      tname1 = std::move(task_name1);
+      tname2 = std::move(task_name2);
+      tpool = pool;
+  }
+
+  void Run() override {
+      std::this_thread::sleep_for(std::chrono::seconds(1));
+      tpool->WaitForTask(tname1);
+      std::this_thread::sleep_for(std::chrono::seconds(3));
+      tpool->WaitForTask(tname2);
+      std::this_thread::sleep_for(std::chrono::seconds(3));
+  }
+};
+
+TEST(PoolTest, TaskExecution) {
+  ThreadPool pool{5};
+
+  auto *et1 = new EmptyTask(5);
+  pool.SubmitTask("first", et1);
+
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+  auto *et2 = new EmptyTask(2);
+  pool.SubmitTask("second", et2);
+
+  auto *et3 = new EmptyTask(1);
+  pool.SubmitTask("third", et3);
+
+  pool.WaitForTask("first");
+  pool.WaitForTask("second");
+  pool.WaitForTask("third");
+
+  std::cout << "All tasks completed." << std::endl;
+
+  pool.Stop();
+}
+
+TEST(PoolTest, TaskExecution1) {
+  ThreadPool pool{5};
+
+  auto *et1 = new EmptyTask(5);
+  pool.SubmitTask("first", et1);
+
+  auto *swt = new SimpleWaitTask(&pool, "first");
+  std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+  pool.SubmitTask("second", swt);
+  pool.WaitForTask("second");
+
+  std::cout << "All tasks completed." << std::endl;
+  pool.Stop();
+}
+
+TEST(PoolTest, TaskExecution2) {
+  ThreadPool pool{5};
+
+  auto *et1 = new EmptyTask(10);
+  pool.SubmitTask("first", et1);
+
+  auto *et2 = new EmptyTask(10);
+  pool.SubmitTask("second", et2);
+
+  auto *et3 = new EmptyTask(10);
+  pool.SubmitTask("third", et3);
+
+  auto *dwt = new DoubleWaitTask(&pool, "first", "second");
+
+  pool.SubmitTask("fourth", dwt);
+  pool.WaitForTask("third");
+  pool.WaitForTask("fourth");
+
+  std::cout << "All tasks completed." << std::endl;
+  pool.Stop();
+}
