@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        ".toast": "plaintext",
+        "socket.h": "c",
+        "shared.h": "c",
+        "errno.h": "c",
+        "stdlib.h": "c",
+        "stdio.h": "c",
+        "_stdio.h": "c"
+    }
+}
