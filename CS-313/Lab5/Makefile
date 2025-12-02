@@ -1,5 +1,5 @@
 CXX=g++
-CXXFLAGS=-std=c++23 -I. -g3 -Wpedantic -Wall -Wextra -Werror -Wconversion -Wfloat-equal
+CXXFLAGS=-std=c++20 -I. -g3 -Wpedantic -Wall -Wextra -Werror -Wconversion -Wfloat-equal -pthread
 
 
 SRCS=Teller.cpp

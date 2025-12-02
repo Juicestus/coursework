@@ -10,6 +10,7 @@ A Practical Exercise in Concurrency
 #include <string>
 #include <thread>
 #include <vector>
+#include <unistd.h>
 
 using timepoint = std::chrono::time_point<std::chrono::steady_clock>;
 
@@ -29,12 +30,14 @@ void print_helper(const int _approach_num, const timepoint& start, const timepoi
 void teller_thread(BankAccount* const acc, const int64_t _amount)
 {
         // TODO #1: call perform_transaction() function for acc
+		acc->perform_transaction(_amount);
 }
 
 // thread function the teller will use to process a threadsafe transaction
 void teller_threadsafe(BankAccount* const acc, const int64_t _amount)
 {
         // TODO #2: call perform_threadsafe_transaction() function for acc
+		acc->perform_threadsafe_transaction(_amount);
 }
 
 int main(int argc, char* argv[])
@@ -73,6 +76,9 @@ int main(int argc, char* argv[])
         std::vector<std::thread> t_vec;
         const timepoint          start2 = std::chrono::steady_clock::now();
         // TODO #3: create *num_trans* threads and push_back() each one to t_vec
+		for (size_t i = 0; i < num_trans; i++)
+			t_vec.push_back(std::thread(teller_thread, &B, trans_arr[i]));
+
         for(std::thread& t: t_vec) t.join();
         const timepoint end2 = std::chrono::steady_clock::now();
         print_helper(2, start2, end2, B);
@@ -83,7 +89,11 @@ int main(int argc, char* argv[])
         std::vector<std::thread> t_vec2;
         const timepoint          start3 = std::chrono::steady_clock::now();
         // TODO #4: create *num_trans* threads and push_back() each one to t_vec2
+
+		for (size_t i = 0; i < num_trans; i++)
+			t_vec2.push_back(std::thread(teller_threadsafe, &C, trans_arr[i]));
         // TODO #5: join all threads in t_vec2
+		for (std::thread& t : t_vec2) t.join();
 
         // end timer and print result
         const auto end3 = std::chrono::steady_clock::now();
