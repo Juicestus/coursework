@@ -1,0 +1,970 @@
+:root {
+    --bg: #fff;
+    --fg: #111;
+    --muted: #555;
+    --border: #ddd;
+    --primary: #111;
+    --primary-contrast: #fff;
+}
+
+:root.holiday {
+    /* keep base colors readable */
+    --bg: #ffffff;
+    --fg: #111111;
+    --muted: #555555;
+
+    /* holiday accents */
+    --border: #970707;           /* red borders / outlines */
+    --primary: #7c0808;          /* red primary buttons */
+    --primary-contrast: #ffffff; /* white text on primary buttons */
+}
+
+
+/* Optional: subtle background + sparkle when holiday mode is on */
+body.holiday-bg {
+    background:
+            radial-gradient(circle at top left, #dcb0b0 0, transparent 55%),
+            radial-gradient(circle at bottom right, rgb(124, 0, 0) 0, transparent 60%),
+            #ffffff;
+}
+
+:root.holiday .menu-card {
+    background: linear-gradient(
+            to bottom right,
+            rgba(11, 61, 46, 0.05),
+            rgba(198, 40, 40, 0.05)
+    );
+}
+
+body.holiday-bg::before,
+body.holiday-bg::after {
+    content: "";
+    position: fixed;
+    top: -20px;         /* pull them down inside the frame */
+    width: 560px;
+    height: 560px;
+    background-image: url("/images/lights.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+/* Left corner */
+body.holiday-bg::before {
+    right: -100px;   /* pushes inside frame */
+}
+
+/* Right corner (mirrored) */
+body.holiday-bg::after {
+    left: -660px;  /* pushes inside frame */
+    transform: scaleX(-1);
+    transform-origin: top right;
+}
+
+
+
+:root.holiday {
+    cursor: url("/images/snowflake.png") 8 8, auto;
+}
+
+
+
+body.holiday-bg {
+    border: 50px solid #0b3d2e; /* deep evergreen */
+    box-sizing: border-box;
+    min-height: 100vh;
+}
+
+body.holiday-bg {
+    border: 40px solid #0b3d2e;
+    box-shadow: inset 0 0 45px rgba(0, 0, 0, 0.4);
+}
+
+:root.holiday .nav-btn,
+:root.holiday button {
+    box-shadow:
+            0 0 4px rgba(198, 40, 40, 0.4),
+            0 0 12px rgba(0, 128, 0, 0.25);
+}
+
+/* Wreath centered at the top of Home screen (holiday mode only) */
+.home-wrap::before {
+    content: "";
+    position: absolute;
+    top: -40px;           /* adjust to fit your layout */
+    left: 55%;
+    transform: translateX(-50%);
+    width: 400px;         /* adjust wreath size */
+    height: 250px;
+    background-image: url("/images/redbow.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    pointer-events: none;
+    z-index: 5000;
+    opacity: 1;           /* reduce to 0.8 if you want softer look */
+}
+.home-wrap {
+    position: relative;   /* required for the wreath to position correctly */
+}
+
+/* Only display in holiday mode */
+:root:not(.holiday) .home-wrap::before {
+    display: none;
+}
+
+
+
+/* Little floating toggle in the corner */
+.holiday-toggle {
+    position: fixed;
+    right: 12px;
+    bottom: 20px;  /* places it nicely above the corner */
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.65);
+    color: #fff;
+    font-size: 12px;
+    backdrop-filter: blur(6px);
+}
+
+/* Simple switch styling */
+.holiday-toggle-button {
+    width: 42px;
+    height: 22px;
+    border-radius: 999px;
+    border: 1px solid #fff;
+    background: #555;
+    position: relative;
+    cursor: pointer;
+    padding: 0;
+}
+
+.holiday-toggle-button-knob {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #fff;
+    top: 1px;
+    left: 2px;
+    transition: transform 0.18s ease;
+}
+
+.holiday-toggle-button.on {
+    background: #c62828;
+    border-color: #ffeb3b;
+}
+
+.holiday-toggle-button.on .holiday-toggle-button-knob {
+    transform: translateX(18px);
+}
+
+/* Glow on primary buttons when in holiday mode */
+:root.holiday .nav-btn,
+:root.holiday button {
+    box-shadow: 0 0 0 1px rgba(255, 235, 59, 0.35),
+    0 0 12px rgba(198, 40, 40, 0.55);
+}
+
+/* Slightly rounded cards & inputs in holiday mode */
+:root.holiday .page-container,
+:root.holiday .page-container-alt,
+:root.holiday input,
+:root.holiday select,
+:root.holiday .cart,
+:root.holiday .menu-card {
+    border-radius: 14px;
+}
+
+
+
+
+
+
+
+* {
+    box-sizing: border-box
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: var(--fg);
+    background: var(--bg)
+}
+
+
+h1 {
+    margin: 0 0 12px;
+    font-size: 2rem
+}
+
+.muted {
+    color: var(--muted)
+}
+
+.mt-sm {
+    margin-top: .5rem
+}
+
+.grow {
+    flex: 1
+}
+
+.wrap { position: relative; max-width: 1100px; margin: 32px auto; padding: 0 16px; }
+
+.home-wrap {
+    position: relative;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 16px;
+
+    min-height: 100vh;              /* Full screen height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;        /* Vertical centering */
+    align-items: center;            /* Horizontal centering */
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;         /* Stack vertically */
+    gap: 16px;                      /* Space between buttons */
+    margin-top: 24px;
+    width: 100%;
+    max-width: 300px;               /* Keeps buttons nicely sized */
+}
+
+.nav-btn {
+    width: 100%;            
+    text-align: center;
+    background: #fafafa;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    text-decoration: none;
+    color: var(--fg);
+    font-size: 1.25rem;
+    height: 80px;
+}
+
+.nav-btn:hover {
+    background: #f3f3f3
+}
+
+#backBtn {
+    width: 64px;
+}
+
+.logout-btn {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    border: 2px solid #882d2d;
+    border-radius: 10px; 
+    background: #c52c2c;
+    color: var(--primary-contrast);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    filter: brightness(.9)
+}
+
+.search-input {
+    width: calc(100% - 80px);
+    padding: .6rem .8rem;
+    border: 1px solid var(--border);
+    border-radius: 10px
+}
+
+.toolbar {
+    margin-bottom: 75px
+}
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr;
+    gap: 16px
+}
+
+@media (max-width: 920px) {
+    .grid-2 {
+        grid-template-columns: 1fr
+    }
+}
+
+.grid-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 16px;
+    align-items: stretch
+}
+
+.card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: #fff;
+    text-align: left;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform .06s ease, box-shadow .06s ease;
+    padding: 0px;
+}
+
+.card:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, .06)
+}
+
+.card-img {
+    width: 100%;
+    height: 220px;
+    object-fit: contain;
+    object-position: center;
+    background-color: white;
+    padding: 10px;
+    display: block;
+}
+
+.card-body {
+    padding: 10px 12px 12px
+}
+
+.card-name {
+    font-weight: 600;
+    line-height: 1.25;
+    min-height: 2.6em
+}
+
+.card-price {
+    margin-top: 6px;
+    color: #444;
+    font-weight: 600
+}
+
+.panel {
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 16px;
+    /* max-height: auto; */
+    height: auto;
+    max-height: 450px;
+}
+
+.weather-box {
+  margin-top: 0px;
+  margin-bottom: 4px;
+  padding: 0px 16px;
+  border-radius: 14px;
+
+  color:black;
+ border: 1px solid var(--border);
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  /* box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25); */
+  font-size: 1rem;
+  height: 100px;
+}
+
+#weatherHeading {
+    margin-top: 14px;
+    margin-bottom: -4px;
+    text-align: center;
+    font-size:18px;
+    font-weight: bold;
+}
+
+/* Weather Text Lines */
+.weather-box p {
+  margin: 0;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Headline */
+.weather-box strong {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+/* Subtle Icon Styling */
+.weather-box span {
+  opacity: 0.85;
+}
+
+#cartItems {
+    overflow-y: auto;
+    margin-top: 12px;
+    flex: 1;
+    padding-right: 4px;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gap-sm {
+    margin-top: 4px;
+}
+
+.gap-md {
+    margin-top: 8px;
+}
+
+.gap-lg {
+    margin-top: 16px;
+}
+
+.cart-row {
+    padding-right: 4px;
+    min-height: 3.5rem;
+}
+
+.cart-table-wrap {
+    flex: none;
+    overflow-y: auto;
+    border-radius: 12px;
+    max-height: 200px;
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    table-layout: fixed;
+}
+
+.cart-table thead th {
+    background: #fafafa;
+    padding: 8px;
+    font-weight: 600;
+    border-bottom: 1px solid #eee;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.cart-table tbody td {
+    padding: 8px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.cart-table .qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.cart-table td,
+.cart-table th {
+    text-align: left;
+    overflow: wrap;
+}
+
+.cart-table td.td-btn {
+    text-align: center;
+    padding: 4px;
+}
+
+.cart-table td.td-qty {
+    text-align: center;
+}
+
+.customization-summary {
+    display: flex;
+}
+
+.customization {
+    color: rgb(87, 87, 87);
+    font-size: .8rem;
+    white-space: pre-line;
+}
+
+.cart-table button.btn.sm {
+    padding: 2px 4px;
+    padding-top: 18%;
+    padding-left: 2px;
+    padding-right: 2px;
+    min-width: 24px;
+    aspect-ratio: 1/1;
+}
+
+.btn {
+    border: none;
+    border-radius: 8px;
+    padding: .55rem .9rem;
+    background: var(--primary);
+    color: var(--primary-contrast);
+    cursor: pointer
+}
+
+.btn.sm {
+    padding: .25rem .6rem
+}
+
+.btn.primary {
+    background: #0d6efd
+}
+
+.btn:hover {
+    filter: brightness(.95)
+}
+
+.totals {
+    margin-top: 8px
+}
+
+.totals .total {
+    font-size: 1.05rem
+}
+
+.page-container{display: flex; flex-direction: column; align-items: center; justify-content: center;}
+.page-container-alt{display: flex; height: 100vh; flex-direction: column; align-items: center; justify-content: center;}
+.login-page {
+  position: fixed;           /* ✅ detach from normal DOM flow */
+  inset: 0;                   /* ✅ top:0 right:0 bottom:0 left:0 */
+  
+  display: flex;
+  flex-direction: column;
+  justify-content: center;    /* ✅ vertical center */
+  align-items: center;        /* ✅ horizontal center */
+
+  gap: 20px;
+
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-size: 2rem;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+.login-width-constraint {
+  max-width: 400px;
+  width: 100%;
+  text-align: center;
+}
+.login-width-constraint h1 {
+    text-align: center;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0
+}
+
+.table-wrap {
+    overflow: auto;
+    border: 1px solid var(--border);
+    border-radius: 14px
+}
+
+#empTable {
+    width: 100%;
+    border-collapse: collapse
+}
+
+#empTable th,
+#empTable td {
+    padding: .6rem .8rem;
+    border-bottom: 1px solid #f1f1f1;
+    text-align: left
+}
+
+#empTable thead th {
+    background: #fafafa
+}
+
+.navbar {
+    display: flex;
+    margin: 10px 10px;
+    align-items: center;
+    gap: 10px;
+}
+
+.menu {
+    display: block;
+    margin: 20px 20px;
+    border-collapse: collapse;
+}
+
+.menu td,
+.menu th {
+    padding: 5px;
+    border: 2px solid black;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#cartHeadingBox {
+    margin-top: -16px;
+    margin-left: -16px;
+    margin-right: -16px;
+    margin-bottom: 16px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+    background-color: rgb(247, 247, 247);
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+}
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 500;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.modal-panel {
+    width: 420px;
+    height: 55vh;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.modal-panel h2 {
+    margin: 0;
+    padding: 16px;
+    border-bottom: 1px solid var(--border);
+    background-color: rgb(247, 247, 247);
+    text-align: center;
+}
+
+.modal-body {
+    padding: 16px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+/* .modal-item div {
+    display: flex;
+    margin-top: 10px;
+    gap: 5px;
+} */
+
+.modal-footer {
+    padding: 12px 16px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+}
+
+.modal-panel.large {
+    width: 560px;
+    max-height: 85vh;
+}
+
+.review-table th,
+.review-table td {
+    padding: 8px;
+    border-bottom: 1px solid #eee;
+}
+
+.mb {
+    margin-bottom: 16px;
+}
+
+.card-field {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 12px;
+}
+
+.card-field label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--fg);
+}
+
+.card-input {
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 1rem;
+    color: var(--fg);
+    background: #fff;
+}
+
+.card-input:focus {
+    outline: none;
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 2px rgba(13, 110, 253, 0.25);
+}
+
+.card-row {
+    display: flex;
+    gap: 8px;
+}
+
+.card-row .card-input {
+    flex: 1;
+}
+
+.card-exp-small {
+    max-width: 80px;
+}
+
+.gap-right {
+    margin-right: 16px;
+}
+
+.kiosk-entry {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    z-index: 100000;
+    height: 100vh;
+    width: 100vw;
+    top: 0;
+    left: 0;
+    align-items: center;
+    justify-content: center;
+    background-color: white;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    font-size: 50px;
+    gap: 20px;
+}
+
+.logout-btn {
+    position: absolute;
+    z-index: 100000;
+    top: 5px;
+    right: 5px;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 16px;
+    border: 2px solid #882d2d;
+    border-radius: 10px;
+    background: #c52c2c;
+    color: var(--primary-contrast);
+    font-size: 1.1rem;
+    cursor: pointer;
+}
+
+.customization-wrap {
+    margin-top: 6px;
+    max-width: 600px;
+    display: flex;
+    flex-wrap: wrap;   /* <-- allows wrapping to next line */
+    gap: 8px;          /* optional spacing */
+}
+
+.customization-wrap > div {
+    display: flex;
+    flex-wrap: wrap;   /* allow wrapping */
+    gap: 5px;
+}
+
+.customization-btn {
+    /* flex: 1 1 calc(50% - 8px); */
+    min-height: 50px;
+    max-height: 100px;
+    width: 100px;
+    border: 2px solid transparent;
+    border-radius: 8px;
+    padding: .55rem .9rem;
+    background: rgb(223, 223, 223);
+    color: var(--fg);
+    cursor: pointer
+}
+
+.customization-btn.selected {
+    min-height: 50px;
+    max-height: 100px;
+    border: 2px solid rgb(72, 121, 255);
+    border-radius: 8px;
+    padding: .55rem .9rem;
+    background: rgb(223, 223, 223);
+    color: var(--fg);
+    cursor: pointer
+}
+
+.category-buttons {
+    display: flex;
+    flex-direction: row;      /* ✅ Horizontal */
+    gap: 16px;
+    justify-content: center; /* ✅ Centered under search */
+    align-items: center;
+    margin: -60px 0 0px 0;    
+    position: static;        /* ✅ Kills the absolute bug */
+}
+
+.category-buttons button {
+    border: none;
+    border-radius: 8px;
+    width: 125px;
+    height: 30px;
+    /* padding: 1.5rem 2.5rem; */
+    padding: .4rem;
+    font-size: .80rem;
+    background: rgb(116, 27, 27);
+    color: white;
+    cursor: pointer;
+}
+
+
+.menu-category-heading {
+    margin-top: 12px;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-size: 18px;
+}
+
+.btn.secondary {
+    background: #f97316;
+    border-color: #ea580c;
+    color: #ffffff;
+}
+
+.btn.secondary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.btn.secondary:hover:not(:disabled) {
+    filter: brightness(1.05);
+}
+.menu-categories-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    height: 90vh;
+    width: 98vw;
+    margin: 32px auto 0;
+    align-items: center;
+    overflow-y: auto;
+    padding-bottom: 20px;
+    align-content: center;  
+    gap: 20px; 
+}
+
+.menu-section {
+    display: flex;
+    height: auto;
+    width: 20vw;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--bg);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .05);
+    padding: 20px;
+}
+
+.menu-grid {
+    display: grid;
+    height: auto;
+    width: 100%;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 10px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    height: auto;
+    width: 100%;
+    background: #fafafa;
+    padding: 15px;
+    margin: 0;
+    }
+
+.menu-item .item-details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.menu-item .item-name {
+    font-weight: 600;
+}
+
+.menu-item .item-price {
+    color: var(--muted);
+    font-weight: 500;
+}
+
+.logo {
+    display: flex;
+    height: auto;
+    width: 400px;
+    margin-top: 20px;
+    margin-left: 50vw;
+    transform: translateX(-50%);
+}
+
+.cart-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;   /* clean spacing between Weather & Cart */
+}
+
+.globalhead {
+    font-size: 20px;
+    text-align: center;
+    color: black;
+
+     position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap; /* prevent line breaks */
+    border: 0;
+}

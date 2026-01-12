@@ -1,0 +1,77 @@
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* dimmed backdrop */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.dialog-box {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  width: 320px;
+}
+
+
+
+/* FIXME: NEED TO FIX */
+/* button.active {
+  background-color: #e0e0e0; 
+  color: #555;           
+} */
+
+/**** ACCESSIBILITY ****/
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: auto;
+  background: #000;
+  color: #fff;
+  padding: 8px;
+  z-index: 100;
+}
+.skip-link:focus {
+  left: 0;
+  top: 0;
+}
+.nav-btn:focus {
+  outline: none;              /* remove default browser outline */
+  box-shadow: 0 0 0 1px #99caff; /* custom high-contrast focus ring */
+}
+.nav-list {
+  list-style: none;       /* removes bullets */
+  margin: 0;
+  padding: 0;
+  display: flex;          /* lays items side-by-side */
+  gap: 0.5rem;            /* optional spacing between buttons */
+}
+
+.nav-list li {
+  margin: 0;
+}
+.nav-btn[aria-current="page"] {
+  /* font-weight: bold;        */
+  /* text-decoration: underline;  */
+  color: #005fcc; 
+  border-color:#005fcc;
+  border-width: 3px;        
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; 
+  height: 1px; 
+  padding: 0; 
+  margin: -1px; 
+  overflow: hidden; 
+  clip: rect(0, 0, 0, 0); 
+  white-space: nowrap; 
+  border: 0;
+}
