@@ -1,0 +1,226 @@
+.frame {
+    width: 1000px;
+    border: solid black 2px;
+    text-align: left;
+    padding: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: white;
+}
+
+body {
+    background-color: rgb(15, 33, 87);
+}
+
+h1,
+h2,
+h3
+
+/*, h4, h5, h6*/
+    {
+    font-family: sans-serif;
+    color: #000;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h4,
+h5,
+h6 {
+    font-family: sans-serif;
+    color: #000;
+    font-weight: bold;
+}
+
+p {
+    font-family: Georgia, 'Times New Roman', Times, serif;
+    color: #000;
+}
+
+img#menasa {
+    display: block;
+    width: 300px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 16px;
+}
+
+.hamburger-btn {
+    display: none;
+}
+
+.menu {
+  display: flex;
+  justify-content: center; /* center items */
+  gap: 2rem;               /* even spacing */
+  align-items: center;
+  background-color: rgb(15, 33, 87); /* your chosen blue */
+  padding: 1rem 2rem;
+  border-bottom: 2px solid #0d1e52;  /* slightly darker border */
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25); /* subtle depth */
+  position: sticky;        /* stick to top on scroll */
+  top: 0;
+  z-index: 1000;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #fff;             /* white text */
+  font-family: "Helvetica Neue", sans-serif;
+  font-weight: 600;
+  font-size: 1.05rem;
+  padding: 0.5rem 0;
+  position: relative;
+  transition: color 0.3s ease;
+}
+
+.menu a::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: #fff;        /* white underline */
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.menu a:hover {
+  color: #ffdd55;          /* optional golden highlight */
+}
+
+.menu a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+a {
+  position: relative;
+  color: rgb(15, 33, 87);       /* dark blue text */
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 100%;
+  height: 2px;
+  background-color: rgb(15, 33, 87);  /* dark blue underline */
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+a:hover {
+  color: #ffdd55;               /* golden highlight on hover */
+}
+
+a:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.project-desc {
+    border: 2px solid #000;
+    border-radius: 8px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    background-color: #fff;
+}
+
+.copy-box {
+  display: flex;
+  align-items: stretch;
+  border: 2px solid rgb(15, 33, 87); /* dark blue border */
+  border-radius: 8px;
+  overflow: hidden;
+  background: #fff;
+  width: min(318px, 100%);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.copy-input {
+  flex: 1;
+  font-size: 0.95rem;
+  padding: 0.6rem 0.8rem;
+  border: none;
+  outline: none;
+  font-family: "SFMono-Regular", Consolas, monospace;
+  color: rgb(15, 33, 87);
+  background: transparent;
+}
+
+.copy-input:focus {
+  outline: none;
+}
+
+.copy-button {
+  background: rgb(15, 33, 87); /* dark blue button */
+  color: #fff;
+  border: none;
+  padding: 0 1rem;
+  font-family: sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.1s ease;
+}
+
+.copy-button:hover {
+  background: #ffdd55;   /* gold hover */
+  color: rgb(15, 33, 87);
+}
+
+.copy-button:active {
+  transform: scale(0.97); /* subtle press effect */
+}
+
+.res-desc {
+    margin-top: 48px;
+}
+
+
+.switch-style-btn-cont {
+  display: flex;
+  justify-content: center;   /* center the button */
+  margin-top: 1.5rem;
+}
+
+.switch-style-btn {
+  background: rgb(15, 33, 87);   /* dark blue base */
+  color: #fff;
+  border: 2px solid rgb(15, 33, 87);
+  border-radius: 8px;
+  padding: 0.6rem 1.4rem;
+  font-size: 1rem;
+  font-family: "Helvetica Neue", sans-serif;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s ease, color 0.3s ease, transform 0.15s ease;
+}
+
+.switch-style-btn:hover {
+  background: #ffdd55;           /* gold hover */
+  color: rgb(15, 33, 87);
+}
+
+.switch-style-btn:active {
+  transform: scale(0.97);        /* subtle press effect */
+}
+
+
+.resume {
+}
+iframe {
+    width: 100%;
+    height: 800px;
+    border: none;
+}

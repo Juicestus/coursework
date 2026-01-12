@@ -1,0 +1,71 @@
+.copy-box {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid #000;
+  padding: 0;
+  border-radius: 0;
+  background: #fff;
+  box-sizing: border-box;
+  width: auto;
+  /* max-width: 100%; */
+}
+
+.copy-input {
+  font-size: 0.9rem;
+  padding: 0.5rem;
+  border: none;
+  outline: none;
+  font-family: "SFMono", monospace;
+  background: transparent;
+  color: #000;
+  min-width: 8ch;
+  flex: 1 1 auto;
+  box-sizing: border-box;
+  width: auto;
+}
+
+.copy-input:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+/* Button locked at 2.5rem */
+.copy-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 90px;
+  max-width: 90px;
+  width: 90px;
+  height: auto;
+  font-size: 14px;
+  font-family: "SFCompact", monospace;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  background: #ffffff;
+  color: #000000;
+  border: none;
+  border-left: 1px solid #000000;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  white-space: nowrap;
+  overflow: hidden;        /* hide text overflow */
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.copy-button:hover {
+  background: #000000;
+  color: #ffffff;
+}
+
+.copy-button:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.copy-button-text {
+  display: block;
+  text-align: center;
+  width: 100%;
+}

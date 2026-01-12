@@ -1,0 +1,23 @@
+
+#left-border-line,
+#right-border-line {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: black;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+/* @media (max-width: 1000px) {
+  #left-border-line,
+  #right-border-line {
+    display: none;
+  }
+} */
+
+#left-border-line,
+#right-border-line {
+    left: 0;
+}

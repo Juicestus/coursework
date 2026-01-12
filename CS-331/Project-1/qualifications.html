@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon/favicon.ico" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Justus' personal website.">
+    <meta name="keywords" content="justus, languell, justus languell, juicestus">
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Justus" />
+    <!-- <meta property="og:description" content="All about Justus" /> -->
+    <meta property="og:url" content="https://justusl.com" />
+    <meta property="og:image" content="imgs/menasa2_1508.jpg" />
+    <!-- <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" /> -->
+    <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> -->
+    <title>justusl.com</title>
+
+    <link rel="stylesheet" href="styles1/text.css">
+    <link rel="stylesheet" href="styles1/bars.css">
+    <link rel="stylesheet" href="styles1/btn.css">
+    <link rel="stylesheet" href="styles1/main.css">
+    <link rel="stylesheet" href="styles1/dual-btn.css">
+    <link rel="stylesheet" href="styles1/copy-box.css">
+    <link rel="stylesheet" href="styles1/fancy-link.css">
+    <link rel="stylesheet" href="styles1/back-btn.css">
+    <link rel="stylesheet" href="styles1/burger.css">
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script src="scripts/misc.js"></script>
+    <script src="scripts/copy.js"></script>
+
+    <script src="scripts/switch.js"></script>
+
+    <style>
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 35px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="left-border-line"></div>
+        <div id="right-border-line"></div>
+
+        <div class="frame">
+            <!-- <div class="text-only">
+                <div class="text navbar">
+                    <a class="back-button" href="index.html">Home</a>
+                    <p>&nbsp;</p>
+                </div>
+            </div> -->
+            <div class="text-only">
+                <div class="text burgerbox">
+                    <div class="menu-wrap">
+                        <button class="hamburger-btn" aria-haspopup="true" aria-controls="main-menu">
+                            <span class="hamburger-lines" aria-hidden="true">
+                                <i></i><i></i><i></i>
+                            </span>
+                        </button>
+
+                        <nav class="menu" id="main-menu" role="menu" aria-label="Main">
+                            <a class="" role="menuitem" href="index.html">Home</a>
+                            <a class="" role="menuitem" href="qualifications.html">Qualifications</a>
+                            <a class="" role="menuitem" href="portfolio.html">Portfolio</a>
+                            <a class="" role="menuitem" href="research.html">Research</a>
+                            <a class="" role="menuitem" href="service.html">Service</a>
+                            <a class="" role="menuitem" href="genai.html">GenAI</a>
+                        </nav>
+                    </div>
+                </div>
+                <div class="switch-style-btn-cont">
+                    <button class="switch-style-btn" onclick="toggleStyle()">S</button>
+                </div>
+            </div>
+
+            <!-- <div class="text-only">
+                <div class="text experience-desc">
+
+                    <h1>Professional Experience</h1>
+
+                    <br></br>
+                </div>
+            </div> -->
+            <div class="text-only">
+                
+                <div class="text experience-desc">
+                    <h1>Professional Experience</h1>
+                    <p>I started coding quite young, and been doing it professionally since I was 15. Over the years I've developed strong experience across the software stack.</p>
+                    <br>
+
+                    <ul class="experience-list">
+                        <li>
+                            <h2>Citadel</h2>
+                            <p>I am joining <a class="fancy-link" href="https://citadel.com">Citadel</a> (2026) as a software engineering intern with the commodities team. </p>
+                            <p>
+                                Citadel is the #1 most profitable hedge fund of all time, and one of the largest alternative
+                                investment managers in the commodities market.
+                            </p>
+                        </li>
+
+                        <li>
+                            <h2>Microsoft</h2>
+                            <p>Last summer (2025) I interned with <a class="fancy-link" href="https://microsoft.com">Microsoft</a>'s Azure Compute team, where I worked on high performance RDMA networking for #AI.</p>
+                            <p>Most notably, I worked on the project to support cross-region RDMA traffic without inducing tail latency.</p>
+                            <p>This enabled OpenAI to concurrently train LLMs across multiple datacenters in physically separated regions, which is important because energy demand restricts the number of GPUs in a single region.</p>
+                        </li>
+
+                        <li>
+                            <h2>NASA</h2>
+                            <p>After I graduated high school (2024) I interned with <a class="fancy-link" href="https://nasa.gov">NASA</a>'s experimental robotics group.</p>
+                            <p>My most important project was writing software for drivetrain characterization equipment for the <a class="fancy-link" href="https://nasa.gov">VIPER</a> lunar rover.</p>
+                        </li>
+
+                        <li>
+                            <h2>thethriftybot.com</h2>
+                            <p>While at NASA, I had a second job (never doing that again) working for for <a class="fancy-link" href="https://thethriftybot.com">The Thrifty Bot</a>, 
+                                a robotics education company. I did the firmware for a CAN-based, Hall Effect encoder that cost 50% less than the current solution on the market.
+                            </p>
+                        </li>
+
+                        <li>
+                            <h2>WebCreek</h2>
+                            <p>During high school (2022-2024) I worked at <a class="fancy-link" href="https://webcreek.com">WebCreek</a>, a software company near where I lived.
+                                Specifically, I worked on <a class="fancy-link" href="https://trainbeyond.com">TrainBeyond</a>, an immersive equipment training simulation system licensed to high-profile clients in the oil and gas and heavy machinery industries.</p>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-only">
+                <div class="text experience-desc">
+                    <h1>Education</h1>
+                    <!-- <br> -->
+                    <!-- <h2>Texas A&M University</h2> -->
+                    <p>I am pursuing a bachelors of science in Computer Science at <a class="fancy-link"
+                            href="https://tamu.edu">Texas A&M University.</a></p>
+                    <p>
+                        I do <a class="fancy-link" href="research.html">undergraduate research</a>,
+                        am an honors student, and am graduating in ≤ 3 years.
+                    </p>
+                </div>
+            </div>
+            <div class="text-only">
+                <div class="text experience-desc">
+                    <h1>Technical Skills</h1>
+                    <p>I have a number of technical skills, including but not limited to</p>
+                    <br>
+                    <ul class="skills-list">
+                        <li><p><b>Languages: </b>C, C++, Python, Java, C#, JavaScript, TypeScript, Golang, Swift, x86/64
+                            Assembly, Arm Assembly.</p></li>
+                        <li><p><b>Technologies: </b>Git, CMake, Linux, Networking, TCP/IP, UDP, SIMD, Drivers, OpenCV,
+                            TensorFlow, PyTorch, .NET, ASP, Flask, React, Node.js, JQuery, Unity3D, JavaFX, AWS, Azure,
+                            Firebase, GCP, STM32, ESP8266/32, MongoDB, SQL.</p></li>
+                        <li><p><b>Areas: </b>Low-Latency Networking, Software Optimization, Performance-Oriented Programming,
+                            Systems Programming, Embedded Systems, Distributed Systems, Firmware Development, Full-Stack
+                            Development.</p></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="text-only">
+                <div class="text resume">
+                <h1>Resume</h1>
+                <p>
+                        <br>
+                        <br>
+                    <iframe src="https://drive.google.com/file/d/1AFAoRrRiGyez0uOP3WXKG1sAq_leH1W7/preview"
+                        title="Resume PDF"  allow="autoplay">
+                    </iframe>
+                    </p>
+                </div>
+                </div>
+            <div class="text-only">
+                <div class="text footer"></div>
+            </div>
+        </div>
+</body>
+
+<script>
+    document.querySelectorAll('.fancy-link').forEach(a => {
+        a.addEventListener('mouseenter', () => {
+            a.classList.add('play');
+            a.addEventListener('animationend', () => a.classList.remove('play'), { once: true });
+        });
+    });
+</script>
+
+</html>

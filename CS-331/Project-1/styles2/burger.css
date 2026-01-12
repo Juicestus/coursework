@@ -1,0 +1,127 @@
+.menu-wrap {
+  position: relative;
+  display: inline-block;
+  z-index: 20;
+}
+
+/* ---- Button ---- */
+.hamburger-btn {
+  appearance: none;
+  cursor: pointer;
+  background: #fff;
+  border: 1px solid #000;
+  width: 40px; height: 40px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  transition: background-color .3s ease;
+}
+
+.hamburger-lines {
+  display: grid;
+  gap: 6px;
+  transition: all .3s ease;
+}
+.hamburger-lines i {
+  display: block;
+  width: 22px;
+  height: 1px;
+  background: #000;
+  transition: background-color .3s ease;
+}
+
+/* Hover effect: button fills black, lines turn white */
+.menu-wrap:hover .hamburger-btn {
+  background: #000;
+}
+.menu-wrap:hover .hamburger-lines i {
+  background: #fff;
+}
+/* ---- Menu ---- */
+.menu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  min-width: 220px;                 /* wider menu */
+  background: #fff;
+  border: 1px solid #000;
+  box-shadow: 0 6px 14px rgba(0,0,0,.12);
+  opacity: 0;
+  transform-origin: left;
+  pointer-events: none;
+  transition: opacity .15s ease, transform .15s ease;
+}
+
+.menu-wrap:hover .menu {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+
+/* ---- Menu items ---- */
+.menu a[role="menuitem"] {
+  position: relative;
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 20px 14px 48px;     /* spacing adjusted for wider menu */
+  font-size: 1rem;
+  font-family: sans-serif;
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  background: #fff;
+  color: #444;
+  border-bottom: 1px solid #000;
+  text-decoration: none;
+  transition: color .3s ease, padding-left .3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+/* remove divider on last item */
+.menu a[role="menuitem"]:last-child {
+  border-bottom: none;
+}
+
+/* Arrow */
+.menu a[role="menuitem"]::before {
+  content: "";
+  position: absolute;
+  height: 14px;
+  width: 21px;
+  top: 50%;
+  left: 18px;
+  transform: translateY(-60%) translateX(-50px);
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' xmlns='http://www.w3.org/2000/svg' width='21' height='14' viewBox='0 0 21 14'><path d='M14.586 0L13.172 1.414 17.757 6H0v2h17.757l-4.585 4.586L14.586 14 21 7.586 14.586 0z'/></svg>");
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: transform .3s ease;
+  pointer-events: none;
+}
+
+/* Hover */
+.menu a[role="menuitem"]:hover {
+  color: #000;
+  padding-left: 68px;               /* shift text right; width remains fixed */
+}
+
+.menu a[role="menuitem"]:hover::before {
+  transform: translateY(-60%) translateX(0);
+}
+
+/* Persist open when toggled via JS */
+.menu-wrap.open .menu {
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+}
+.menu-wrap.open .hamburger-btn { background: #000; }
+.menu-wrap.open .hamburger-lines i { background: #fff; }
+
+/* Optional: backdrop to make “tap outside” super easy */
+.menu-backdrop {
+  position: fixed;
+  inset: 0;
+  background: transparent;  /* invisible click-catcher */
+  z-index: 19;              /* just under .menu-wrap (z=20) */
+}

@@ -1,0 +1,63 @@
+.twosigma-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 45px 10px 45px;
+  font-size: 1rem;
+  /* font-family: sans-serif; */
+  font-weight: 300;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  background: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+  text-decoration: none;
+  transition: all 0.4s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+/* The arrow */
+.twosigma-button::before {
+  content: "";
+  display: block;
+  position: absolute;
+  height: 14px;
+  width: 21px;
+  top: 50%;
+  left: 15px;
+  transform: translateY(-50%) translateX(-40px);
+  background-image: url("data:image/svg+xml;utf8,<svg fill='white' xmlns='http://www.w3.org/2000/svg' width='21' height='14' viewBox='0 0 21 14'><path d='M14.586 0L13.172 1.414 17.757 6H0v2h17.757l-4.585 4.586L14.586 14 21 7.586 14.586 0z'/></svg>");
+  background-repeat: no-repeat;
+  background-size: contain;
+  transition: transform 0.4s ease;
+  pointer-events: none;
+}
+
+/* Hover state */
+.twosigma-button:hover {
+  background: #000000;
+  color: #ffffff;
+  border-color: #000000;
+  padding-left: 65px; /* creates space for the arrow */
+}
+
+.twosigma-button:hover::before {
+  transform: translateY(-50%) translateX(0);
+}
+
+.button-container {
+  padding: 0rem;
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .button-container {
+    justify-content: center;
+  }
+}

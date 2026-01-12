@@ -1,0 +1,123 @@
+.dual-twosigma-button-group {
+    display: flex;
+    max-width: 20rem;
+    width: 100%;
+    border: 1px solid #000;
+    background: #fff;
+    overflow: hidden;
+    box-sizing: border-box;
+}
+
+/* Alignment modifiers */
+.dual-twosigma-button-group.align-left {
+    margin-left: 0;
+    margin-right: auto;
+}
+
+.dual-twosigma-button-group.align-right {
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.dual-twosigma-button-group.align-center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Button styling */
+.dual-twosigma-button {
+    min-width: 0;
+    flex: 1 1 50%;
+    padding: 10px 30px;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-family: "SFCompact", monospace;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    background: #ffffff;
+    color: #000000;
+    text-decoration: none;
+    border: none;
+    border-left: 1px solid #000;
+    transition:
+        background 0.4s ease-in-out,
+        color 0.4s ease-in-out,
+        padding 0.4s ease-in-out,
+        flex 0.4s ease-in-out;
+    cursor: pointer;
+    white-space: nowrap;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.dual-twosigma-button:first-child {
+    border-left: none;
+}
+
+/* Arrow effects (optional, can remove if unwanted) */
+.dual-twosigma-button:first-child::before,
+.dual-twosigma-button:last-child::before {
+    content: "";
+    position: absolute;
+    height: 14px;
+    width: 21px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-image: url("data:image/svg+xml;utf8,<svg fill='white' xmlns='http://www.w3.org/2000/svg' width='21' height='14' viewBox='0 0 21 14'><path d='M14.586 0L13.172 1.414 17.757 6H0v2h17.757l-4.585 4.586L14.586 14 21 7.586 14.586 0z'/></svg>");
+    background-repeat: no-repeat;
+    background-size: contain;
+    pointer-events: none;
+    transition: transform 0.4s ease-in-out;
+}
+
+.dual-twosigma-button:first-child::before {
+    left: 15px;
+    transform: translateY(-50%) translateX(-40px);
+}
+
+.dual-twosigma-button:last-child::before {
+    right: 15px;
+    transform: translateY(-50%) translateX(40px);
+}
+
+/* Hover state */
+.dual-twosigma-button:hover {
+    background: #000000;
+    color: #ffffff;
+    flex: 1.15;
+}
+
+.dual-twosigma-button:first-child:hover {
+    padding-left: 54px;
+}
+
+.dual-twosigma-button:last-child:hover {
+    padding-right: 54px;
+}
+
+.dual-twosigma-button:first-child:hover::before {
+    transform: translateY(-50%) translateX(0);
+}
+
+.dual-twosigma-button:last-child:hover::before {
+    transform: translateY(-50%) translateX(0);
+}
+
+/* Shrink non-hovered button */
+.dual-twosigma-button-group:hover .dual-twosigma-button:not(:hover) {
+    flex: 0.85;
+    padding-left: 28px;
+    padding-right: 28px;
+}
+
+@media screen and (max-width: 640px) {
+    .dual-twosigma-button-group.align-right {
+        /* right -> left on mobile */
+        margin-left: 0;
+        margin-right: auto;
+    }
+
+}

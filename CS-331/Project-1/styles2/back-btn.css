@@ -1,0 +1,29 @@
+.back-button {
+  display: inline-block;
+  color: #000;
+  font-family: "SFMono", monospace;
+  font-size: 0.85rem;
+  text-decoration: none;
+  position: relative;
+  padding-left: 1.5rem;
+  transition: color 0.3s ease;
+}
+
+.back-button::before {
+  content: "←";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.85rem;
+  transition: transform 0.3s ease;
+}
+
+/* Fun animation on hover */
+.back-button:hover::before {
+  transform: translateY(-50%) translateX(-3px);
+}
+
+.back-button:hover {
+  color: #555;
+}

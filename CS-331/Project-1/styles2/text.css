@@ -1,0 +1,109 @@
+@font-face {
+    font-family: "SFPro";
+    src: url('../fonts/SFPro/SF-Pro-Text-Regular.otf');
+}
+
+@font-face {
+    font-family: "SFCompact";
+    src: url('../fonts/SFCompact/SF-Compact.ttf');
+}
+
+@font-face {
+    font-family: "NY";
+    src: url('../fonts/NewYork/NewYork.ttf');
+}
+
+@font-face {
+    font-family: "SFMono";
+    src: url('../fonts/SFMono/SF-Mono.ttf');
+}
+
+@font-face {
+    font-family: "apercu";
+    src: url('../fonts/apercu-pro/apercu_regular_pro.otf');
+}
+
+@font-face {
+    font-family: "tcc";
+    src: url('../fonts/tcc-sans/tccsans-medium.otf');
+}
+
+h1,
+h2,
+h3
+
+/*, h4, h5, h6*/
+    {
+    font-family: "SFMono", sans-serif;
+    color: #000;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h4,
+h5,
+h6 {
+    font-family: "SFCompact", sans-serif;
+    color: #000;
+    font-weight: bold;
+}
+
+a,
+p {
+    font-family: "SFCompact", sans-serif;
+    color: #000;
+}
+
+a {
+    color: #000;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+a.thick {
+    font-weight: 700;
+}
+
+a:hover {
+    color: #000;
+    text-decoration: none;
+}
+
+ul.experience-list {
+    list-style-type: none;
+    padding-left: 16px;
+}
+
+ul.experience-list li {
+    margin-bottom: 50px;
+}
+
+ul.experience-list li:last-child {
+    margin-bottom: 0;
+}
+
+ul.skills-list {
+     list-style-type: none;
+    padding-left: 16px;
+}
+
+@media (max-width: 720px) { /* not the mobile cutoff */
+    ul.experience-list {
+        padding-left: 0px;
+
+    }
+
+    ul.skills-list {
+        padding-left: 0px;
+    }
+}
+
+body {
+    background-color: #fff;
+}
+.frame {
+    background-color: #fff;
+}

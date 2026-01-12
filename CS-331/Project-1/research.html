@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="favicon/favicon.ico" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="Justus' personal website.">
+    <meta name="keywords" content="justus, languell, justus languell, juicestus">
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Justus" />
+    <!-- <meta property="og:description" content="All about Justus" /> -->
+    <meta property="og:url" content="https://justusl.com" />
+    <meta property="og:image" content="imgs/menasa2_1508.jpg" />
+    <!-- <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" /> -->
+    <!-- <link rel="manifest" href="%PUBLIC_URL%/manifest.json" /> -->
+    <title>justusl.com</title>
+
+    <link rel="stylesheet" href="styles1/text.css">
+    <link rel="stylesheet" href="styles1/bars.css">
+    <link rel="stylesheet" href="styles1/btn.css">
+    <link rel="stylesheet" href="styles1/main.css">
+    <link rel="stylesheet" href="styles1/dual-btn.css">
+    <link rel="stylesheet" href="styles1/copy-box.css">
+    <link rel="stylesheet" href="styles1/fancy-link.css">
+    <link rel="stylesheet" href="styles1/back-btn.css">
+    <link rel="stylesheet" href="styles1/burger.css">
+
+    <style>
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 35px;
+            }
+        }
+    </style>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <script src="scripts/misc.js"></script>
+    <script src="scripts/copy.js"></script>
+
+        <script src="scripts/switch.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div id="left-border-line"></div>
+        <div id="right-border-line"></div>
+
+        <div class="frame">
+             <!-- <div class="text-only">
+                <div class="text navbar">
+                    <a class="back-button" href="index.html">Home</a>
+                    <p>&nbsp;</p>
+                </div>
+            </div> -->
+            <div class="text-only">
+                <div class="text burgerbox">
+                    <div class="menu-wrap">
+                        <button class="hamburger-btn" aria-haspopup="true" aria-controls="main-menu">
+                            <span class="hamburger-lines" aria-hidden="true">
+                                <i></i><i></i><i></i>
+                            </span>
+                        </button>
+
+                        <nav class="menu" id="main-menu" role="menu" aria-label="Main">
+                            <a class="" role="menuitem" href="index.html">Home</a>
+                            <a class="" role="menuitem" href="qualifications.html">Qualifications</a>
+                            <a class="" role="menuitem" href="portfolio.html">Portfolio</a>
+                            <a class="" role="menuitem" href="research.html">Research</a>
+                            <a class="" role="menuitem" href="service.html">Service</a>
+                            <a class="" role="menuitem" href="genai.html">GenAI</a>
+                        </nav>
+                    </div>
+                </div>
+                <div class="switch-style-btn-cont">
+                    <button class="switch-style-btn" onclick="toggleStyle()">S</button>
+                </div>
+            </div>
+
+            <div class="text-only">
+                <div class="text project-desc res-desc">
+
+                    <h1 class="can-resize">Fast, Vectorized Quicksort Partitioning Algorithms</h1>
+
+                    <br></br>
+
+                    <p>I work under Dr. Dmitri Loguinov in the <a class="fancy-link"
+                            href="https://irl.cse.tamu.edu">Texas A&M Internet Research Lab</a>.</p>
+
+                    <p>The primary workload of the quicksort algorithm lies in partitioning the input around a pivot. By
+                        leveraging AVX vector instructions and optimizing L1 cache utilization, we can achieve a
+                        significantly faster quicksort partition than previous implementations. </p>
+
+                    <p>Our algorithms are designed to minimize the number of physical instructions, avoid execution port
+                        bottlenecks, eliminate branches, and maximize branch prediction accuracy.</p>
+
+                    <!-- {/* <p>As a result, the partition step completes in less time than it takes for the CPU frontend to decode the instructions. </p> */} -->
+                    <!-- <p>As a result, our partition step takes less time executing than the CPU frontend takes to decode the instructions.</p> -->
+
+                    <p>Because we’re optimizing at a level far beyond what’s possible in C or C++, the most
+                        performance-critical partitioning core is written in x86-64 assembly using Microsoft Macro
+                        Assembler.</p>
+
+                    <br></br>
+                    <br></br>
+                    <a href="portfolio.html" class="twosigma-button">More Projects</a>
+                </div>
+            </div>
+            <div class="text-only">
+                <div class="text footer"></div>
+            </div>
+        </div>
+</body>
+
+<script>
+    document.querySelectorAll('.fancy-link').forEach(a => {
+        a.addEventListener('mouseenter', () => {
+            a.classList.add('play');
+            a.addEventListener('animationend', () => a.classList.remove('play'), { once: true });
+        });
+    });
+</script>
+
+</html>

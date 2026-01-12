@@ -1,0 +1,155 @@
+/* Dark Mode – layout preserved, colors flipped */
+
+/* Base */
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  color: #e6e6e6;            /* light text */
+  background: #0d1117;       /* app background */
+}
+
+/* Page box */
+.page {
+  max-width: 1100px;
+  margin: 48px auto;
+  padding: 28px;
+  border: 1px solid #2d333b; /* subtle dark border */
+  background: #0f141a;       /* surface background */
+  box-sizing: border-box;
+}
+
+/* Top nav */
+.nav {
+  display: flex;
+  gap: 24px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #2d333b;
+}
+
+.nav a {
+  color: #eeeeee;            /* link color on dark */
+  /* text-decoration: none; */
+  transition: color .15s ease, border-color .15s ease;
+}
+
+.nav a:hover,
+.nav a:focus {
+  color: #eeeeee;
+  border-color: #eeeeee;
+  outline: none;
+}
+
+.nav .active {
+  font-weight: bold;
+  color: #eeeeee;            /* active link pop */
+}
+
+/* Header */
+.header h1 {
+  margin: 24px 0 8px;
+  font-size: 38px;
+  line-height: 1.2;
+  color: #f0f3f6;
+}
+
+.header p {
+  margin: 0 0 12px;
+  font-size: 18px;
+  color: #c9d1d9;
+}
+
+/* Content */
+.content {
+  display: block;
+  margin-top: 20px;
+  font-size: 18px;
+  line-height: 1.6;
+  color: #e6e6e6;
+}
+
+.content.with-media {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+}
+
+.text {
+  flex: 1;
+}
+
+/* Media box */
+.media {
+  width: 36%;
+  min-width: 260px;
+  /* border: 1px solid #2d333b;
+  background: #11161d; */
+  padding: 12px;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.media img {
+  width: 100%;
+  height: auto;
+  /* aspect-ratio: 4 / 3; */
+  object-fit: cover;
+  background: #161b22;       /* placeholder bg behind images */
+}
+
+.media figcaption {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #9aa4b2;            /* muted caption */
+}
+
+/* Resume iframe wrapper */
+.resume-container {
+  width: min(100%, 600px);
+  aspect-ratio: 8.5 / 10;
+  margin: 24px auto;
+  box-sizing: border-box;
+}
+
+.resume-container iframe {
+  width: 100%;
+  height: 100%;
+  border: 1px solid #3a3f46; /* dark border that matches page */
+  background: #0f141a;
+}
+
+/* Small screens */
+@media (max-width: 480px) {
+  .resume-container { margin: 16px auto; }
+}
+
+/* Optional: stack media under text on narrow viewports
+@media (max-width: 720px) {
+  .content.with-media { display: block; }
+  .media { width: 100%; margin-top: 16px; }
+}
+*/
+
+/* Accessibility: focus & selection */
+:focus-visible {
+  outline: 2px solid #58a6ff;
+  outline-offset: 2px;
+}
+
+::selection {
+  background: #244a7f;
+  color: #ffffff;
+}
+
+/* Optional: automatically enable when user prefers dark scheme
+   (only if you want this file to be opt-in by media query instead of a separate link)
+
+@media (prefers-color-scheme: dark) {
+  :root { color-scheme: dark; }
+}
+*/
+
+.toggle-style {
+  margin-bottom: 1rem;
+}

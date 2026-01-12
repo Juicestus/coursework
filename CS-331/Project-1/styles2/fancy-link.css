@@ -1,0 +1,42 @@
+a.fancy-link {
+  position: relative;
+  color: black;
+  text-decoration: none;
+  background: linear-gradient(
+      90deg,
+      currentColor 33%,
+      transparent 0 66%,
+      currentColor 0
+    )
+    100% 100% / 300% 1.5px no-repeat;
+}
+
+a.fancy-link.thick {
+  position: relative;
+  color: black;
+  text-decoration: none;
+  background: linear-gradient(
+      90deg,
+      currentColor 33%,
+      transparent 0 66%,
+      currentColor 0
+    )
+    100% 100% / 300% 1.5px no-repeat;
+}
+
+
+/* .fancy-link:hover, */
+a.fancy-link.play {
+  animation: underline-slide 0.6s forwards;
+}
+
+@keyframes underline-slide {
+  from {
+    background-position: 100% 100%;
+  }
+  to {
+    background-position: 0% 100%;
+  }
+} 
+
+
