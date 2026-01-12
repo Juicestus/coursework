@@ -1,0 +1,14 @@
+
+Clear
+    \i scripts/clear.sql
+
+Python script generates orders
+    python3.11 scripts/create_orders.py
+
+Load
+    \i scripts/load.sql
+
+Count items
+    SELECT COUNT(*) FROM table_name;
+
+
