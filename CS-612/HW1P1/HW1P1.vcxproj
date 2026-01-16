@@ -145,7 +145,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="ParsedURL.h" />
+    <ClInclude Include="UrlParserHttp.h" />
+    <ClInclude Include="UrlParser.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Socket.h" />
     <ClInclude Include="Util.h" />

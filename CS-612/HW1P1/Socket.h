@@ -2,34 +2,40 @@
 
 #include <cstdlib>
 
-// https://learn.microsoft.com/en-us/windows/win32/winsock/creating-a-basic-winsock-application
+#define _WINSOCK_DEPRECATED_NO_WARNINGS
+
 #include <winsock2.h>
 #include <ws2tcpip.h>
-#pragma comment(lib, "Ws2_32.lib")
+#pragma comment(lib, "ws2_32.lib")
 
 #include "Util.h"
 
-#define INITIAL_BUF_SIZE 4096
+#define INITIAL_BUF_SIZE	4096
+#define THRESHOLD			256
 
 class Socket {
-// This class was based off the code sample on page 3 and 4 of the hw pdf
-// and this winsock reference from MSDN:
-// https://learn.microsoft.com/en-us/windows/win32/winsock/complete-client-code
 	SOCKET	sock;
 	char*	buf;
 	size_t	cap;
-	int		pos;
+	size_t	pos;
+	timeval timeout;
 
 public:
 	Socket() : sock(INVALID_SOCKET), cap(INITIAL_BUF_SIZE), pos(0)
 	{
+		timeout.tv_sec = 10;
+		timeout.tv_usec = 0;
+
 		// create this buffer once, then possibly reuse for multiple connections in Part 3 
 		// use queue, min/max heap to give back blocks and get new blocks?
 		buf = (char*)malloc(cap);
 	}
 
-	int Connect(const std::string& host, uint16_t port);
+	int Connect(char* host, uint16_t port);
+	
+	int Send(char*);
 	int Read(void);
+
 	inline int Close(void)
 	{
 		free(buf);
@@ -37,72 +43,120 @@ public:
 	}
 
 	static int InitWinSock();
-	static int CleanupWinSock();
+
+	inline static int CloseWinSock()
+	{
+		return WSACleanup();
+	}
 };
 
-int Socket::Connect(const std::string& host, uint16_t port)
+int Socket::Connect(char* host, uint16_t port)
 {
-	// Much of this is based off the MSDN sample code
-	// https://learn.microsoft.com/en-us/windows/win32/winsock/complete-client-code
 	int ret = 0;
 	struct addrinfo* ainfo = nullptr, hints = { 0 };	
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_protocol = IPPROTO_TCP;
 
-	std::string portstr = std::to_string(port);
-	if ((ret = getaddrinfo(host.c_str(), portstr.c_str(), &hints, &ainfo)) != 0)
+	if ((sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP)) == INVALID_SOCKET)
 	{
-		FATAL("Failed to get addr info for %s:%d with %d (%d)", host.c_str(), port, ret, WSAGetLastError());
-		WSACleanup();
+		FATAL("Failed to create socket with %d", WSAGetLastError());
 		return 1;
 	}
-	
-	int connecterr;
-	for (; ainfo; ainfo = ainfo->ai_next)
+
+	// based off of 463-sample winsock.cpp
+	struct hostent*		remote;
+	struct sockaddr_in	server;
+	uint32_t ip;
+
+	if ((ip = inet_addr(host)) != INADDR_NONE)
 	{
-		sock = socket(ainfo->ai_family, ainfo->ai_socktype, ainfo->ai_protocol);
-		if (sock == INVALID_SOCKET)
+		server.sin_addr.S_un.S_addr = ip;
+	}
+	else
+	{
+		if ((remote = gethostbyname(host)) == nullptr)
 		{
-			FATAL("Failed to create socket with %d", WSAGetLastError());
+			FATAL("Invalid hostname: neither FQDN nor IP addr");
 			return 1;
 		}
-		if ((ret = connect(sock, ainfo->ai_addr, ainfo->ai_addrlen)) != 0)
+		else
 		{
-			//FATAL("Could not connect socket because %d", WSAGetLastError());
-			connecterr = WSAGetLastError();		// if this is the last run and still fails
-			closesocket(sock);					// the error needs to be preserved...
-			sock = INVALID_SOCKET;
-			continue;
+			// I HATE that msft (or posix standard) made h_addr 
+			// a DEFINE for h_add_list[0]
+			// ....that is so confusing and makes things harder to debug
+			// I couldnt figure out why it wasnt connecting... 
+			// ... I was using h_addr_list b/c I hit tab on the autocomplete
+			// They shouldve made a function like macro like
+			// #define H_ADDR(SPTR) SPTR->h_addr_list[0]
+			memcpy(&server.sin_addr, remote->h_addr, remote->h_length);
 		}
-		break;	// one of them worked
 	}
+	server.sin_family = AF_INET;
+	server.sin_port = htons(port);
 
-	freeaddrinfo(ainfo);
-	if (sock == INVALID_SOCKET)	// could not find a good one
+	if (connect(sock, (struct sockaddr*)&server, sizeof(struct sockaddr_in)) == SOCKET_ERROR)
 	{
-		FATAL("Could not connect to server, error %d", connecterr);	// ...for this message
+		FATAL("Failed to connect to %s:%d (%s:%d), connection error %d", host, port, 
+				inet_ntoa(server.sin_addr), port, WSAGetLastError());
 		return 1;
 	}
-	printf("Socket created for %s:%d\n", host.c_str(), port);
-	return ret;
+	printf("Successfully connect to %s:%d (%s:%d)\n", host, port,
+		inet_ntoa(server.sin_addr), port);
+	return 0;
 }
 
+int Socket::Send(char* req)
+{
+	if (send(sock, req, strlen(req), 0) == SOCKET_ERROR)
+	{
+		FATAL("Failed to send request with error %d", WSAGetLastError());
+		return 1;
+	}
+	return 0;
+}
 
 int Socket::Read(void)
 {
+	int ret;
+	size_t nbytes;
+
+	// This structure was based off the code sample on page 3 and 4 of the hw pdf
 	while (true)
 	{
-		//if ((ret = select(0, &fd, )))
+		fd_set readfdset;
+		// FD_ZERO(*set) - Initializes set to the empty set. A set should always be cleared before using.
+		FD_ZERO(&readfdset);
+		// FD_SET(s, *set) - Adds socket s to set.
+		FD_SET(sock, &readfdset);
+		
+		if ((ret = select(0, &readfdset, nullptr, nullptr, &timeout)) > 0)
+		{
+			if ((nbytes = recv(sock, buf + pos, cap - pos, 0)) < 0)
+			{
+				FATAL("Read error %d", WSAGetLastError());
+				return 1;
+			}
+			pos += nbytes;
+		
+			if (cap - pos <= THRESHOLD)		// too close to end of buffer
+			{
+				cap *= 2;
+				buf = (char*)realloc(buf, cap);
+			}
+		}
+		else
+		{
+			FATAL("Read error %d", WSAGetLastError());
+			return 1;
+		}
 	}
-
+	return 0;
 }
-
 
 
 int Socket::InitWinSock()
 {
-	// https://learn.microsoft.com/en-us/windows/win32/winsock/initializing-winsock
 	int ret;
 	WSADATA data;
 	if ((ret = WSAStartup(MAKEWORD(2, 2), &data)) != 0)
@@ -112,8 +166,3 @@ int Socket::InitWinSock()
 	}
 	return 0;
 }
-int Socket::CleanupWinSock()
-{
-	return WSACleanup();
-}
-
