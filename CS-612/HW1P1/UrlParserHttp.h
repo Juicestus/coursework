@@ -7,20 +7,8 @@
 
 #include "Util.h"
 
-__forceinline char* extractstrn(char* src, int n)
-{
-	char* dst = (char*)malloc(n + 1);
-	if (!dst) return nullptr;
-	dst[n] = 0;
-	// I hate the microsoft _s functions 
-	// https://learn.microsoft.com/en-us/cpp/c-runtime-library/reference/strncpy-s-strncpy-s-l-wcsncpy-s-wcsncpy-s-l-mbsncpy-s-mbsncpy-s-l?view=msvc-170&devlangs=cpp&f1url=%3FappId%3DDev17IDEF1%26l%3DEN-US%26k%3Dk(STRING%2Fstrncpy_s)%3Bk(strncpy_s)%3Bk(DevLang-C%2B%2B)%3Bk(TargetOS-Windows)%26rd%3Dtrue#remarks
-	strncpy_s(dst, n+1, src, n);
-	return dst;
-}
-__forceinline char* extractstr(char* src)
-{
-	return extractstrn(src, strlen(src));
-}
+#include "HTMLParserBase.h"	// limit for defines
+
 
 /* 
  * This is a simpler version of ParsedURL from UrlParser 
@@ -39,17 +27,14 @@ struct ParsedURL {
 			host((char*)""),query((char*)"") {}
 	ParsedURL(char* raw);
 
-	inline std::string Str()
+	inline void Print()
 	{/*
 		return
 			"Scheme:\t" + scheme + "\nHost:\t" + host + "\nPort:\t"
 			+ std::to_string(port) + "\nPath:\t" + path
 			+ "\nQuery:\t" + query + "\nValid:\t" + BOOLYN(valid) + "\n";*/
-		char buffer[4096];	// this is a debug only function this is fine
-		int k = sprintf_s(buffer, "Host:\t%s\nPort:\t%d\nPath\t%s\nQuery:\t%s\nValid:\t%s\n",
-			host, port, path, query, BOOLYN(valid));
-		buffer[k + 1] = 0;
-		return std::string(buffer);
+		//printf("Host:\t%s\nPort:\t%d\nPath\t%s\nQuery:\t%s\nValid:\t%s\n",
+			//host, port, path, query, BOOLYN(valid));
 	}
 };
 
@@ -58,6 +43,11 @@ ParsedURL::ParsedURL(char* _raw)
 	// Correctly initialize defaults
 	: port(80), valid(false), path((char*)"/"), host((char*)""), query((char*)"") 
 {
+	if (strlen(_raw) > MAX_URL_LEN)
+	{
+		FATAL("failed because URL is too long");
+		return;
+	}
 	char* raw = extractstr(_raw);	// kind of a hack, allows us to modify raw in place
 									// even if it is a string literal
 	// Notes from class on Thu:
@@ -70,7 +60,7 @@ ParsedURL::ParsedURL(char* _raw)
 	//		d. find :, extract from : to end, truncate
 	//	4. host should be what is left
 
-	std::cout << "Parsing URL... ";
+	std::cout << "        Parsing URL... ";
 	// (1) ... I searched for this function forever
 	if (_strnicmp(raw, "http://", 7))
 	{
@@ -85,7 +75,8 @@ ParsedURL::ParsedURL(char* _raw)
 	// (3b)
 	if ((cptr = strchr(raw, '?')))
 	{
-		query = extractstr(cptr + 1);	 // no ? sign
+		//query = extractstr(cptr + 1);	 // no ? sign
+		query = extractstr(cptr);	 // including the ? sign so it formats correctly
 		*cptr = 0;
 	}
 	// (3c)
@@ -110,7 +101,12 @@ ParsedURL::ParsedURL(char* _raw)
 	}
 	// (5)
 	host = extractstr(raw);
+	if (strlen(host) > MAX_HOST_LEN)
+	{
+		FATAL("failed because host is too long");
+		return;
+	}
 	// done
-	std::cout << "\n";
+	printf("host %s, port %d, request %s%s\n", host, port, path, query);
 	valid = true;
 }

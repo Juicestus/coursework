@@ -32,10 +32,16 @@
     <ClInclude Include="Util.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Socket.h">
+    <ClInclude Include="IOCPSocket.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="UrlParserHttp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HttpFormat.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HTMLParserBase.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
