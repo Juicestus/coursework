@@ -3,11 +3,14 @@ CFLAGS = -I/usr/include/tirpc -L/usr/lib/x86_64-linux-gnu -g -DRPC_SVC_FG
 
 all: client server
 
+#$(CC) $(CFLAGS) -o client client.o strings_clnt.o strings_xdr.o -lnsl -ltirpc
+#$(CC) $(CFLAGS) -o server server.o strings_svc.o strings_xdr.o -lnsl -ltirpc
+
 client: client.o strings_clnt.o strings_xdr.o
-	$(CC) $(CFLAGS) -o client client.o strings_clnt.o strings_xdr.o -lnsl -ltirpc
+	$(CC) $(CFLAGS) -o client client.o strings_clnt.o strings_xdr.o -ltirpc
 
 server: server.o strings_svc.o  strings_xdr.o
-	$(CC) $(CFLAGS) -o server server.o strings_svc.o strings_xdr.o -lnsl -ltirpc
+	$(CC) $(CFLAGS) -o server server.o strings_svc.o strings_xdr.o -ltirpc
 
 strings_svc.o: strings.h
 	$(CC) $(CFLAGS) -c strings_svc.c
