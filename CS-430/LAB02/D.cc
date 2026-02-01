@@ -1,39 +1,45 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+using ll = long long;
+
 int main()
 {
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
 
-    int N, M;
-    cin >> N >> M;
+    ll N, M;
+    cin >> M >> N;
 
     vector<int> kids;
+    ll sum = 0;
     for (int _N = N; _N--; )
     {
         int k;
         cin >> k;
         kids.push_back(k);
+        sum += k;
     }
+    //std::sort(kids.begin(), kids.end(), std::greater<int>());
+    std::sort(kids.begin(), kids.end());
     
-    int g = 0; 
-    while (g < M)
-    {
-        int m = INT32_MAX;
-        for (int i =0; i < N; i++)
-        {
-            if (kids[i] > 0 && kids[i] < m)
-            {
-                m = kids[i];
-            }
-        }
+    //for (int i = 0; i < N; i++)
+        //std::cout << kids.at(i) << "\n";
 
-        if (m * N > M)
-        {
-            
-            break;
-        }
+    ll anger = 0; 
+    ll D = sum - M;
+    for (int i = 0; i < N; i++)
+    {
+        ll nrem = N - i;
+        ll each = D / N;
+        ll rem = D % nrem;
+        ll d = each;
+        if (i < rem)d++;
+        d = min(d, (ll)kids[i]);
+        anger += d*d;
     }
 
+
+
+       cout << anger << "\n";
 }
