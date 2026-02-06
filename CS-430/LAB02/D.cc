@@ -28,18 +28,25 @@ int main()
 
     ll anger = 0; 
     ll D = sum - M;
+
     for (int i = 0; i < N; i++)
     {
+        if (D == 0)break;
+
         ll nrem = N - i;
-        ll each = D / N;
+        ll each = D / nrem;
         ll rem = D % nrem;
+
         ll d = each;
-        if (i < rem)d++;
+        if (rem > 0)
+        {
+            d++;
+            rem--;
+        }
         d = min(d, (ll)kids[i]);
         anger += d*d;
+        D-=d;
     }
 
-
-
-       cout << anger << "\n";
+    cout << anger << "\n";
 }

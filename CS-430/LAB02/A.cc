@@ -1,33 +1,39 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-vector<int> bins{};
-int sum = 0;
-
-int rec(int i)
-{
-    if (bins[i] < 2)
-    {
-        rec(i+1); 
-    }
-    
-
-}
 
 int main()
 {
+    using ll = long long;
     ios_base::sync_with_stdio(false);
     cin.tie(0); cout.tie(0);
-    bins.push_back(0);
 
     int n; 
     cin >> n;
-    for (int i = n-1; i--; )
+    vector<ll> v(n-1); 
+    for (int i = 0; i < v.size(); i++)
     {
-        int k;
-        cin >> k;
-        bins.push_back(k);
+        cin >> v[i];
     }
 
+    double tc = 0;
+    ll need = 1;
+    bool ok = false;
+
+    double le = 0.594603557501, se = 0.420448207627;
+
+    for (int i = 0; i < v.size() ;i++)
+    {
+        tc += need * le;
+        double t = se;
+        se = le / 2;
+        le = t;
+
+        need = (need * 2) - v[i];
+        if (need <= 0) { ok = true; break; }
+    }
+    if (ok)
+        printf("%.11f\n", tc);
+    else cout << "impossible\n";
 
 }
