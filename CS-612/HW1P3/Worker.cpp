@@ -41,6 +41,7 @@ void Worker::Run()
 int Worker::Crawl(char* url)
 {
 	//std::cout << "URL: " << url << "\n";
+	//printf("\n%s\n\n", url);
 
 	ParsedURL parsed(url);
 	if (!parsed.valid) return 1;

@@ -40,8 +40,7 @@ std::vector<char*> ReadFileLines(const char* path)
 	
 	for (char* k = fbuf, *n; ; )
 	{
-
-		if ((n = strstr(k, "\r\n")) == nullptr) 
+		if ((n = strchr(k, '\n')) == nullptr) 
 		{
 			//ret.push_back(extractstr(k));
 			if (strlen(k) > 0)
@@ -52,10 +51,12 @@ std::vector<char*> ReadFileLines(const char* path)
 		}
 		else {
 			//ret.push_back(extractstrn(k, n-k));
-			*n = 0;
+			if (n > fbuf && n[-1] == '\r')
+				n[-1] = 0;
+			else *n = 0;
 			ret.push_back(k);
 		}
-		k = n + 2;
+		k = n + 1;
 	}
 
 	//free(fbuf);

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Crawler.h"
 
-#define STATS_PERIOD 100
+#define STATS_PERIOD 500
 
 DWORD WINAPI Crawler::StatsThread(LPVOID _crawler)
 {
@@ -19,7 +19,7 @@ DWORD WINAPI Crawler::StatsThread(LPVOID _crawler)
 		long _pages_elapsed = InterlockedExchange(&crawler->stats.pages_elapsed, 0);
 		long _bytes_elapsed = InterlockedExchange(&crawler->stats.bytes_elapsed, 0);
 
-		printf("[%3d] %8d Q %8d E %8d H %10d D %8d I %8d R %8d C %8d L %8dK\n",
+		printf("[%3d] %8d Q %6d E %7d H %6d D %6d I %5d R %5d C %5d L %4dK\n",
 			elapsed,
 			crawler->active_threads,
 			qsize,
@@ -32,7 +32,7 @@ DWORD WINAPI Crawler::StatsThread(LPVOID _crawler)
 			crawler->stats.nlinks / 1000);
 
 		printf(" *** crawling %.1f pps @ %.1f Mbps\n",
-				_pages_elapsed / (STATS_PERIOD/1000.0), (_bytes_elapsed * 8) / (STATS_PERIOD * 1000));
+				_pages_elapsed / (STATS_PERIOD/1000.0), (_bytes_elapsed * 8.0) / (STATS_PERIOD * 1000.0));
 	}
 
 	return 0;
@@ -72,6 +72,18 @@ void Crawler::Crawl(int nthreads)
 
 	for (int i = 0; i < nthreads; i++)	CloseHandle(workers[i]);
 	CloseHandle(stats_thread);
+
+	double elapsed = (clock() - start_t) / 1000.0;
+	printf("\n");
+	printf("Extracted %d URLs @ %.0f/s\n", stats.extracted, stats.extracted / elapsed);
+	printf("Looked up %d DNS names @ %.0f/s\n", stats.dns_success, stats.dns_success / elapsed);
+	printf("Attempted %d robots @ %.0f/s\n", stats.unique_ips, stats.unique_ips / elapsed);
+	printf("Crawled %d pages @ %.0f/s\n", stats.crawled, stats.crawled / elapsed);
+	printf("Parsed %d links @ %.0f/s\n", stats.nlinks, stats.nlinks / elapsed);
+
+	printf("HTTP codes: 2xx = %d, 3xx = %d, 4xx = %d, 5xx = %d, other = %d\n",
+		stats.s2, stats.s3, stats.s4, stats.s5, stats.s_other);
+
 }
 
 

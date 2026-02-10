@@ -7,7 +7,7 @@ ParsedURL::ParsedURL(char* _raw)
 {
 	if (strlen(_raw) > MAX_URL_LEN)
 	{
-		FATAL("failed because URL is too long");
+		//FATAL("failed because URL is too long");
 		return;
 	}
 	char* raw = extractstr(_raw);	// kind of a hack, allows us to modify raw in place

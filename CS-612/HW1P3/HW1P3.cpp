@@ -36,6 +36,9 @@ int main(int argc, char** argv)
 	//crawler.Crawl((char*)"http://cyberjournalist.org.in/medialaw.html");
 
 	std::vector<char*> urls = ReadFileLines(argv[2]);
+	printf("Number of URLs %d\n", urls.size());
+	std::cout << urls[0] << "\n";
+
 	crawler.Push(urls);
 	crawler.Crawl(nthreads);
 

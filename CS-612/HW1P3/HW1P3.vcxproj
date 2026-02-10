@@ -164,6 +164,9 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="test-urls.txt" />
+    <Text Include="URL-input-1M-2019.txt" />
+    <Text Include="URL-input-1M-2025.txt" />
+    <Text Include="URL-input-1M.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

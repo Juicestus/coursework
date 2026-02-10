@@ -12,8 +12,8 @@
 #include <queue>
 
 #ifdef _DEBUG	// only be able to do this define in debug mode
-#define BYPASS_HOST_UNIQUENESS true
-#define BYPASS_ADDR_UNIQUENESS true
+#define BYPASS_HOST_UNIQUENESS false
+#define BYPASS_ADDR_UNIQUENESS false
 #endif
 
 

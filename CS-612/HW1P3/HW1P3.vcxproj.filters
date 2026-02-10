@@ -67,6 +67,17 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="test-urls.txt" />
+    <Text Include="URL-input-1M-2025.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="URL-input-1M.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="URL-input-1M-2019.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="test-urls.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
