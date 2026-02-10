@@ -1,0 +1,22 @@
+This code demonstrates passing and returning strings in ONC RPC.
+
+Compile it with:
+SunOS:	make
+OS X:	make -f Makefile.linux
+Linux:	make -f Makefile.linux
+
+Before compiling, be sure that you edit strings.x and
+change the XXXXX in the program number to some numbers
+of your choice.
+
+Start the server on one machine (e.g. remus)
+
+	$ ./server
+
+Run the client:
+
+	./client <localhost> <teststring>
+for example:
+	./client remus this is a test
+
+and get the results.

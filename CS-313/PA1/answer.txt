@@ -1,0 +1,34 @@
+PA 1 Report
+
+(q1) 	File Size vs File Transfer Time
+
+I created a script that, for the filesizes in the table below,
+- generate a binary file of a given size
+- initiate the client filetransfer on that file
+- collect the client runtime and log to a table.
+
+The table generated is
+
+Size       | Time (s)  
+-----------+-----------
+1M         | 1.25      
+2M         | 1.35      
+5M         | 1.78      
+10M        | 2.48      
+20M        | 3.84      
+50M        | 7.55      
+100M       | 13.86     
+200M       | 27.33     
+500M       | 64.68     
+1G         | 131.85   
+
+This denotes that, for large file size, the runtime increases linearly to the size of the input file. This is because the number of message requests, which each take time and happen in sequence, increase linearly to the filesize.
+
+For small filesize (n < 10M), the linear correlation flattens out, because there is some other O(1) overhead in the program that becomes the bottleneck.
+
+(Q2) 	What is the main bottleneck? 
+
+The "main" bottleneck (when n is large) in the code happens sending data over the transfer channel. The system calls invoked by the send/recv functions on the channel are expensive, as they involve context switches. 
+
+Also, there is an O(n) copy associated with the transfer, which gets expensive as filesize increases.
+
