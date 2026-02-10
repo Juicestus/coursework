@@ -9,13 +9,18 @@
 
 #include <set>
 
+#ifdef _DEBUG	// only be able to do this define in debug mode
+#define BYPASS_UNIQUENESS true 
+#endif
+
+
 class Crawler {
 
 	IOCPSocket socket;
 	HTMLParserBase html_parser;
+
 	std::set<std::string> seen_hosts{};
 	std::set<int> seen_addrs{};
-
 
 	int ParseHTML(char* url, HttpResponse resp)
 	{
@@ -34,6 +39,9 @@ class Crawler {
 
 	bool DuplicateHost(ParsedURL url)
 	{
+#if BYPASS_UNIQUENESS
+		return false;
+#else
 		std::cout << "        Checking host uniqueness... ";
 		std::string host(url.host);
 		if (seen_hosts.contains(host))
@@ -44,10 +52,14 @@ class Crawler {
 		seen_hosts.insert(host);
 		std::cout << "passed\n";
 		return false;
+#endif
 	}
 
 	bool DuplicateAddr(int ip)
 	{
+#if BYPASS_UNIQUENESS 
+		return false;
+#else
 		std::cout << "        Checking IP uniqueness... ";
 		if (seen_addrs.contains(ip))
 		{
@@ -57,6 +69,7 @@ class Crawler {
 		seen_addrs.insert(ip);
 		std::cout << "passed\n";
 		return false;
+#endif
 	}
 
 public:
@@ -103,8 +116,10 @@ public:
 		char* req = EncodeHttpRobotsRequest(parsed);
 		if (socket.Send(req))
 		{
+			free(req);
 			return 1;
 		}
+		free(req);
 
 		if (socket.Recv())
 		{
@@ -131,13 +146,12 @@ public:
 		}
 
 		req = EncodeHttpRequest(parsed);
-		//std::cout << "\n------\n" << req << "\n------\n";
-
-
 		if (socket.Send(req))
 		{
+			free(req);
 			return 1;
 		}
+		free(req);
 
 		if (socket.Recv())
 		{

@@ -45,7 +45,6 @@ int main(int argc, char** argv)
 		//std::cin.get();
 	}
 
-
 	IOCPSocket::CloseWinSock();
 
 }
