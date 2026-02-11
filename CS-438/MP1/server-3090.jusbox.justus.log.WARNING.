@@ -1,0 +1,8 @@
+Log file created at: 2026/02/10 20:59:21
+Running on machine: jusbox
+Running duration (h:mm:ss): 0:00:36
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+E20260210 20:59:21.486038 279161546766656 tsd.cc:104] Failed to open following file for justus
+E20260210 21:00:03.276838 279161546766656 tsd.cc:104] Failed to open following file for bob
+W20260210 21:00:05.649755 279161546766656 tsd.cc:269] justus already connected
+W20260210 21:00:13.302886 279161546766656 tsd.cc:269] justus already connected

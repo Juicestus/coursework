@@ -1,0 +1,23 @@
+Log file created at: 2026/02/07 22:33:42
+Running on machine: jusbox
+Running duration (h:mm:ss): 0:00:00
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I20260207 22:33:42.971904 251923173367872 tsd.cc:206] Logging Initialized. Server starting ...
+I20260207 22:33:42.974822 251923173367872 tsd.cc:174] Server listening on: 0.0.0.0:3090
+Log file created at: 2026/02/10 20:58:45
+Running on machine: jusbox
+Running duration (h:mm:ss): 0:00:00
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I20260210 20:58:45.450895 279161625452608 tsd.cc:454] Logging Initialized. Server starting ...
+I20260210 20:58:45.454630 279161625452608 tsd.cc:422] Server listening on: 0.0.0.0:3090
+I20260210 20:59:21.485912 279161546766656 tsd.cc:262] Connection request from justus
+E20260210 20:59:21.486038 279161546766656 tsd.cc:104] Failed to open following file for justus
+I20260210 20:59:21.486294 279161546766656 tsd.cc:278] justus connected
+I20260210 20:59:29.257533 279161063045440 tsd.cc:148] List request from justus
+I20260210 21:00:03.276721 279161546766656 tsd.cc:262] Connection request from bob
+E20260210 21:00:03.276838 279161546766656 tsd.cc:104] Failed to open following file for bob
+I20260210 21:00:03.276876 279161546766656 tsd.cc:278] bob connected
+I20260210 21:00:05.649674 279161546766656 tsd.cc:262] Connection request from justus
+W20260210 21:00:05.649755 279161546766656 tsd.cc:269] justus already connected
+I20260210 21:00:13.302827 279161546766656 tsd.cc:262] Connection request from justus
+W20260210 21:00:13.302886 279161546766656 tsd.cc:269] justus already connected

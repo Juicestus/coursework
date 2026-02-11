@@ -1,0 +1,62 @@
+// -*- coding: utf-8 -*-
+// Copyright (C) <2026> <Texas A&M University>
+//
+// This program is free software: you can redistribute it and/or modify it
+// under the terms of the GNU Affero General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful, but
+// WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+// Affero General Public License for more details.
+//
+// You should have received a copy of the GNU Affero General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+// For AGPL-specific network service requirements, see the full license.
+//
+
+syntax = "proto3";
+
+package csce_dsc;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+// The messenger service definition.
+service SNSService {
+
+  rpc Heartbeat(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc Connect(Request) returns (Reply) {} // support a single connection from one user
+  rpc List(Request) returns (ListReply) {}
+  rpc Follow(Request) returns (Reply) {}
+  rpc UnFollow(Request) returns (Reply) {}
+
+  // Bidirectional streaming RPC
+  rpc Timeline(stream Message) returns (stream Message) {}
+}
+
+message ListReply {
+  repeated string all_users = 1;
+  repeated string followers = 2;
+}
+
+message Request {
+  string username = 1;
+  repeated string arguments = 2;
+}
+
+message Reply { string msg = 1; }
+
+message Message {
+  // Username who sent the message
+  string username = 1;
+  // Message from the user
+  string msg = 2;
+  // Time the message was sent
+  google.protobuf.Timestamp timestamp = 3;
+}
+
+
+
