@@ -1,0 +1,109 @@
+Log file created at: 2026/02/11 00:11:42
+Running on machine: justus-desktop
+Running duration (h:mm:ss): 0:05:09
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W20260211 00:11:42.176845 128534261520064 tsd.cc:272]  already connected
+W20260211 00:13:31.162552 128534261520064 tsd.cc:272]  already connected
+W20260211 00:13:33.129882 128534261520064 tsd.cc:272]  already connected
+W20260211 00:13:34.050370 128534244734656 tsd.cc:272]  already connected
+W20260211 00:13:34.883065 128534244734656 tsd.cc:272]  already connected
+W20260211 00:13:43.473930 128534261520064 tsd.cc:272]  already connected
+W20260211 00:14:33.901544 128534244734656 tsd.cc:189] User us does not exist
+W20260211 00:14:38.604520 128534261520064 tsd.cc:179] jus tried to follow self
+Log file created at: 2026/02/11 13:02:27
+Running on machine: justus-desktop
+Running duration (h:mm:ss): 0:00:11
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W20260211 13:02:27.873027 134818520086208 tsd.cc:272] jus already connected
+W20260211 13:02:28.544698 134818520086208 tsd.cc:272] jus already connected
+W20260211 13:02:29.031821 134818536871616 tsd.cc:272] jus already connected
+W20260211 13:04:03.010695 134818520086208 tsd.cc:272] bruh already connected
+Log file created at: 2026/02/11 13:13:40
+Running on machine: justus-desktop
+Running duration (h:mm:ss): 0:08:00
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W20260211 13:13:40.090628 135987111913152 tsd.cc:272] bruh already connected
+W20260211 13:13:41.587255 135987095127744 tsd.cc:272] bruh already connected
+W20260211 13:14:37.365012 135987111913152 tsd.cc:189] User bob  does not exist
+W20260211 13:15:09.349315 135987111913152 tsd.cc:179] jus tried to follow self
+Log file created at: 2026/02/11 13:42:51
+Running on machine: justus-desktop
+Running duration (h:mm:ss): 0:00:30
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W20260211 13:42:51.889811 136517540374208 tsd.cc:272] default already connected
+W20260211 13:43:09.913930 136517523588800 tsd.cc:272] default already connected
+W20260211 13:43:12.791715 136518035281600 tsd.cc:272] default already connected
+W20260211 13:43:13.727443 136517523588800 tsd.cc:272] default already connected
+Log file created at: 2026/02/11 13:46:16
+Running on machine: justus-desktop
+Running duration (h:mm:ss): 0:00:24
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W20260211 13:46:16.986862 129028023363264 tsd.cc:179] u1 tried to follow self
+W20260211 13:48:37.843603 129028040148672 tsd.cc:179] u2 tried to follow self
+W20260211 13:49:01.556288 129028023363264 tsd.cc:179] u3 tried to follow self
+W20260211 13:49:05.948616 129028040148672 tsd.cc:189] User u4 does not exist
+W20260211 13:49:12.828522 129028040148672 tsd.cc:189] User u4 does not exist
+W20260211 13:49:23.012514 129028040148672 tsd.cc:189] User u4 does not exist
+W20260211 13:49:57.428691 129028040148672 tsd.cc:241] u1 is not following u1
+Log file created at: 2026/02/11 17:16:56
+Running on machine: justus-desktop
+Running duration (h:mm:ss): 0:00:03
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W20260211 17:16:56.386152 125467889735360 tsd.cc:272] u1 already connected
+W20260211 17:16:57.130399 125467889735360 tsd.cc:272] u1 already connected
+W20260211 17:16:57.922241 125467889735360 tsd.cc:272] u1 already connected
+W20260211 17:16:58.786057 125467394827968 tsd.cc:272] u1 already connected
+W20260211 17:16:59.537273 125467394827968 tsd.cc:272] u1 already connected
+W20260211 17:17:00.249720 125467889735360 tsd.cc:272] u1 already connected
+W20260211 17:17:01.042764 125467394827968 tsd.cc:272] u1 already connected
+Log file created at: 2026/02/11 17:17:49
+Running on machine: justus-desktop
+Running duration (h:mm:ss): 0:00:05
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W20260211 17:17:49.482085 124675778668224 tsd.cc:272] u1 already connected
+W20260211 17:17:53.002992 124675778668224 tsd.cc:272] u1 already connected
+W20260211 17:18:00.562326 124675761882816 tsd.cc:272] u1 already connected
+W20260211 17:18:03.011455 124675761882816 tsd.cc:272] u1 already connected
+Log file created at: 2026/02/11 17:18:41
+Running on machine: justus-desktop
+Running duration (h:mm:ss): 0:00:03
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W20260211 17:18:41.322967 123558743234240 tsd.cc:272] u1 already connected
+W20260211 17:18:43.866928 123558760019648 tsd.cc:272] u1 already connected
+W20260211 17:18:44.770379 123558760019648 tsd.cc:272] u1 already connected
+W20260211 17:18:46.610879 123558743234240 tsd.cc:272] u1 already connected
+W20260211 17:18:47.515111 123558760019648 tsd.cc:272] u1 already connected
+W20260211 17:18:49.034701 123558760019648 tsd.cc:272] u1 already connected
+W20260211 17:18:49.571008 123558743234240 tsd.cc:272] u1 already connected
+W20260211 17:18:51.235616 123558760019648 tsd.cc:272] u1 already connected
+W20260211 17:18:55.162391 123558760019648 tsd.cc:272] u1 already connected
+W20260211 17:18:59.059537 123558760019648 tsd.cc:272] u1 already connected
+W20260211 17:18:59.635055 123558760019648 tsd.cc:272] u1 already connected
+Log file created at: 2026/02/11 17:19:20
+Running on machine: justus-desktop
+Running duration (h:mm:ss): 0:00:06
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W20260211 17:19:20.451277 123337736959680 tsd.cc:272] u1 already connected
+W20260211 17:19:21.459965 123337736959680 tsd.cc:272] u1 already connected
+W20260211 17:19:23.235267 123337736959680 tsd.cc:272] u1 already connected
+W20260211 17:19:23.571641 123337753745088 tsd.cc:272] u1 already connected
+W20260211 17:19:23.923092 123337753745088 tsd.cc:272] u1 already connected
+W20260211 17:19:25.819690 123337736959680 tsd.cc:272] u1 already connected
+W20260211 17:19:26.163153 123337736959680 tsd.cc:272] u1 already connected
+W20260211 17:19:26.499932 123337736959680 tsd.cc:272] u1 already connected
+W20260211 17:20:00.827983 123337753745088 tsd.cc:272] u1 already connected
+W20260211 17:20:04.307425 123337753745088 tsd.cc:272] u1 already connected
+W20260211 17:20:09.565842 123337736959680 tsd.cc:272] u1 already connected
+W20260211 17:20:10.668357 123337753745088 tsd.cc:272] u1 already connected
+W20260211 17:20:11.316369 123337736959680 tsd.cc:272] u1 already connected
+W20260211 17:20:11.756299 123337736959680 tsd.cc:272] u1 already connected
+W20260211 17:20:12.140204 123337753745088 tsd.cc:272] u1 already connected
+W20260211 17:20:12.531988 123337736959680 tsd.cc:272] u1 already connected
+W20260211 17:20:14.037531 123337736959680 tsd.cc:272] u1 already connected
+W20260211 17:20:14.467891 123337753745088 tsd.cc:272] u1 already connected
+W20260211 17:20:24.349208 123337753745088 tsd.cc:179] u1 tried to follow self
+Log file created at: 2026/02/11 17:21:28
+Running on machine: justus-desktop
+Running duration (h:mm:ss): 0:00:13
+Log line format: [IWEF]yyyymmdd hh:mm:ss.uuuuuu threadid file:line] msg
+W20260211 17:21:28.061887 129771732186816 tsd.cc:179] u2 tried to follow self

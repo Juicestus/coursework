@@ -92,8 +92,12 @@ void IClient::displayCommandReply(const std::string& comm, const IReply& reply) 
 	  std::cout << room << ", ";
 	}
 	std::cout << "\nFollowers: ";
-	for (std::string room : reply.followers) {
-	  std::cout << room << ", ";
+  if (reply.followers.empty()) {
+    std::cout << "No followers";
+  } else {
+    for (std::string room : reply.followers) {
+	    std::cout << room << ", ";
+    }
 	}
 	std::cout << std::endl;
       }

@@ -29,6 +29,9 @@
 #include <string>
 #include <stdlib.h>
 #include <unistd.h>
+#include <thread>
+#include <mutex>
+
 #include <google/protobuf/util/time_util.h>
 #include <grpc++/grpc++.h>
 #include <glog/logging.h>
@@ -99,9 +102,9 @@ Client* getClient(const std::string& username, bool create = true)
 
 void Client::loadFollowing()
 {
-  std::ifstream file(username + "_following.txt");
+  std::ifstream file("__" + username + "_following.txt");
   if (!file.is_open()) {
-    log(ERROR, "Failed to open following file for " + username);
+    // log(ERROR, "Failed to open following file for " + username);
     return;
   }
 
@@ -129,7 +132,7 @@ void Client::loadFollowing()
 
 void Client::saveFollowing() 
 {
-  std::ofstream file(username + "_following.txt", std::ios::trunc);  
+  std::ofstream file("__" + username + "_following.txt", std::ios::trunc);  
 
   if (!file.is_open()) {
     log(ERROR, "Failed to open following file for " + username);
@@ -172,7 +175,7 @@ class SNSServiceImpl final : public SNSService::Service {
     log(INFO, "Follow request from " + u1 + ", following " + u2);
 
     if (u1 == u2) {
-      reply->set_msg("you have already joined");  
+      reply->set_msg("you cannot follow yourself");  
       log(WARNING, u1 + " tried to follow self");
       return Status::OK;
     }
@@ -274,7 +277,7 @@ class SNSServiceImpl final : public SNSService::Service {
       c->connected = true;
       c->last_hb = time(0);
 
-      reply->set_msg("Connect Successful");
+      reply->set_msg("Connection Successful");
       log(INFO, u + " connected");
     }
     
@@ -302,8 +305,7 @@ Status Timeline(ServerContext* context,  ServerReaderWriter<Message, Message>* s
         //    }else{
         //       lat20 = read 20 latest massages from file u_following.txt;
         //     stre
-        std::string tl_file = u + "_timeline.txt";
-        std::ifstream tl_in(tl_file);
+        std::ifstream tl_in("__" + u + "_timeline.txt");
 
         if (tl_in.is_open()) {
           std::vector<std::string> lines;
@@ -352,6 +354,9 @@ Status Timeline(ServerContext* context,  ServerReaderWriter<Message, Message>* s
     //       append ffo to file u.txt
     // }
 
+      if (m.msg().empty() || m.msg() == "\n") {
+        continue;  
+      }
       //    ffo = format_file_output(timestamp, request.username, m)
       time_t now = m.timestamp().seconds();
       struct tm *ti = localtime(&now);
@@ -361,8 +366,7 @@ Status Timeline(ServerContext* context,  ServerReaderWriter<Message, Message>* s
       std::string ffo = "T " + std::string(buf) + "\n" + "U " + u + "\n" + "W " + m.msg() + "\n";
 
       // Append ffo to file u.txt
-      std::string u_file = u + ".txt";
-      std::ofstream u_out(u_file, std::ios::app);
+      std::ofstream u_out("__" + u + ".txt", std::ios::app);
       if (u_out.is_open()) {
         u_out << ffo;
         u_out.close();
@@ -377,8 +381,7 @@ Status Timeline(ServerContext* context,  ServerReaderWriter<Message, Message>* s
           f->stream->Write(m);
         }
 
-        std::string f_tl = f->username + "_timeline.txt";
-        std::ofstream f_out(f_tl, std::ios::app);
+        std::ofstream f_out("__" + f->username + "_timeline.txt", std::ios::app);
         if (f_out.is_open()) {
           f_out << ffo;
           f_out.close();
@@ -399,15 +402,22 @@ Status Timeline(ServerContext* context,  ServerReaderWriter<Message, Message>* s
     return Status::OK;
   }
 
+
   // RPC Heartbeat
   Status Heartbeat(ServerContext* context, const google::protobuf::Empty* request, 
-		  google::protobuf::Empty* reply) override {
+      google::protobuf::Empty* reply) override {
 
-      /******
-       YOUR CODE HERE
-       *****/
+    auto md = context->client_metadata();
+    auto it = md.find("username");
+    if (it != md.end())
+    {
+      std::string username(it->second.data(), it->second.size());
+      Client* c = getClient(username);
+      c->last_hb = time(0);
+      log(INFO, "Rx heartbeat from " + username);
+    }
 
-     return Status::OK;
+    return Status::OK;
   }
 };
  
@@ -420,6 +430,28 @@ void RunServer(std::string port_no) {
   builder.RegisterService(&service);
   std::unique_ptr<Server> server(builder.BuildAndStart());
   log(INFO, "Server listening on: "+server_address);
+
+  // heartbeat checker thread 
+  std::thread heartbeat_thread([&]() {
+     while (true) {
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+      time_t now = time(0);
+      std::lock_guard<std::mutex> lock(client_db_mut);
+
+      for (Client* c : client_db) {
+        if (c->connected) {
+          if (difftime(now, c->last_hb) >= 1.0) {   // 1s timeout
+            c->connected = false;
+            c->in_timeline = false;
+            c->stream = nullptr;
+            log(INFO, c->username + " timed out");
+          }
+        }
+      }
+    }
+  });
+  heartbeat_thread.detach();
 
   server->Wait();
 }
