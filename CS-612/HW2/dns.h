@@ -41,6 +41,8 @@
 #define MAX_DNS_LEN		512
 #define MAX_DNS_WORD	64
 
+#define MAX_ATTEMPTS	3
+
 // A lot of the below code is based off the slides:
 
 #pragma pack(push, 1)
@@ -61,15 +63,28 @@ struct DNSFixedHeader
 	uint16_t n_additional;
 };
 
+struct DNSResponseHeader
+{
+	uint16_t rtype;
+	uint16_t rclass;
+	uint16_t ttl;
+	uint16_t len;
+};
+
+
 #pragma pack(pop)
 
-struct DNSQuery
+
+struct DNSBuffer 
 {
 	uint16_t size;
-	uint16_t txid;
+	uint16_t txid;	
 	byte packet[MAX_DNS_LEN];
 };
 
+/*
+* Transform a hostname or IP address into a DNS question.
+*/
 int CreateQuestion(byte* ques, char* lookup)
 {
 	int i = 0; 
@@ -86,17 +101,25 @@ int CreateQuestion(byte* ques, char* lookup)
 	return 0;
 }
 
+/*
+* Print a DNS question with word lengths for debugging.
+*/
 void PrintQuestion(byte* ques)
 {
 	for (int l; l = *(ques++); putchar(' '))
 	{
+		printf("(%d)", l);
 		while (l--)
 			putchar(*(ques++));
 	}
-	putchar('\n');
+	printf("0\n");
 }
 
-int CreateQuery(DNSQuery* query, char* lookup, int qtype)
+/*
+* Construct a DNS query for a given hostname or IP to lookup
+* with a given query type. 
+*/
+int CreateQuery(DNSBuffer* query, char* lookup, int qtype)
 {
 	if ((query->size = strlen(lookup) + 2 + sizeof(DNSFixedHeader) + sizeof(DNSQueryHeader)) > MAX_DNS_LEN)
 	{
@@ -123,9 +146,96 @@ int CreateQuery(DNSQuery* query, char* lookup, int qtype)
 		return 1;
 	}
 	//PrintBytes(packet + sizeof(DNSFixedHeader), strlen(lookup) + 2);
-	PrintQuestion(query->packet + sizeof(DNSFixedHeader));
+	//PrintQuestion(query->packet + sizeof(DNSFixedHeader));
 	
 	PrintBytes(query->packet, query->size);
 	return 0;
+}
+
+/*
+* 
+*/
+int PerformQuery(char* dns_addr_str, DNSBuffer* query, DNSBuffer* resp)
+{
+	SOCKET sock;
+
+	timeval tv;
+	tv.tv_sec = 10;
+	tv.tv_usec = 0;
+
+	if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == INVALID_SOCKET)
+	{
+		FATAL("Failed to create socket with %d", WSAGetLastError());
+		return 1;
+	}
+
+	struct sockaddr_in local = { 0 }, remote = { 0 }, reply = { 0 };
+	remote.sin_family = local.sin_family = AF_INET;
+
+	local.sin_addr.s_addr = INADDR_ANY;
+	local.sin_port = htons(0);
+	remote.sin_addr.s_addr = inet_addr(dns_addr_str);
+	remote.sin_port = htons(53);
+
+
+	/*
+	*/
+	if (bind(sock, (struct sockaddr*)&local, sizeof(local)) == SOCKET_ERROR)
+	{
+		FATAL("Failed to bind local socket with %d\n", WSAGetLastError());
+	}
+	
+	for (int i = 0, avail; i < MAX_ATTEMPTS; i++)
+	{
+		clock_t start_t = clock();
+		printf("Attempt %d with %d bytes... ", i, query->size);
+		// tx
+		if (sendto(sock, (char*)query->packet, query->size, 0, (struct sockaddr*)&remote, sizeof(remote)) == SOCKET_ERROR)
+		{
+			FATAL("Failed to transmit with %d", WSAGetLastError());
+			goto err;
+		}
+	
+		// rx 
+		fd_set fd;
+		FD_ZERO(&fd);
+		FD_SET(sock, &fd);
+		if ((avail = select(0, &fd, NULL, NULL, &tv)) > 0)
+		{
+			int reply_addr_len = sizeof(reply);
+			if ((resp->size = recvfrom(sock, (char*)resp->packet, MAX_DNS_LEN, 0, (struct sockaddr*)&reply, &reply_addr_len)) == SOCKET_ERROR)
+			{
+				FATAL("Failed to receive response with %d", WSAGetLastError());
+				goto err;
+			}
+			if (reply.sin_addr.s_addr != remote.sin_addr.s_addr || reply.sin_port != remote.sin_port)
+			{
+				// is this an error or a retransmit?
+				FATAL("Received a response for a different socket and port, I am complaining!");
+				goto err;
+			}
+			printf("response in %d ms with %d bytes\n", clock() - start_t, resp->size);
+			break;
+		} 
+		else if (avail == 0)
+		{
+			printf("timeout in %d ms\n", clock() - start_t);
+			continue;
+		}
+		else
+		{
+			FATAL("failed on select with %d", WSAGetLastError());
+			goto err;
+		}
+	}
+
+	//PrintBytes(resp->packet, resp->size);
+
+	closesocket(sock);
+	return 0;
+err:
+	closesocket(sock);
+	return 1;
+
 }
 

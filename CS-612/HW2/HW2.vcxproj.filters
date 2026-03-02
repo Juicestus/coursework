@@ -29,7 +29,7 @@
     <ClInclude Include="utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="query.h">
+    <ClInclude Include="dns.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
