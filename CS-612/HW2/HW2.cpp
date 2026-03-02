@@ -41,7 +41,8 @@ int main(int argc, char** argv)
 
 #if defined(_DEBUG) && defined(IGNORE_INPUTS)
 	//char lookup_str[] = "www.justusl.com";
-	char lookup_str[] = "1.1.1.1";
+	char lookup_str[] = "irl.cse.tamu.edu";
+	//char lookup_str[] = "1.1.1.1";
 	char dns_addr_str[] = "128.194.135.79";
 #else
 	if (argc != 3)
@@ -66,6 +67,9 @@ int main(int argc, char** argv)
 		lookup_str, lookup_str, query_type, query.txid, dns_addr_str);
 	
 	if (PerformQuery(dns_addr_str, &query, &resp))
+		return 1;
+
+	if (ParseResponse(&query, &resp))
 		return 1;
 
 	WSACleanup();

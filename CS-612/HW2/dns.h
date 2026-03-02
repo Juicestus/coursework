@@ -63,7 +63,7 @@ struct DNSFixedHeader
 	uint16_t n_additional;
 };
 
-struct DNSResponseHeader
+struct DNSAnswerHeader
 {
 	uint16_t rtype;
 	uint16_t rclass;
@@ -81,6 +81,15 @@ struct DNSBuffer
 	uint16_t txid;	
 	byte packet[MAX_DNS_LEN];
 };
+
+void htons_n(void* vobj, int size)
+{
+	short* obj = (short*)vobj;
+	for (int i = 0; i < size / sizeof(short); i++)
+	{
+		obj[i] = htons(obj[i]);
+	}
+}
 
 /*
 * Transform a hostname or IP address into a DNS question.
@@ -239,3 +248,73 @@ err:
 
 }
 
+/*
+* 
+*/
+int ParseQuestions(byte* buf, int n)
+{
+	static char host[MAX_DNS_LEN] = { 0 };
+	byte* bptr = buf;
+	printf("------------ [questions] ----------\n");
+	while (n--)
+	{
+		char* hptr = host;
+		for (int l; l = *(bptr++); *(hptr++) = '.')
+		{
+			while (l--)
+				*(hptr++) = *(bptr++);
+		}
+		hptr[-1] = 0;
+
+		DNSQueryHeader* qh = (DNSQueryHeader*)bptr;
+		printf("  %s type %d class %d\n", host, htons(qh->qtype), htons(qh->qclass));
+	}
+	return bptr - buf;
+}
+
+int ParseAnswers(byte* buf, int n)
+{
+	printf("------------[answers] ------------\n");
+	DNSAnswerHeader* ah = (DNSAnswerHeader*)buf;
+	htons_n(ah, sizeof(DNSAnswerHeader));
+	printf("%d %d %d %d\n", ah->rtype,ah->rclass,ah->ttl,ah->len);	// debug
+
+	return 0;
+
+}
+
+/*
+*/
+int ParseResponse(DNSBuffer* query, DNSBuffer* resp)
+{
+	if (resp->size <= sizeof(DNSFixedHeader))
+	{
+		FATAL("  ++ packet smaller than fixed DNS header\n");
+		return 1;
+	}
+
+	DNSFixedHeader* fh = (DNSFixedHeader*)resp->packet;
+	htons_n(fh, sizeof(DNSFixedHeader));					// perform all the htons in bulk
+
+	printf("  TXID 0x%04X flags 0x%04X questions %d answers %d authority %d additional %d\n",
+		fh->txid, fh->flags, fh->n_questions, fh->n_answers, fh->n_authority, fh->n_additional);
+	if (query->txid != fh->txid)
+	{
+		FATAL("  ++ invalid reply TXID mismatch, sent 0x%04X, received 0x%04X\n", query->txid, fh->txid);
+		return 1;
+	}
+	
+	byte* buf = (byte*)(resp->packet + sizeof(DNSFixedHeader));
+	buf += ParseQuestions(buf, fh->n_questions);
+	//PrintBytes(buf, 64);
+	buf += ParseAnswers(buf, fh->n_answers);
+
+
+
+	
+
+
+	//PrintBytes(buf, 128);
+
+	return 0;
+}
