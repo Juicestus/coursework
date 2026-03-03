@@ -41,9 +41,11 @@ int main(int argc, char** argv)
 
 #if defined(_DEBUG) && defined(IGNORE_INPUTS)
 	//char lookup_str[] = "www.justusl.com";
-	char lookup_str[] = "irl.cse.tamu.edu";
+	//char lookup_str[] = "irl.cse.tamu.edu";
+	char lookup_str[] = "www.dhs.gov";
 	//char lookup_str[] = "1.1.1.1";
 	char dns_addr_str[] = "128.194.135.79";
+	//char dns_addr_str[] = "8.8.8.8";
 #else
 	if (argc != 3)
 	{
@@ -54,6 +56,7 @@ int main(int argc, char** argv)
 #endif
 	// TODO: swap byte order and add .in-addr.arpa for reverse lookup
 	int query_type = isdigit(lookup_str[0]) ? DNS_PTR : DNS_A;
+
 
 	DNSBuffer query = { 0 }, resp = { 0 };
 

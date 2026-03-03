@@ -47,6 +47,7 @@
 
 #pragma pack(push, 1)
 
+
 struct DNSQueryHeader
 {
 	uint16_t qtype;
@@ -67,20 +68,12 @@ struct DNSAnswerHeader
 {
 	uint16_t rtype;
 	uint16_t rclass;
-	uint16_t ttl;
+	uint32_t ttl;
 	uint16_t len;
 };
 
 
 #pragma pack(pop)
-
-
-struct DNSBuffer 
-{
-	uint16_t size;
-	uint16_t txid;	
-	byte packet[MAX_DNS_LEN];
-};
 
 void htons_n(void* vobj, int size)
 {
@@ -90,6 +83,13 @@ void htons_n(void* vobj, int size)
 		obj[i] = htons(obj[i]);
 	}
 }
+
+struct DNSBuffer 
+{
+	uint16_t size;
+	uint16_t txid;	
+	byte packet[MAX_DNS_LEN];
+};
 
 /*
 * Transform a hostname or IP address into a DNS question.
@@ -168,9 +168,6 @@ int PerformQuery(char* dns_addr_str, DNSBuffer* query, DNSBuffer* resp)
 {
 	SOCKET sock;
 
-	timeval tv;
-	tv.tv_sec = 10;
-	tv.tv_usec = 0;
 
 	if ((sock = socket(AF_INET, SOCK_DGRAM, 0)) == INVALID_SOCKET)
 	{
@@ -209,6 +206,9 @@ int PerformQuery(char* dns_addr_str, DNSBuffer* query, DNSBuffer* resp)
 		fd_set fd;
 		FD_ZERO(&fd);
 		FD_SET(sock, &fd);
+		timeval tv;
+		tv.tv_sec = 10;
+		tv.tv_usec = 0;
 		if ((avail = select(0, &fd, NULL, NULL, &tv)) > 0)
 		{
 			int reply_addr_len = sizeof(reply);
@@ -251,36 +251,172 @@ err:
 /*
 * 
 */
-int ParseQuestions(byte* buf, int n)
-{
-	static char host[MAX_DNS_LEN] = { 0 };
-	byte* bptr = buf;
-	printf("------------ [questions] ----------\n");
-	while (n--)
-	{
-		char* hptr = host;
-		for (int l; l = *(bptr++); *(hptr++) = '.')
-		{
-			while (l--)
-				*(hptr++) = *(bptr++);
-		}
-		hptr[-1] = 0;
+//int ParseQuestions(byte* buf, int n)
+//{
+//	static char host[MAX_DNS_LEN] = { 0 };
+//	byte* bptr = buf;
+//	printf("------------ [questions] ----------\n");
+//	while (n--)
+//	{
+//		char* hptr = host;
+//		for (int l; l = *(bptr++); *(hptr++) = '.')
+//		{
+//			while (l--)
+//				*(hptr++) = *(bptr++);
+//		}
+//		hptr[-1] = 0;
+//
+//		DNSQueryHeader* qh = (DNSQueryHeader*)bptr;
+//		bptr += sizeof(DNSQueryHeader);
+//		printf("  %s type %d class %d\n", host, htons(qh->qtype), htons(qh->qclass));
+//	}
+//	return bptr - buf;
+//}
 
-		DNSQueryHeader* qh = (DNSQueryHeader*)bptr;
-		printf("  %s type %d class %d\n", host, htons(qh->qtype), htons(qh->qclass));
+
+int ParseName(byte* buf, int buflen, int pos, char* name)
+{
+	int rpos = pos, wpos = 0, len, dif = 0, jmps = 0;
+
+	while (true)
+	{
+		if (pos >= buflen)
+		{
+			FATAL("  ++ invalid record: truncated name");
+			return -1;
+		}
+		if ((len = buf[rpos]) == 0)
+		{
+			if (!jmps) dif = rpos - pos;
+			break;
+		}
+		if ((len & 0xC0) == 0xC0)
+		{
+			if (rpos + 1 >= buflen)
+			{
+				FATAL("  ++ invalid record: truncated jump offset");
+				return -1;
+			}
+			int off = ((buf[rpos] & 0x3F) << 8) + buf[rpos + 1];
+			if (off >= buflen)
+			{
+				FATAL("  ++ invalid record: jump beyond packet boundary");
+				return -1;
+			}
+			if (off < sizeof(DNSFixedHeader))
+			{
+				FATAL("  ++ invalid record: jump into fixed DNS header");
+				return -1;
+			}
+			if (!jmps) dif = rpos - pos + 2;
+			if (++jmps > 32)
+			{
+				FATAL("  ++ invalid record: jump loop");
+				return -1;
+			}
+			rpos = off;
+			continue;
+		}
+		if (rpos + 1 + len > buflen)
+		{
+			FATAL("  ++ invalid record: truncated name");
+			return -1;
+		}
+		if (wpos > 0) name[wpos++] = '.';
+		memcpy(name + wpos, buf + rpos + 1, len);
+		wpos += len;
+		rpos += 1 + len;
 	}
-	return bptr - buf;
+	name[wpos] = 0;
+	if (!jmps) dif = rpos - pos + 1;
+	return dif;
 }
 
-int ParseAnswers(byte* buf, int n)
+
+int ParseQuestions(byte* buf, int buflen, int pos, int n)
 {
-	printf("------------[answers] ------------\n");
-	DNSAnswerHeader* ah = (DNSAnswerHeader*)buf;
-	htons_n(ah, sizeof(DNSAnswerHeader));
-	printf("%d %d %d %d\n", ah->rtype,ah->rclass,ah->ttl,ah->len);	// debug
+	char name[MAX_DNS_LEN];
+	int r;
+	for (int i = 0; i < n; i++)
+	{
+		if (pos >= buflen)
+		{
+			FATAL("  ++ invalid section: not enough records");
+			return -1;
+		}
+		if ((r = ParseName(buf, buflen, pos, name)) < 0)
+			return -1;
+		pos += r;
+		if (pos + sizeof(DNSQueryHeader) > buflen)
+			return -1;
+		DNSQueryHeader* qh = (DNSQueryHeader*)(buf + pos);
+		pos += sizeof(DNSQueryHeader);
+		printf("  %s type %d class %d\n", name, ntohs(qh->qtype), ntohs(qh->qclass));
+	}
+	return pos;
+}
 
-	return 0;
+char* RecordTypeStr(short type)
+{
+	switch (type)
+	{
+	case DNS_A: return (char*)"A";
+	case DNS_NS: return (char*)"NS";
+	case DNS_CNAME: return (char*)"CNAME";
+	case DNS_PTR: return (char*)"PTR";
+	case DNS_MX: return (char*)"MX";
+	default: return (char*)"?";
+	}
+}
 
+
+int ParseRecords(byte* buf, int buflen, int pos, int n)
+{
+	char name[MAX_DNS_LEN], rr[MAX_DNS_LEN];
+	int r;
+	for (int i = 0; i < n; i++)
+	{
+		if (pos >= buflen)
+		{
+			FATAL("  ++ invalid section: not enough records");
+			return -1;
+		}
+		if ((r = ParseName(buf, buflen, pos, name)) < 0)
+			return -1;
+		pos += r;
+		if (pos + (int)sizeof(DNSAnswerHeader) > buflen)
+		{
+			FATAL("  ++ invalid record: truncated RR answer header");
+			return -1;
+		}
+
+		DNSAnswerHeader* ah = (DNSAnswerHeader*)(buf + pos);
+		ah->rtype = ntohs(ah->rtype);
+		ah->ttl = ntohl(ah->ttl);
+		ah->len = ntohs(ah->len);
+		pos += sizeof(DNSAnswerHeader);
+
+		if (pos + ah->len > buflen)
+		{
+			FATAL("  ++ invalid record: RR value length stretches the answer beyond packet");
+			return -1;
+		}
+
+		if (ah->rtype == DNS_A && ah->len == 4)
+		{
+			struct in_addr addr;
+			memcpy(&addr, buf + pos, 4);
+			printf("  %s A %s TTL = %u\n", name, inet_ntoa(addr), ah->ttl);
+		}
+		else
+		{
+			ParseName(buf, buflen, pos, rr);
+			printf("  %s %s %s TTL = %u\n", name, RecordTypeStr(ah->rtype), rr, ah->ttl);
+		}
+
+		pos += ah->len;
+	}
+	return pos;
 }
 
 /*
@@ -294,7 +430,12 @@ int ParseResponse(DNSBuffer* query, DNSBuffer* resp)
 	}
 
 	DNSFixedHeader* fh = (DNSFixedHeader*)resp->packet;
-	htons_n(fh, sizeof(DNSFixedHeader));					// perform all the htons in bulk
+	fh->txid = ntohs(fh->txid);
+	fh->flags = ntohs(fh->flags);
+	fh->n_questions = ntohs(fh->n_questions);
+	fh->n_answers = ntohs(fh->n_answers);
+	fh->n_authority = ntohs(fh->n_authority);
+	fh->n_additional = ntohs(fh->n_additional);
 
 	printf("  TXID 0x%04X flags 0x%04X questions %d answers %d authority %d additional %d\n",
 		fh->txid, fh->flags, fh->n_questions, fh->n_answers, fh->n_authority, fh->n_additional);
@@ -303,16 +444,33 @@ int ParseResponse(DNSBuffer* query, DNSBuffer* resp)
 		FATAL("  ++ invalid reply TXID mismatch, sent 0x%04X, received 0x%04X\n", query->txid, fh->txid);
 		return 1;
 	}
-	
-	byte* buf = (byte*)(resp->packet + sizeof(DNSFixedHeader));
-	buf += ParseQuestions(buf, fh->n_questions);
-	//PrintBytes(buf, 64);
-	buf += ParseAnswers(buf, fh->n_answers);
+	int rcode, pos = sizeof(DNSFixedHeader);
+	if ((rcode = fh->flags & 0x000F) != DNS_OK)
+	{
+		printf("  failed with Rcode = %d\n", rcode);
+	}
+	else
+	{
+		printf("  succeeded with Rcode = %d\n", rcode);
+	}
 
+	//byte* buf = (byte*)(resp->packet + sizeof(DNSFixedHeader));	// TODO: switch to index based
 
+	printf("  ------------ [questions] ----------\n");
+	if ((pos = ParseQuestions(resp->packet, resp->size, pos, fh->n_questions)) < 0)
+		return 1;
 
-	
+	printf("  ------------ [answers] ------------\n");
+	if ((pos = ParseRecords(resp->packet, resp->size, pos, fh->n_answers)) < 0)
+		return 1;
 
+	printf("  ------------ [authority] ----------\n");
+	if ((pos = ParseRecords(resp->packet, resp->size, pos, fh->n_authority)) < 0)
+		return 1;
+
+	printf("  ------------ [additional] ---------\n");
+	if ((pos = ParseRecords(resp->packet, resp->size, pos, fh->n_additional)) < 0)
+		return 1;
 
 	//PrintBytes(buf, 128);
 
