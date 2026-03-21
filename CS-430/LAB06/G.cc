@@ -46,7 +46,13 @@ int main()
         }
         if (op == "push_middle")
         {
-            L.push_back(x);
+            if (L.size() > R.size())
+            {
+                R.push_front(x);
+            } else {
+                L.push_back(x);
+            }
+            Bal();
         }
         if (op == "get") 
         {
