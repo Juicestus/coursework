@@ -22,10 +22,11 @@ int main()
     for (int i = v.size()-1; i>= 0; i--)
     {
         s++;
-        if (s >= v[i])
+        if (v[i] < s)
         {
-            cout << v[i] << "\n";
+            cout << s-1 << "\n";
             return 0;
-        }
+        } ;
     }
+    cout << s << "\n";
 }
