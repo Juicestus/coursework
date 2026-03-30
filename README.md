@@ -1,9 +1,9 @@
-# Coursework
+# Justus' Coursework
 
 The code for all my computer science coursework.
 
 > [!WARNING]
-> Do not plagiarize. The deepest consequence to plagiarizing is the detriment to your intellectual and moral development: you won't learn anything, and your ethics will be corrupted[^1]. Furthermore, most universities punish academic dishonesty severely.
+> Do not plagiarize. The deepest consequence to plagiarizing is the detriment to your intellectual and moral development: you won't learn anything, and your ethics will be corrupted.[^1] Furthermore, most universities punish academic dishonesty severely.
  
 
 
