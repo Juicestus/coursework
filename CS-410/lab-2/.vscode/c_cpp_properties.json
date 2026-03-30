@@ -1,0 +1,29 @@
+{
+    "version": 4,
+    "configurations": [
+        {
+            "name": "xv6-riscv",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/riscv64-unknown-elf-gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "defines": [
+                "LAB_2",
+                "__riscv",
+                "__riscv_xlen=64"
+            ],
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}/kernel",
+                "${workspaceFolder}/user"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "${workspaceFolder}/kernel",
+                    "${workspaceFolder}/user"
+                ]
+            }
+        }
+    ]
+}

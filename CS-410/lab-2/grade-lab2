@@ -1,0 +1,80 @@
+#!/usr/bin/env python3
+
+import re
+from gradelib import *
+
+r = Runner(save("xv6.out"))
+
+PTE_PRINT = """page table 0x0000000087f6e000
+ ..0: pte 0x0000000021fda801 pa 0x0000000087f6a000
+ .. ..0: pte 0x0000000021fda401 pa 0x0000000087f69000
+ .. .. ..0: pte 0x0000000021fdac1f pa 0x0000000087f6b000
+ .. .. ..1: pte 0x0000000021fda00f pa 0x0000000087f68000
+ .. .. ..2: pte 0x0000000021fd9c1f pa 0x0000000087f67000
+ ..255: pte 0x0000000021fdb401 pa 0x0000000087f6d000
+ .. ..511: pte 0x0000000021fdb001 pa 0x0000000087f6c000
+ .. .. ..509: pte 0x0000000021fdd813 pa 0x0000000087f76000
+ .. .. ..510: pte 0x0000000021fddc07 pa 0x0000000087f77000
+ .. .. ..511: pte 0x0000000020001c0b pa 0x0000000080007000"""
+
+VAL_RE = "(0x00000000[0-9a-f]+)"
+INDENT_RE = r"\s*\.\.\s*"
+INDENT_ESC = "\\\s*\.\.\\\s*"
+
+@test(20, "pte printout")
+def test_pteprint():
+    first = True
+    r.run_qemu(shell_script([
+        'echo hi'
+    ]))
+    r.match('^hi')
+    p = re.compile(VAL_RE)
+    d = re.compile(INDENT_RE)
+    for l in PTE_PRINT.splitlines():
+        l = d.sub(INDENT_ESC, l)
+        l = p.sub(VAL_RE, l)
+        r.match(r'^{}$'.format(l))
+        if first:
+            first = False
+        else:
+            matches = re.findall(r'^{}$'.format(l), r.qemu.output, re.MULTILINE)
+            assert_equal(len(matches[0]), 2)
+            pa = (int(matches[0][0], 16) >> 10) << 12
+            assert_equal(int(matches[0][1], 16), pa)
+
+@test(0, "pgtbltest")
+def test_pgtbltest():
+    r.run_qemu(shell_script([
+        'pgtbltest'
+    ]), timeout=300)
+
+@test(20, "pgtbltest: ugetpid", parent=test_pgtbltest)
+def test_nettest_():
+    r.match('^ugetpid_test: OK$')
+
+@test(30, "pgtbltest: pgaccess", parent=test_pgtbltest)
+def test_nettest_():
+    r.match('^pgaccess_test: OK$')
+
+@test(30, "pgtbltest: hugepage", parent=test_pgtbltest)
+def test_nettest_():
+    r.match('^count = 2$')
+    r.match('^hugepage_test: OK$')
+    matches = re.findall(r'^before mkhugepg: (\d+) (\d+)$', r.qemu.output, re.MULTILINE)
+    assert_equal(len(matches), 1)
+    assert_equal(len(matches[0]), 2)
+    n_page_before = int(matches[0][0])
+    n_hugepage_before = int(matches[0][1])
+    matches = re.findall(r'^after mkhugepg: (\d+) (\d+)$', r.qemu.output, re.MULTILINE)
+    assert_equal(len(matches), 1)
+    assert_equal(len(matches[0]), 2)
+    n_page_after = int(matches[0][0])
+    n_hugepage_after = int(matches[0][1])
+    if n_page_before not in [n_page_after + 512, n_page_after + 513]:
+        raise AssertionError("got:\n  %s\nexpected:\n  %s or %s" %
+                             (str(n_page_before),
+                              str(n_page_after + 512),
+                              str(n_page_after + 513)))
+    assert_equal(n_hugepage_before + 1, n_hugepage_after)
+
+run_tests()
